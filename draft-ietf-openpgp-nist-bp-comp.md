@@ -244,7 +244,7 @@ TBD                    | ML-KEM-1024+ECDH-NIST-P-384        | MAY         | {{ec
 TBD                    | ML-KEM-768+ECDH-brainpoolP256r1    | MAY         | {{ecc-mlkem}}
 TBD                    | ML-KEM-1024+ECDH-brainpoolP384r1   | MAY         | {{ecc-mlkem}}
 
-For signatures, the following (composite) signature schemes are specified:
+For signatures, the following composite signature schemes are specified:
 
 {: title="Signature algorithm specifications" #sig-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
