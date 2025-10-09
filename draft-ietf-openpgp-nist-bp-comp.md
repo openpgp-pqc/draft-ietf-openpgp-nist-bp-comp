@@ -160,6 +160,10 @@ Due to their long-standing and wide deployment, there are well-tested, secure, a
 
 ## Conventions used in this Document
 
+{::boilerplate bcp14-tagged}
+
+In wire format descriptions, the operator "`||`" is used to indicate concatenation of groups of octets.
+
 ### Terminology for Multi-Algorithm Schemes
 
 The terminology in this document is oriented towards the definitions in {{?RFC9794}}.
@@ -176,13 +180,13 @@ All schemes listed here are believed to provide security in the presence of a cr
 ### ML-KEM {#mlkem-intro}
 
 ML-KEM [FIPS-203] is based on the hardness of solving the Learning with Errors problem in module lattices (MLWE).
-The scheme is believed to provide security against cryptanalytic attacks by classical as well as quantum computers.
+The scheme is believed to provide security against cryptanalytic attacks based on classical as well as quantum algorithms.
 This specification defines ML-KEM only in composite combination with ECDH encryption schemes in order to provide a pre-quantum security fallback.
 
 ### ML-DSA {#mldsa-intro}
 
 ML-DSA [FIPS-204] is a signature scheme that, like ML-KEM, is based on the hardness of solving the Learning With Errors problem and a variant of the Short Integer Solution problem in module lattices (MLWE and SelfTargetMSIS).
-Accordingly, this specification only defines ML-DSA in composite combinaton with ECDSA signature schemes.
+Accordingly, this specification only defines ML-DSA in composite combination with ECDSA signature schemes.
 
 ## Elliptic Curve Cryptography
 
