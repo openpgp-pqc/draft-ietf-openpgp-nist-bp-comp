@@ -5,17 +5,17 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 8 January 2026                                      S. Kousidis
+Expires: 12 April 2026                                       S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                             7 July 2025
+                                                          9 October 2025
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
                         Curve Domain Parameters
-                draft-ehlen-openpgp-nist-bp-comp-latest
+                 draft-ietf-openpgp-nist-bp-comp-latest
 
 Abstract
 
@@ -28,7 +28,7 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-ehlen-openpgp-nist-bp-comp/.
+   https://datatracker.ietf.org/doc/draft-ietf-openpgp-nist-bp-comp/.
 
    Discussion of this document takes place on the WG Working Group
    mailing list (mailto:openpgp@ietf.org), which is archived at
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 12 April 2026.
 
 Copyright Notice
 
