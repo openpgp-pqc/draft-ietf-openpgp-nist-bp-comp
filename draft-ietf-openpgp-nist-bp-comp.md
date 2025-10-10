@@ -269,7 +269,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 
 ## Composite KEMs
 
-The ML-KEM + ECDH public-key encryption involves both the ML-KEM and an ECDH KEM in an a priori non-separable manner.
+The ML-KEM + ECDH public-key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
 This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
 ## Composite Signatures
