@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 12 April 2026                                       S. Kousidis
+Expires: 17 April 2026                                       S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                          9 October 2025
+                                                         14 October 2025
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2026.
+   This Internet-Draft will expire on 17 April 2026.
 
 Copyright Notice
 
@@ -149,6 +149,15 @@ Table of Contents
 
 1.1.  Conventions used in this Document
 
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   In wire format descriptions, the operator "||" is used to indicate
+   concatenation of groups of octets.
+
 1.1.1.  Terminology for Multi-Algorithm Schemes
 
    The terminology in this document is oriented towards the definitions
@@ -169,8 +178,8 @@ Table of Contents
 
    ML-KEM [FIPS-203] is based on the hardness of solving the Learning
    with Errors problem in module lattices (MLWE).  The scheme is
-   believed to provide security against cryptanalytic attacks by
-   classical as well as quantum computers.  This specification defines
+   believed to provide security against cryptanalytic attacks based on
+   classical as well as quantum algorithms.  This specification defines
    ML-KEM only in composite combination with ECDH encryption schemes in
    order to provide a pre-quantum security fallback.
 
@@ -180,7 +189,7 @@ Table of Contents
    on the hardness of solving the Learning With Errors problem and a
    variant of the Short Integer Solution problem in module lattices
    (MLWE and SelfTargetMSIS).  Accordingly, this specification only
-   defines ML-DSA in composite combinaton with ECDSA signature schemes.
+   defines ML-DSA in composite combination with ECDSA signature schemes.
 
 1.3.  Elliptic Curve Cryptography
 
@@ -268,7 +277,7 @@ Table of Contents
 
                   Table 1: KEM algorithm specifications
 
-   For signatures, the following (composite) signature schemes are
+   For signatures, the following composite signature schemes are
    specified:
 
    +=====+=================================+=============+=============+
@@ -314,7 +323,7 @@ Table of Contents
 
    The ML-KEM + ECDH public-key encryption involves both the ML-KEM and
    an ECDH KEM in a non-separable manner.  This is achieved via KEM
-   combination, i.e. both key encapsulations/decapsulations are
+   combination, that is, both key encapsulations/decapsulations are
    performed in parallel, and the resulting key shares are fed into a
    key combiner to produce a single shared secret for message
    encryption.
@@ -642,9 +651,9 @@ Table of Contents
    *  The wrapped session key represented as an octet string.
 
    Note that like in the case of the algorithms X25519 and X448
-   specified in [RFC9580], for the ML-KEM + ECDH composite schemes, in
-   the case of a v3 PKESK packet, the symmetric algorithm identifier is
-   not encrypted.  Instead, it is placed in plaintext after the
+   specified in [RFC9580], for the ML-KEM composite schemes, in the case
+   of a v3 PKESK packet, the symmetric algorithm identifier is not
+   encrypted.  Instead, it is placed in plaintext after the
    mlkemCipherText and before the length octet preceding the wrapped
    session key.  In the case of v3 PKESK packets for ML-KEM composite
    schemes, the symmetric algorithm used MUST be AES-128, AES-192 or
@@ -1185,6 +1194,11 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-
               pqc-12>.
 
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
    [RFC3394]  Schaad, J. and R. Housley, "Advanced Encryption Standard
               (AES) Key Wrap Algorithm", RFC 3394, DOI 10.17487/RFC3394,
               September 2002, <https://www.rfc-editor.org/rfc/rfc3394>.
@@ -1202,6 +1216,10 @@ Table of Contents
               Signature Algorithm (EdDSA)", RFC 8032,
               DOI 10.17487/RFC8032, January 2017,
               <https://www.rfc-editor.org/rfc/rfc8032>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
    [RFC9580]  Wouters, P., Ed., Huigens, D., Winter, J., and Y. Niibe,
               "OpenPGP", RFC 9580, DOI 10.17487/RFC9580, July 2024,

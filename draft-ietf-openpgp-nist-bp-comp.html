@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Dang, et al.</td>
-<td class="center">Expires 12 April 2026</td>
+<td class="center">Expires 17 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-openpgp-nist-bp-comp-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-09" class="published">9 October 2025</time>
+<time datetime="2025-10-14" class="published">14 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-12">12 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-17">17 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1135,7 +1135,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1383,6 +1383,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
         <h3 id="name-conventions-used-in-this-do">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-conventions-used-in-this-do" class="section-name selfRef">Conventions used in this Document</a>
         </h3>
+<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">In wire format descriptions, the operator "<code>||</code>" is used to indicate concatenation of groups of octets.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <div id="terminology-for-multi-algorithm-schemes">
 <section id="section-1.1.1">
           <h4 id="name-terminology-for-multi-algor">
@@ -1410,7 +1415,7 @@ All schemes listed here are believed to provide security in the presence of a cr
 <a href="#section-1.2.1" class="section-number selfRef">1.2.1. </a><a href="#name-ml-kem" class="section-name selfRef">ML-KEM</a>
           </h4>
 <p id="section-1.2.1-1">ML-KEM <span>[<a href="#FIPS-203" class="cite xref">FIPS-203</a>]</span> is based on the hardness of solving the Learning with Errors problem in module lattices (MLWE).
-The scheme is believed to provide security against cryptanalytic attacks by classical as well as quantum computers.
+The scheme is believed to provide security against cryptanalytic attacks based on classical as well as quantum algorithms.
 This specification defines ML-KEM only in composite combination with ECDH encryption schemes in order to provide a pre-quantum security fallback.<a href="#section-1.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1420,7 +1425,7 @@ This specification defines ML-KEM only in composite combination with ECDH encryp
 <a href="#section-1.2.2" class="section-number selfRef">1.2.2. </a><a href="#name-ml-dsa" class="section-name selfRef">ML-DSA</a>
           </h4>
 <p id="section-1.2.2-1">ML-DSA <span>[<a href="#FIPS-204" class="cite xref">FIPS-204</a>]</span> is a signature scheme that, like ML-KEM, is based on the hardness of solving the Learning With Errors problem and a variant of the Short Integer Solution problem in module lattices (MLWE and SelfTargetMSIS).
-Accordingly, this specification only defines ML-DSA in composite combinaton with ECDSA signature schemes.<a href="#section-1.2.2-1" class="pilcrow">¶</a></p>
+Accordingly, this specification only defines ML-DSA in composite combination with ECDSA signature schemes.<a href="#section-1.2.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1479,8 +1484,8 @@ This encoding is compatible with the definition given in <span>[<a href="#SEC1" 
 <a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-measures-to-ensure-secure-i" class="section-name selfRef">Measures to Ensure Secure Implementations</a>
           </h4>
 <p id="section-2.1.2-1">In the following measures are described that ensure secure implementations according to existing best practices and standards defining the operations of Elliptic Curve Cryptography.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.1.2-2">Even though the zero point, also called the point at infinity, may occur as a result of arithmetic operations on points of an elliptic curve, it MUST NOT appear in any ECC data structure defined in this document.<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.1.2-3">Furthermore, when performing the explicitly listed operations in <a href="#ecdh-kem" class="auto internal xref">Section 5.1.1.1</a> it is REQUIRED to follow the specification and security advisory mandated from the respective elliptic curve specification.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-2">Even though the zero point, also called the point at infinity, may occur as a result of arithmetic operations on points of an elliptic curve, it <span class="bcp14">MUST NOT</span> appear in any ECC data structure defined in this document.<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-3">Furthermore, when performing the explicitly listed operations in <a href="#ecdh-kem" class="auto internal xref">Section 5.1.1.1</a> it is <span class="bcp14">REQUIRED</span> to follow the specification and security advisory mandated from the respective elliptic curve specification.<a href="#section-2.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1518,7 +1523,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-512+ECDH-NIST-P-256</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
 </td>
@@ -1526,7 +1533,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-768+ECDH-NIST-P-384</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
 </td>
@@ -1534,7 +1543,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-1024+ECDH-NIST-P-384</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
 </td>
@@ -1542,7 +1553,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-768+ECDH-brainpoolP256r1</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
 </td>
@@ -1550,7 +1563,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-KEM-1024+ECDH-brainpoolP384r1</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mlkem" class="auto internal xref">Section 5.2</a>
 </td>
@@ -1558,7 +1573,7 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
           </tbody>
         </table>
 </div>
-<p id="section-3.1-3">For signatures, the following (composite) signature schemes are specified:<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">For signatures, the following composite signature schemes are specified:<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <span id="name-signature-algorithm-specifi"></span><div id="sig-alg-specs">
 <table class="center" id="table-2">
           <caption>
@@ -1577,7 +1592,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-DSA-44+ECDSA-NIST-P-256</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
 </td>
@@ -1585,7 +1602,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-DSA-65+ECDSA-NIST-P-384</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
 </td>
@@ -1593,7 +1612,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-DSA-87+ECDSA-NIST-P-384</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
 </td>
@@ -1601,7 +1622,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-DSA-65+ECDSA-brainpoolP256r1</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
 </td>
@@ -1609,7 +1632,9 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
             <tr>
               <td class="text-right" rowspan="1" colspan="1">TBD</td>
               <td class="text-left" rowspan="1" colspan="1">ML-DSA-87+ECDSA-brainpoolP384r1</td>
-              <td class="text-left" rowspan="1" colspan="1">MAY</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span class="bcp14">MAY</span>
+</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <a href="#ecc-mldsa" class="auto internal xref">Section 6.2</a>
 </td>
@@ -1625,7 +1650,7 @@ All of these schemes are fully specified via their algorithm ID, that is, they a
 <p id="section-3.1.1-1">[ Note: this section to be removed before publication ]<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-2">The algorithms in this draft are not assigned a codepoint in the current state of the draft since there are not enough private/experimental code points available to cover all newly introduced public-key algorithm identifiers.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-3">The use of private/experimental codepoints during development are intended to be used in non-released software only, for experimentation and interop testing purposes only.
-An OpenPGP implementation MUST NOT produce a formal release using these experimental codepoints.
+An OpenPGP implementation <span class="bcp14">MUST NOT</span> produce a formal release using these experimental codepoints.
 This draft will not be sent to IANA without every listed algorithm having a non-experimental codepoint.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1644,7 +1669,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-composite-kems" class="section-name selfRef">Composite KEMs</a>
         </h3>
 <p id="section-4.1-1">The ML-KEM + ECDH public-key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
-This is achieved via KEM combination, i.e. both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="composite-signatures">
@@ -1652,7 +1677,7 @@ This is achieved via KEM combination, i.e. both key encapsulations/decapsulation
         <h3 id="name-composite-signatures">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-composite-signatures" class="section-name selfRef">Composite Signatures</a>
         </h3>
-<p id="section-4.2-1">The ML-DSA + ECDSA signature consists of independent ML-DSA and ECDSA signatures, and an implementation MUST successfully validate both signatures to state that the ML-DSA + ECDSA signature is valid.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">The ML-DSA + ECDSA signature consists of independent ML-DSA and ECDSA signatures, and an implementation <span class="bcp14">MUST</span> successfully validate both signatures to state that the ML-DSA + ECDSA signature is valid.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-version-binding">
@@ -1989,7 +2014,7 @@ All artifacts are encoded as defined in <span>[<a href="#FIPS-203" class="cite x
           <h4 id="name-key-combiner">
 <a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-key-combiner" class="section-name selfRef">Key Combiner</a>
           </h4>
-<p id="section-5.2.1-1">For the composite KEM schemes defined in this document the procedure <code>multiKeyCombine</code> that is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-pqc-12#section-4.2.1" class="relref">Section 4.2.1</a> of [<a href="#I-D.draft-ietf-openpgp-pqc" class="cite xref">I-D.draft-ietf-openpgp-pqc</a>]</span> MUST be used to compute the KEK that wraps a session key.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-1">For the composite KEM schemes defined in this document the procedure <code>multiKeyCombine</code> that is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-pqc-12#section-4.2.1" class="relref">Section 4.2.1</a> of [<a href="#I-D.draft-ietf-openpgp-pqc" class="cite xref">I-D.draft-ietf-openpgp-pqc</a>]</span> <span class="bcp14">MUST</span> be used to compute the KEK that wraps a session key.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ecc-mlkem-generation">
@@ -1997,7 +2022,7 @@ All artifacts are encoded as defined in <span>[<a href="#FIPS-203" class="cite x
           <h4 id="name-key-generation-procedure">
 <a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-key-generation-procedure" class="section-name selfRef">Key Generation Procedure</a>
           </h4>
-<p id="section-5.2.2-1">The implementation MUST generate the ML-KEM and the ECDH component keys independently.
+<p id="section-5.2.2-1">The implementation <span class="bcp14">MUST</span> generate the ML-KEM and the ECDH component keys independently.
 ML-KEM key generation follows the specification in <span>[<a href="#FIPS-203" class="cite xref">FIPS-203</a>]</span>, and the artifacts are encoded as fixed-length octet strings whose sizes are listed <a href="#mlkem-ops" class="auto internal xref">Section 5.1.2</a>.
 ECDH key generation follows the specification in <span>[<a href="#SP800-186" class="cite xref">SP800-186</a>]</span> or <span>[<a href="#RFC5639" class="cite xref">RFC5639</a>]</span>, and the artifacts are encoded as fixed-length octet strings whose sizes and format are listed in <a href="#tab-ecdh-nist-artifacts" class="auto internal xref">Table 3</a> or <a href="#tab-ecdh-brainpool-artifacts" class="auto internal xref">Table 4</a>.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 </section>
@@ -2112,11 +2137,11 @@ ECDH key generation follows the specification in <span>[<a href="#SP800-186" cla
               <p id="section-5.3.1-2.5.1">The wrapped session key represented as an octet string.<a href="#section-5.3.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.3.1-3">Note that like in the case of the algorithms X25519 and X448 specified in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, for the ML-KEM + ECDH composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
+<p id="section-5.3.1-3">Note that like in the case of the algorithms X25519 and X448 specified in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, for the ML-KEM composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
 Instead, it is placed in plaintext after the <code>mlkemCipherText</code> and before the length octet preceding the wrapped session key.
-In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algorithm used MUST be AES-128, AES-192 or AES-256 (algorithm ID 7, 8 or 9).<a href="#section-5.3.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.3.1-4">In the case of a v3 PKESK, a receiving implementation MUST check if the length of the unwrapped symmetric key matches the symmetric algorithm identifier, and abort if this is not the case.<a href="#section-5.3.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.3.1-5">Implementations MUST NOT use the obsolete Symmetrically Encrypted Data packet (Packet Type ID 9) to encrypt data protected with the algorithms described in this document.<a href="#section-5.3.1-5" class="pilcrow">¶</a></p>
+In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algorithm used <span class="bcp14">MUST</span> be AES-128, AES-192 or AES-256 (algorithm ID 7, 8 or 9).<a href="#section-5.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-4">In the case of a v3 PKESK, a receiving implementation <span class="bcp14">MUST</span> check if the length of the unwrapped symmetric key matches the symmetric algorithm identifier, and abort if this is not the case.<a href="#section-5.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-5">Implementations <span class="bcp14">MUST NOT</span> use the obsolete Symmetrically Encrypted Data packet (Packet Type ID 9) to encrypt data protected with the algorithms described in this document.<a href="#section-5.3.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mlkem-ecc-key">
@@ -2124,7 +2149,7 @@ In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algo
           <h4 id="name-key-material-packets">
 <a href="#section-5.3.2" class="section-number selfRef">5.3.2. </a><a href="#name-key-material-packets" class="section-name selfRef">Key Material Packets</a>
           </h4>
-<p id="section-5.3.2-1">The composite ML-KEM + ECDH schemes defined in this specification MUST be used only with v6 keys, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.2-1">The composite ML-KEM + ECDH schemes defined in this specification <span class="bcp14">MUST</span> be used only with v6 keys, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-5.3.2-1" class="pilcrow">¶</a></p>
 <div id="public-key-packets-packet-type-ids-6-and-14">
 <section id="section-5.3.2.1">
             <h5 id="name-public-key-packets-packet-t">
@@ -2197,8 +2222,8 @@ Upon parsing the secret key format, or before using the secret key, for the expa
 </div>
 <p id="section-6.1.1-5">Here, the operation <code>ECDSA.Sign()</code> is defined as the algorithm in Section "6.4.1 ECDSA Signature Generation Algorithm" of <span>[<a href="#SP800-186-5" class="cite xref">SP800-186-5</a>]</span>, however, excluding Step 1: <code>H = Hash(M)</code> in that algorithm specification, as in this specification the message digest <code>H</code> is a direct input to the operation <code>ECDSA.Sign()</code>. Equivalently, the operation <code>ECDSA.Sign()</code> can be understood as representing the algorithm under Section "4.2.1.1. Signature Algorithm" in <span>[<a href="#TR-03111" class="cite xref">TR-03111</a>]</span>, again with the difference that in this specification the message digest <code>H_Tau(M)</code> appearing in Step 5 of the algorithm specification is the direct input to the operation <code>ECDSA.Sign()</code> and thus the hash computation is not carried out.
 The same statement holds for the definition of the verification operation <code>ECDSA.Verify()</code>: it is given either through the algorithm defined in Section "6.4.2 ECDSA Signature Verification Algorithm" of <span>[<a href="#SP800-186-5" class="cite xref">SP800-186-5</a>]</span> omitting the message digest computation in Step 2 or by the algorithm in Section "4.2.1.2. Verification Algorithm" of <span>[<a href="#TR-03111" class="cite xref">TR-03111</a>]</span> omitting the message digest computation in Step 3.<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-6">The public keys MUST be encoded in SEC1 format as defined in section <a href="#sec1-format" class="auto internal xref">Section 2.1.1</a>.
-The secret key, as well as both values <code>R</code> and <code>S</code> of the signature MUST each be encoded as a big-endian integer in a fixed-length octet string of the specified size.<a href="#section-6.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-6">The public keys <span class="bcp14">MUST</span> be encoded in SEC1 format as defined in section <a href="#sec1-format" class="auto internal xref">Section 2.1.1</a>.
+The secret key, as well as both values <code>R</code> and <code>S</code> of the signature <span class="bcp14">MUST</span> each be encoded as a big-endian integer in a fixed-length octet string of the specified size.<a href="#section-6.1.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1.1-7">The following table describes the ECDSA parameters and artifact lengths:<a href="#section-6.1.1-7" class="pilcrow">¶</a></p>
 <span id="name-ecdsa-parameters-and-artifa"></span><div id="tab-ecdsa-artifacts">
 <table class="center" id="table-7">
@@ -2341,7 +2366,7 @@ All artifacts are encoded as defined in <span>[<a href="#FIPS-204" class="cite x
           <h4 id="name-key-generation-procedure-2">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-key-generation-procedure-2" class="section-name selfRef">Key Generation Procedure</a>
           </h4>
-<p id="section-6.2.1-1">The implementation MUST generate the ML-DSA and the ECDSA component keys independently.
+<p id="section-6.2.1-1">The implementation <span class="bcp14">MUST</span> generate the ML-DSA and the ECDSA component keys independently.
 ML-DSA key generation follows the specification in <span>[<a href="#FIPS-204" class="cite xref">FIPS-204</a>]</span> and the artifacts are encoded as fixed-length octet strings whose sizes are listed in <a href="#mldsa-signature" class="auto internal xref">Section 6.1.2</a>.
 ECDSA key generation follows the specification in <span>[<a href="#SP800-186" class="cite xref">SP800-186</a>]</span> or <span>[<a href="#RFC5639" class="cite xref">RFC5639</a>]</span>, and the artifacts are encoded as fixed-length octet strings whose sizes are listed in <a href="#ecdsa-signature" class="auto internal xref">Section 6.1.1</a>.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 </section>
@@ -2382,7 +2407,7 @@ ECDSA key generation follows the specification in <span>[<a href="#SP800-186" cl
               <p id="section-6.2.3-2.2.1">Verify the ML-DSA signature with <code>ML-DSA.Verify()</code> from <a href="#mldsa-signature" class="auto internal xref">Section 6.1.2</a><a href="#section-6.2.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-6.2.3-3">As specified in <a href="#composite-signatures" class="auto internal xref">Section 4.2</a> an implementation MUST validate both signatures, that is, ECDSA and ML-DSA, successfully to state that a composite ML-DSA + ECDSA signature is valid.<a href="#section-6.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-3">As specified in <a href="#composite-signatures" class="auto internal xref">Section 4.2</a> an implementation <span class="bcp14">MUST</span> validate both signatures, that is, ECDSA and ML-DSA, successfully to state that a composite ML-DSA + ECDSA signature is valid.<a href="#section-6.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2397,7 +2422,7 @@ ECDSA key generation follows the specification in <span>[<a href="#SP800-186" cl
           <h4 id="name-signature-packet-packet-typ">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-signature-packet-packet-typ" class="section-name selfRef">Signature Packet (Packet Type ID 2)</a>
           </h4>
-<p id="section-6.3.1-1">The composite ML-DSA + ECDSA schemes MUST be used only with v6 signatures, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-1">The composite ML-DSA + ECDSA schemes <span class="bcp14">MUST</span> be used only with v6 signatures, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-2">The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures consist of:<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.1-3.1">
@@ -2410,8 +2435,8 @@ ECDSA key generation follows the specification in <span>[<a href="#SP800-186" cl
               <p id="section-6.3.1-3.3.1">A fixed-length octet string of the ML-DSA signature value, whose length depends on the algorithm ID as specified in <a href="#tab-mldsa-artifacts" class="auto internal xref">Table 8</a>.<a href="#section-6.3.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.3.1-4">A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 256 bits for the computation of the message digest.
-A verifying implementation MUST reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size.<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-4">A composite ML-DSA + ECDSA signature <span class="bcp14">MUST</span> use a hash algorithm with a digest size of at least 256 bits for the computation of the message digest.
+A verifying implementation <span class="bcp14">MUST</span> reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size.<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-material-packets">
@@ -2419,7 +2444,7 @@ A verifying implementation MUST reject any composite ML-DSA + ECDSA signature th
           <h4 id="name-key-material-packets-2">
 <a href="#section-6.3.2" class="section-number selfRef">6.3.2. </a><a href="#name-key-material-packets-2" class="section-name selfRef">Key Material Packets</a>
           </h4>
-<p id="section-6.3.2-1">The composite ML-DSA + ECDSA schemes MUST be used only with v6 keys, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-6.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2-1">The composite ML-DSA + ECDSA schemes <span class="bcp14">MUST</span> be used only with v6 keys, as defined in <span>[<a href="#RFC9580" class="cite xref">RFC9580</a>]</span>, or newer versions defined by updates of that document.<a href="#section-6.3.2-1" class="pilcrow">¶</a></p>
 <div id="public-key-packets-packet-type-ids-6-and-14-1">
 <section id="section-6.3.2.1">
             <h5 id="name-public-key-packets-packet-ty">
@@ -2711,6 +2736,10 @@ The field specifications enclosed in brackets for the ML-KEM + ECDH composite al
         <dd>
 <span class="refAuthor">Kousidis, S.</span>, <span class="refAuthor">Roth, J.</span>, <span class="refAuthor">Strenzke, F.</span>, and <span class="refAuthor">A. Wussler</span>, <span class="refTitle">"Post-Quantum Cryptography in OpenPGP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-openpgp-pqc-12</span>, <time datetime="2025-06-17" class="refDate">17 June 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-pqc-12">https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-pqc-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3394">[RFC3394]</dt>
         <dd>
 <span class="refAuthor">Schaad, J.</span> and <span class="refAuthor">R. Housley</span>, <span class="refTitle">"Advanced Encryption Standard (AES) Key Wrap Algorithm"</span>, <span class="seriesInfo">RFC 3394</span>, <span class="seriesInfo">DOI 10.17487/RFC3394</span>, <time datetime="2002-09" class="refDate">September 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3394">https://www.rfc-editor.org/rfc/rfc3394</a>&gt;</span>. </dd>
@@ -2726,6 +2755,10 @@ The field specifications enclosed in brackets for the ML-KEM + ECDH composite al
 <dt id="RFC8032">[RFC8032]</dt>
         <dd>
 <span class="refAuthor">Josefsson, S.</span> and <span class="refAuthor">I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8032">https://www.rfc-editor.org/rfc/rfc8032</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9580">[RFC9580]</dt>
         <dd>
