@@ -160,6 +160,10 @@ Due to their long-standing and wide deployment, there are well-tested, secure, a
 
 ## Conventions used in this Document
 
+{::boilerplate bcp14-tagged}
+
+In wire format descriptions, the operator "`||`" is used to indicate concatenation of groups of octets.
+
 ### Terminology for Multi-Algorithm Schemes
 
 The terminology in this document is oriented towards the definitions in {{?RFC9794}}.
@@ -176,13 +180,13 @@ All schemes listed here are believed to provide security in the presence of a cr
 ### ML-KEM {#mlkem-intro}
 
 ML-KEM [FIPS-203] is based on the hardness of solving the Learning with Errors problem in module lattices (MLWE).
-The scheme is believed to provide security against cryptanalytic attacks by classical as well as quantum computers.
+The scheme is believed to provide security against cryptanalytic attacks based on classical as well as quantum algorithms.
 This specification defines ML-KEM only in composite combination with ECDH encryption schemes in order to provide a pre-quantum security fallback.
 
 ### ML-DSA {#mldsa-intro}
 
 ML-DSA [FIPS-204] is a signature scheme that, like ML-KEM, is based on the hardness of solving the Learning With Errors problem and a variant of the Short Integer Solution problem in module lattices (MLWE and SelfTargetMSIS).
-Accordingly, this specification only defines ML-DSA in composite combinaton with ECDSA signature schemes.
+Accordingly, this specification only defines ML-DSA in composite combination with ECDSA signature schemes.
 
 ## Elliptic Curve Cryptography
 
@@ -240,7 +244,7 @@ TBD                    | ML-KEM-1024+ECDH-NIST-P-384        | MAY         | {{ec
 TBD                    | ML-KEM-768+ECDH-brainpoolP256r1    | MAY         | {{ecc-mlkem}}
 TBD                    | ML-KEM-1024+ECDH-brainpoolP384r1   | MAY         | {{ecc-mlkem}}
 
-For signatures, the following (composite) signature schemes are specified:
+For signatures, the following composite signature schemes are specified:
 
 {: title="Signature algorithm specifications" #sig-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
@@ -266,7 +270,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 ## Composite KEMs
 
 The ML-KEM + ECDH public-key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
-This is achieved via KEM combination, i.e. both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
+This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
 ## Composite Signatures
 
@@ -471,7 +475,7 @@ The algorithm-specific fields consist of the output of the encryption procedure 
 
  - The wrapped session key represented as an octet string.
 
-Note that like in the case of the algorithms X25519 and X448 specified in [RFC9580], for the ML-KEM + ECDH composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
+Note that like in the case of the algorithms X25519 and X448 specified in [RFC9580], for the ML-KEM composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
 Instead, it is placed in plaintext after the `mlkemCipherText` and before the length octet preceding the wrapped session key.
 In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algorithm used MUST be AES-128, AES-192 or AES-256 (algorithm ID 7, 8 or 9).
 
