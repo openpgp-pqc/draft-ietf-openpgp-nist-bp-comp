@@ -678,6 +678,14 @@ IANA is asked to add the following note to this registry:
 
 This section gives the history of changes in the respective document versions. The order is newest first.
 
+## draft-ietf-openpgp-nist-bp-comp-01
+
+- Editorial alignment to {{I-D.draft-ietf-openpgp-pqc}}
+
+## draft-ietf-openpgp-nist-bp-comp-00
+
+- change draft title
+
 ## draft-ehlen-openpgp-nist-bp-comp-02
 
 - Completed the IANA table.
@@ -688,6 +696,7 @@ This section gives the history of changes in the respective document versions. T
 ## draft-ehlen-openpgp-nist-bp-comp-01
 
 - Replaced the explicit description of the KEM combiner with a reference to {{I-D.draft-ietf-openpgp-pqc}}.
+
 
 # Contributors
 
