@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 17 April 2026                                       S. Kousidis
+Expires: 19 April 2026                                       S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                         14 October 2025
+                                                         16 October 2025
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 April 2026.
+   This Internet-Draft will expire on 19 April 2026.
 
 Copyright Notice
 
@@ -118,8 +118,10 @@ Table of Contents
    7.  Security Considerations
    8.  IANA Considerations
    9.  Changelog
-     9.1.  draft-ehlen-openpgp-nist-bp-comp-02
-     9.2.  draft-ehlen-openpgp-nist-bp-comp-01
+     9.1.  draft-ietf-openpgp-nist-bp-comp-01
+     9.2.  draft-ietf-openpgp-nist-bp-comp-00
+     9.3.  draft-ehlen-openpgp-nist-bp-comp-02
+     9.4.  draft-ehlen-openpgp-nist-bp-comp-01
    10. Contributors
    11. References
      11.1.  Normative References
@@ -1155,7 +1157,15 @@ Table of Contents
    This section gives the history of changes in the respective document
    versions.  The order is newest first.
 
-9.1.  draft-ehlen-openpgp-nist-bp-comp-02
+9.1.  draft-ietf-openpgp-nist-bp-comp-01
+
+   *  Editorial alignment to [I-D.draft-ietf-openpgp-pqc]
+
+9.2.  draft-ietf-openpgp-nist-bp-comp-00
+
+   *  change draft title
+
+9.3.  draft-ehlen-openpgp-nist-bp-comp-02
 
    *  Completed the IANA table.
 
@@ -1166,7 +1176,7 @@ Table of Contents
 
    *  Various editorial alignments to [I-D.draft-ietf-openpgp-pqc].
 
-9.2.  draft-ehlen-openpgp-nist-bp-comp-01
+9.4.  draft-ehlen-openpgp-nist-bp-comp-01
 
    *  Replaced the explicit description of the KEM combiner with a
       reference to [I-D.draft-ietf-openpgp-pqc].
@@ -1188,9 +1198,9 @@ Table of Contents
    [I-D.draft-ietf-openpgp-pqc]
               Kousidis, S., Roth, J., Strenzke, F., and A. Wussler,
               "Post-Quantum Cryptography in OpenPGP", Work in Progress,
-              Internet-Draft, draft-ietf-openpgp-pqc-12, 17 June 2025,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-
-              pqc-12>.
+              Internet-Draft, draft-ietf-openpgp-pqc-13, 14 October
+              2025, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              openpgp-pqc-13>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
