@@ -950,7 +950,7 @@ Table of Contents
    |   |               |   Key|   Key|   Format|            |         |
    |   |               |Format|Format|         |            |         |
    +===+===============+======+======+=========+============+=========+
-   |100|ML-KEM-        |    97|    48|      N/A|   97 octets|  Section|
+   |TBD|ML-KEM-        |    97|    48|      N/A|   97 octets|  Section|
    |   |768+ECDH-NIST- |octets|octets|         |        ECDH|      5.2|
    |   |P-384          |  ECDH|  ECDH|         | ciphertext,|         |
    |   |               |public|secret|         | 1088 octets|         |
@@ -969,7 +969,7 @@ Table of Contents
    |   |               |      |      |         |    (Section|         |
    |   |               |      |      |         |      5.3.1)|         |
    +---+---------------+------+------+---------+------------+---------+
-   |101|ML-KEM-        |   133|    64|      N/A|  133 octets|  Section|
+   |TBD|ML-KEM-        |   133|    64|      N/A|  133 octets|  Section|
    |   |1024+ECDH-NIST-|octets|octets|         |        ECDH|      5.2|
    |   |P-521          |  ECDH|  ECDH|         | ciphertext,|         |
    |   |               |public|secret|         | 1568 octets|         |
@@ -988,7 +988,7 @@ Table of Contents
    |   |               |      |      |         |    (Section|         |
    |   |               |      |      |         |      5.3.1)|         |
    +---+---------------+------+------+---------+------------+---------+
-   |102|ML-KEM-        |    97|    48|      N/A|   97 octets|  Section|
+   |TBD|ML-KEM-        |    97|    48|      N/A|   97 octets|  Section|
    |   |768+ECDH-      |octets|octets|         |        ECDH|      5.2|
    |   |brainpoolP384r1|  ECDH|  ECDH|         | ciphertext,|         |
    |   |               |public|secret|         | 1088 octets|         |
@@ -1007,7 +1007,7 @@ Table of Contents
    |   |               |      |      |         |    (Section|         |
    |   |               |      |      |         |      5.3.1)|         |
    +---+---------------+------+------+---------+------------+---------+
-   |103|ML-KEM-        |   129|    64|      N/A|  129 octets|  Section|
+   |TBD|ML-KEM-        |   129|    64|      N/A|  129 octets|  Section|
    |   |1024+ECDH-     |octets|octets|         |        ECDH|      5.2|
    |   |brainpoolP512r1|  ECDH|  ECDH|         | ciphertext,|         |
    |   |               |public|secret|         | 1568 octets|         |
@@ -1026,7 +1026,7 @@ Table of Contents
    |   |               |      |      |         |    (Section|         |
    |   |               |      |      |         |      5.3.1)|         |
    +---+---------------+------+------+---------+------------+---------+
-   |104|ML-DSA-        |    97|    48|96 octets|         N/A|  Section|
+   |TBD|ML-DSA-        |    97|    48|96 octets|         N/A|  Section|
    |   |65+ECDSA-NIST- |octets|octets|    ECDSA|            |      6.2|
    |   |P-384          | ECDSA| ECDSA|signature|            |         |
    |   |               |public|secret|Table 7 ,|            |         |
@@ -1042,7 +1042,7 @@ Table of Contents
    |   |               |(Table|    8)|         |            |         |
    |   |               |    8)|      |         |            |         |
    +---+---------------+------+------+---------+------------+---------+
-   |105|ML-DSA-        |   133|    66|      132|         N/A|  Section|
+   |TBD|ML-DSA-        |   133|    66|      132|         N/A|  Section|
    |   |87+ECDSA-NIST- |octets|octets|   octets|            |      6.2|
    |   |P-521          | ECDSA| ECDSA|    ECDSA|            |         |
    |   |               |public|secret|signature|            |         |
@@ -1058,7 +1058,7 @@ Table of Contents
    |   |               |(Table|    8)|         |            |         |
    |   |               |    8)|      |         |            |         |
    +---+---------------+------+------+---------+------------+---------+
-   |106|ML-DSA-        |    97|    48|96 octets|         N/A|  Section|
+   |TBD|ML-DSA-        |    97|    48|96 octets|         N/A|  Section|
    |   |65+ECDSA-      |octets|octets|    ECDSA|            |      6.2|
    |   |brainpoolP384r1| ECDSA| ECDSA|signature|            |         |
    |   |               |public|secret|Table 7 ,|            |         |
@@ -1074,7 +1074,7 @@ Table of Contents
    |   |               |(Table|    8)|         |            |         |
    |   |               |    8)|      |         |            |         |
    +---+---------------+------+------+---------+------------+---------+
-   |107|ML-DSA-        |   129|    64|      128|         N/A|  Section|
+   |TBD|ML-DSA-        |   129|    64|      128|         N/A|  Section|
    |   |87+ECDSA-      |octets|octets|   octets|            |      6.2|
    |   |brainpoolP512r1| ECDSA| ECDSA|    ECDSA|            |         |
    |   |               |public|secret|signature|            |         |
