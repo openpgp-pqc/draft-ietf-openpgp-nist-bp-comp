@@ -194,7 +194,7 @@ The ECDH encryption is defined here as a KEM.
 
 All elliptic curves for the use in the composite combinations are taken from {{RFC9580}}.
 
-For interoperability this extension offers ML-* in composite combinations with the NIST curves P-256, P-384 defined in {{SP800-186}} and the Brainpool curves brainpoolP256r1, brainpoolP384r1 defined in {{RFC5639}}.
+For interoperability this extension offers ML-* in composite combinations with the NIST curves P-384, P-521 defined in {{SP800-186}} and the Brainpool curves brainpoolP384r1, brainpoolP512r1 defined in {{RFC5639}}.
 
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
@@ -238,28 +238,24 @@ For encryption, the following composite KEM schemes are specified:
 {: title="KEM algorithm specifications" #kem-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
-TBD                    | ML-KEM-512+ECDH-NIST-P-256         | MAY         | {{ecc-mlkem}}
-TBD                    | ML-KEM-768+ECDH-NIST-P-384         | MAY         | {{ecc-mlkem}}
-TBD                    | ML-KEM-1024+ECDH-NIST-P-384        | MAY         | {{ecc-mlkem}}
-TBD                    | ML-KEM-768+ECDH-brainpoolP256r1    | MAY         | {{ecc-mlkem}}
-TBD                    | ML-KEM-1024+ECDH-brainpoolP384r1   | MAY         | {{ecc-mlkem}}
+100                    | ML-KEM-768+ECDH-NIST-P-384         | MAY         | {{ecc-mlkem}}
+101                    | ML-KEM-1024+ECDH-NIST-P-521        | MAY         | {{ecc-mlkem}}
+102                    | ML-KEM-768+ECDH-brainpoolP384r1    | MAY         | {{ecc-mlkem}}
+103                    | ML-KEM-1024+ECDH-brainpoolP512r1   | MAY         | {{ecc-mlkem}}
 
 For signatures, the following composite signature schemes are specified:
 
 {: title="Signature algorithm specifications" #sig-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
-TBD                    | ML-DSA-44+ECDSA-NIST-P-256         | MAY         | {{ecc-mldsa}}
-TBD                    | ML-DSA-65+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
-TBD                    | ML-DSA-87+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
-TBD                    | ML-DSA-65+ECDSA-brainpoolP256r1    | MAY         | {{ecc-mldsa}}
-TBD                    | ML-DSA-87+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
+104                    | ML-DSA-65+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
+105                    | ML-DSA-87+ECDSA-NIST-P-521         | MAY         | {{ecc-mldsa}}
+106                    | ML-DSA-65+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
+107                    | ML-DSA-87+ECDSA-brainpoolP512r1    | MAY         | {{ecc-mldsa}}
 
 ### Experimental Codepoints for Interop Testing
 
 \[ Note: this section to be removed before publication \]
-
-The algorithms in this draft are not assigned a codepoint in the current state of the draft since there are not enough private/experimental code points available to cover all newly introduced public-key algorithm identifiers.
 
 The use of private/experimental codepoints during development are intended to be used in non-released software only, for experimentation and interop testing purposes only.
 An OpenPGP implementation MUST NOT produce a formal release using these experimental codepoints.
@@ -292,26 +288,26 @@ In this section we define the encryption, decryption, and data formats for the E
 
 
 {: title="NIST curves parameters and artifact lengths" #tab-ecdh-nist-artifacts}
-|                          | NIST P-256                                               | NIST P-384                                                        |
-| ------------------------ | -------------------------------------------------------- | --------------------------------------------------------          |
-| Algorithm ID reference   | TBD (ML-KEM-512+ECDH-NIST-P-256)                         | TBD (ML-KEM-768+ECDH-NIST-P-384, ML-KEM-1024+ECDH-NIST-P-384, )   |
-| Field size               | 32 octets                                                | 48 octets                                                         |
-| ECDH KEM                 | ECDH-KEM {{ecdh-kem}}                                    | ECDH-KEM {{ecdh-kem}}                                             |
-| ECDH public key          | 65 octets of SEC1-encoded public point                   | 97 octets of SEC1-encoded public point                            |
-| ECDH secret key          | 32 octets big-endian encoded secret scalar               | 48 octets big-endian encoded secret scalar                        |
-| ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                | 97 octets of SEC1-encoded ephemeral point                         |
-| ECDH key share           | 32 octets                                                | 48 octets                                                         |
+|                          | NIST P-384                                                        | NIST P-521                                              |
+| ------------------------ | --------------------------------------------------------          | --------------------------------------------------------|
+| Algorithm ID reference   | 100                                                               | 101                                                     |
+| Field size               | 48 octets                                                         | 66 octets                                               |
+| ECDH KEM                 | ECDH-KEM {{ecdh-kem}}                                             | ECDH-KEM {{ecdh-kem}}                                   |
+| ECDH public key          | 97 octets of SEC1-encoded public point                            | 133 octets of SEC1-encoded public point                 |
+| ECDH secret key          | 48 octets big-endian encoded secret scalar                        | 66 octets big-endian encoded secret scalar              |
+| ECDH ephemeral           | 97 octets of SEC1-encoded ephemeral point                         | 133 octets of SEC1-encoded ephemeral point              |
+| ECDH key share           | 48 octets                                                         | 66 octets                                               |
 
 {: title="Brainpool curves parameters and artifact lengths" #tab-ecdh-brainpool-artifacts}
-|                          | brainpoolP256r1                                          | brainpoolP384r1                                          |
+|                          | brainpoolP384r1                                          | brainpoolP512r1                                          |
 | ------------------------ | -------------------------------------------------------- | -------------------------------------------------------- |
-| Algorithm ID reference   | TBD (ML-KEM-768+ECDH-brainpoolP256r1)                    | TBD (ML-KEM-1024+ECDH-brainpoolP384r1)                   |
-| Field size               | 32 octets                                                | 48 octets                                                |
+| Algorithm ID reference   | 102                                                      | 103                                                      |
+| Field size               | 48 octets                                                | 64 octets                                                |
 | ECDH KEM                 | ECDH-KEM {{ecdh-kem}}                                    | ECDH-KEM {{ecdh-kem}}                                    |
-| ECDH public key          | 65 octets of SEC1-encoded public point                   | 97 octets of SEC1-encoded public point                   |
-| ECDH secret key          | 32 octets big-endian encoded secret scalar               | 48 octets big-endian encoded secret scalar               |
-| ECDH ephemeral           | 65 octets of SEC1-encoded ephemeral point                | 97 octets of SEC1-encoded ephemeral point                |
-| ECDH key share           | 32 octets                                                | 48 octets                                                |
+| ECDH public key          | 97 octets of SEC1-encoded public point                   | 129 octets of SEC1-encoded public point                  |
+| ECDH secret key          | 48 octets big-endian encoded secret scalar               | 64 octets big-endian encoded secret scalar               |
+| ECDH ephemeral           | 97 octets of SEC1-encoded ephemeral point                | 129 octets of SEC1-encoded ephemeral point               |
+| ECDH key share           | 48 octets                                                | 64 octets                                                |
 
 The SEC1 format for point encoding is defined in {{sec1-format}}.
 
@@ -366,13 +362,13 @@ ML-KEM has the parametrization with the corresponding artifact lengths in octets
 All artifacts are encoded as defined in [FIPS-203].
 
 {: title="ML-KEM parameters and artifact lengths" #tab-mlkem-artifacts}
-|                        | ML-KEM-512 | ML-KEM-768  | ML-KEM-1024 |
-|------------------------| ---------- | ----------- | ----------- |
-| Algorithm ID reference | TBD        | TBD         | TBD         |
-| Public key             | 800 octets | 1184 octets | 1568 octets |
-| Secret key             | 64 octets  | 64 octets   | 64 octets   |
-| Ciphertext             | 768 octets | 1088 octets | 1568 octets |
-| Key share              | 32 octets  | 32 octets   | 32 octets   |
+|                        | ML-KEM-768  | ML-KEM-1024 |
+|------------------------| ----------- | ----------- |
+| Algorithm ID reference | 100, 102    | 101, 103    |
+| Public key             | 1184 octets | 1568 octets |
+| Secret key             | 64 octets   | 64 octets   |
+| Ciphertext             | 1088 octets | 1568 octets |
+| Key share              | 32 octets   | 32 octets   |
 
 To instantiate `ML-KEM`, one must select a parameter set from the column "ML-KEM" of {{tab-mlkem-artifacts}}.
 
@@ -381,13 +377,12 @@ To instantiate `ML-KEM`, one must select a parameter set from the column "ML-KEM
 {{kem-alg-specs}} specifies the following ML-KEM + ECDH composite public-key encryption schemes:
 
 {: title="ML-KEM + ECDH composite schemes" #tab-mlkem-ecc-composite}
-Algorithm ID reference                    | ML-KEM       |  ECDH-KEM curve
-----------------------------------------: | ------------ |  --------------
-TBD (ML-KEM-512+ECDH-NIST-P-256)          | ML-KEM-512   |  NIST P-256
-TBD (ML-KEM-768+ECDH-NIST-P-384)          | ML-KEM-768   |  NIST P-384
-TBD (ML-KEM-1024+ECDH-NIST-P-384)         | ML-KEM-1024  |  NIST P-384
-TBD (ML-KEM-768+ECDH-brainpoolP256r1)     | ML-KEM-768   |  brainpoolP256r1
-TBD (ML-KEM-1024+ECDH-brainpoolP384r1)    | ML-KEM-1024  |  brainpoolP384r1
+Algorithm ID reference     | ML-KEM       |  ECDH-KEM curve  |
+-------------------------: | ------------ | ---------------- |
+100                        | ML-KEM-768   |  NIST P-384      |
+101                        | ML-KEM-1024  |  NIST P-521      |
+102                        | ML-KEM-768   |  brainpoolP384r1 |
+103                        | ML-KEM-1024  |  brainpoolP512r1 |
 
 The ML-KEM + ECDH composite public-key encryption schemes are built according to the following principal design:
 
@@ -531,14 +526,14 @@ The secret key, as well as both values `R` and `S` of the signature MUST each be
 The following table describes the ECDSA parameters and artifact lengths:
 
 {: title="ECDSA parameters and artifact lengths" #tab-ecdsa-artifacts}
-|                      | NIST-P-256                       | NIST P-384                                                 | brainpoolP256r1                       | brainpoolP384r1                       |
----------------------: | -------------------------------- | ---------------------------------------------------------- | ------------------------------------- | ------------------------------------- |
-Algorithm ID reference | TBD (ML-DSA-44+ECDSA-NIST-P-256) | TBD (ML-DSA-65+ECDSA-NIST-P-384,ML-DSA-87+ECDSA-NIST-P-384 | TBD (ML-DSA-65+ECDSA-brainpoolP256r1) | TBD (ML-DSA-87+ECDSA-brainpoolP384r1) |
-Field size             | 32 octets                        | 48 octets                                                  | 32 octets                             | 48 octets                             |
-Public key             | 65 octets                        | 97 octets                                                  | 65 octets                             | 97 octets                             |
-Secret key             | 32 octets                        | 48 octets                                                  | 32 octets                             | 48 octets                             |
-Signature value R      | 32 octets                        | 48 octets                                                  | 32 octets                             | 48 octets                             |
-Signature value S      | 32 octets                        | 48 octets                                                  | 32 octets                             | 48 octets                             |
+|                      | NIST P-384 | NIST-P-521  | brainpoolP384r1 | brainpoolP512r1 |
+---------------------: | ---------- | ----------- | --------------- | --------------- |
+Algorithm ID reference | 104        | 105         | 106             | 107             |
+Field size             | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
+Public key             | 97 octets  | 133 octets  | 97 octets       | 129 octets      |
+Secret key             | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
+Signature value R      | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
+Signature value S      | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 
 ### ML-DSA Signatures {#mldsa-signature}
 
@@ -558,12 +553,12 @@ ML-DSA has the parametrization with the corresponding artifact lengths in octets
 All artifacts are encoded as defined in [FIPS-204].
 
 {: title="ML-DSA parameters and artifact lengths" #tab-mldsa-artifacts}
-|                        | ML-DSA-44   | ML-DSA-65   | ML-DSA-87   |
-|------------------------| ----------- | ----------- | ----------- |
-| Algorithm ID reference | TBD         | TBD         | TBD         |
-| Public key             | 1312 octets | 1952 octets | 2592 octets |
-| Secret key             | 32 octets   | 32 octets   | 32 octets   |
-| Signature              | 2420 octets | 3309 octets | 4627 octets |
+|                        | ML-DSA-65   | ML-DSA-87   |
+|------------------------| ----------- | ----------- |
+| Algorithm ID reference | 104, 106    | 105, 107    |
+| Public key             | 1952 octets | 2592 octets |
+| Secret key             | 32 octets   | 32 octets   |
+| Signature              | 3309 octets | 4627 octets |
 
 ## Composite Signature Schemes with ML-DSA {#ecc-mldsa}
 
@@ -659,16 +654,14 @@ The field specifications enclosed in brackets for the ML-KEM + ECDH composite al
 {: title="IANA updates for registry 'OpenPGP Public Key Algorithms'" #iana-pubkey-algos}
 ID     | Algorithm                        | Public Key Format                                                                                                    | Secret Key Format                                                                                                   | Signature Format                                                                                              | PKESK Format                                                                                                                                                                                | Reference
 ---  : | -----                            | ---------:                                                                                                           | --------:                                                                                                           | --------:                                                                                                     | -----:                                                                                                                                                                                      | -----:
-TBD    | ML-DSA-44+ECDSA-NIST-P-256       | 65 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1312 octets ML-DSA-44 public key ({{tab-mldsa-artifacts}})  | 32 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-44 secret key ({{tab-mldsa-artifacts}})   | 64 octets ECDSA signature {{tab-ecdsa-artifacts}} , 2420 octets ML-DSA-44 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-65+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-87+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-65+ECDSA-brainpoolP256r1  | 65 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 32 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 64 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-87+ECDSA-brainpoolP384r1  | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-KEM-512+ECDH-NIST-P-256       | 65 octets ECDH public key ({{tab-ecdsa-artifacts}}), 800 octets ML-KEM-512 public key ({{tab-mlkem-artifacts}})  | 32 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-512 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 65 octets ECDH ciphertext, 768 octets ML-KEM-512 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})   | {{ecc-mlkem}}
-TBD    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdsa-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-NIST-P-384      | 97 octets ECDH public key ({{tab-ecdsa-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 97 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
-TBD    | ML-KEM-768+ECDH-brainpoolP256r1  | 65 octets ECDH public key ({{tab-ecdsa-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 32 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 65 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-brainpoolP384r1 | 97 octets ECDH public key ({{tab-ecdsa-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 97 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+100    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
+101    | ML-KEM-1024+ECDH-NIST-P-521      | 133 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 133 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+102    | ML-KEM-768+ECDH-brainpoolP384r1  | 97 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
+103    | ML-KEM-1024+ECDH-brainpoolP512r1 | 129 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 129 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+104    | ML-DSA-65+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+105    | ML-DSA-87+ECDSA-NIST-P-521       | 133 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 66 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 132 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+106    | ML-DSA-65+ECDSA-brainpoolP384r1  | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+107    | ML-DSA-87+ECDSA-brainpoolP512r1  | 129 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 64 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 128 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
 
 IANA is asked to add the following note to this registry:
 
