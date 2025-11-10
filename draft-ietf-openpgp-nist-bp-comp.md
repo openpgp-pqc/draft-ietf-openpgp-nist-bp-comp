@@ -671,13 +671,18 @@ IANA is asked to add the following note to this registry:
 
 This section gives the history of changes in the respective document versions. The order is newest first.
 
+## draft-ietf-openpgp-nist-bp-comp-02
+
+- Updated algorithm selection and assigned experimental code points 100-107.
+- Added test vectors.
+
 ## draft-ietf-openpgp-nist-bp-comp-01
 
-- Editorial alignment to {{I-D.draft-ietf-openpgp-pqc}}
+- Editorial alignment to {{I-D.draft-ietf-openpgp-pqc}}.
 
 ## draft-ietf-openpgp-nist-bp-comp-00
 
-- change draft title
+- Changed draft title.
 
 ## draft-ehlen-openpgp-nist-bp-comp-02
 
@@ -697,14 +702,241 @@ This section gives the history of changes in the respective document versions. T
 
 # Test Vectors
 
-TBD
+## Sample ML-DSA-65+ECDSA-NIST-P-384 with ML-KEM-768+ECDH-NIST-P-384 Data
 
-## Sample v6 PQC Subkey Artifacts
+### Transferable Secret Key {#test-vector-1-sec}
 
-TBD
-## V4 PQC Subkey Artifacts
+Here is a Transferable Secret Key consisting of:
 
-TBD
+- A v6 ML-DSA-65+ECDSA-NIST-P-384 Private-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-768+ECDH-NIST-P-384 Private-Subkey packet
+- A v6 subkey binding signature
+
+The primary key has the fingerprint `a3f3ea658b8324df76694581f4f6fede3e15bb0b67c7520255d2f7868208d756`.
+
+The subkey has the fingerprint `16addcbd549eb8c4153c9626b6aa4dac17adeac4f79c54dfcbe4aabaa28aba1b`.
+
+{: sourcecode-name="seckey-primary104-sub100.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary104-sub100.asc}
+~~~
+
+### Transferable Public Key {#test-vector-1-pub}
+
+Here is the corresponding Transferable Public Key for {{test-vector-1-sec}} consisting of:
+
+- A v6 ML-DSA-65+ECDSA-NIST-P-384 Public-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-768+ECDH-NIST-P-384 Public-Subkey packet
+- A v6 subkey binding signature
+
+{: sourcecode-name="pubkey-primary104-sub100.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/pubkey-primary104-sub100.asc}
+~~~
+
+### Encrypted and Signed Message
+
+Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-1-pub}} and signed by the secret key {{test-vector-1-sec}}:
+
+- A v6 PKESK
+- A v2 SEIPD
+
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `26da669cc569a460708f96b0e4132488c2f990b931a7fa4e02625f3f4293e7b5`.
+
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `b1564c7701bdf47ac5825908aac109cd4fafa0c528beefe73be02248dff8f2665e8e01d38fd17424af32c8acaabdfe17`.
+
+The hex-encoded output of `multiKeyCombine` is `ea93bb3825128c37f318018d74867cdb451317ae3fa6b64da0eca7931cd8bd7c`.
+
+The hex-encoded session key is `0c251def2936896735f8903bf6382d822e6aa3791104b1a2da02e142a10dc38f`.
+
+{: sourcecode-name="encrypted-alg100_signed-alg104.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/encrypted-alg100_signed-alg104.asc}
+~~~
+
+## Sample ML-DSA-87+ECDSA-NIST-P-521 with ML-KEM-1024+ECDH-NIST-P-521 Data
+
+### Transferable Secret Key {#test-vector-2-sec}
+
+Here is a Transferable Secret Key consisting of:
+
+- A v6 ML-DSA-87+ECDSA-NIST-P-521 Private-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-1024+ECDH-NIST-P-521 Private-Subkey packet
+- A v6 subkey binding signature
+
+The primary key has the fingerprint `e3674a3dcbfc35fcc24b1cd7f55213a3866d17b6081c3ad5933af3d78e8c8bce`.
+
+The subkey has the fingerprint `c22c679c40289df8111fda26f1cc8eca6c08dcbc8e20ceaac7e6b7ddd3b040bb`.
+
+{: sourcecode-name="seckey-primary105-sub101.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary105-sub101.asc}
+~~~
+
+### Transferable Public Key {#test-vector-2-pub}
+
+Here is the corresponding Transferable Public Key for {{test-vector-2-sec}} consisting of:
+
+- A v6 ML-DSA-87+ECDSA-NIST-P-521 Public-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-1024+ECDH-NIST-P-521 Public-Subkey packet
+- A v6 subkey binding signature
+
+{: sourcecode-name="seckey-primary105-sub101.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary105-sub101.asc}
+~~~
+
+### Encrypted and Signed Message
+
+Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-2-pub}} and signed by the secret key {{test-vector-2-sec}}:
+
+- A v6 PKESK
+- A v2 SEIPD
+
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `cd8a9216c981c151843d48ce17a30cb69f01373c35032d313ce34244cbaa0e35`.
+
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `016ca7330ea0a216376803717001269aeb8a94083b20bb3a1a709f8aeb322219759d9ff7872bab303e357f78507d423f59d3e2206e67537aba75280ca7937e250b5b`.
+
+The hex-encoded output of `multiKeyCombine` is `6c514547454fbb8ff7308c80d79f59d1cde7d99a2fe2a2a1ac4e31114906b186`.
+
+The hex-encoded session key is `371de99d254c0a0d4ee2c1b63d2a4956bbfe84cdafa4b264dcc59b80ece9d8f4`.
+
+{: sourcecode-name="encrypted-alg101_signed-alg105.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/encrypted-alg101_signed-alg105.asc}
+~~~
+
+
+## Sample ML-DSA-65+ECDSA-brainpoolP384r1 with ML-KEM-768+ECDH-brainpoolP384r1 Data
+
+### Transferable Secret Key {#test-vector-3-sec}
+
+Here is a Transferable Secret Key consisting of:
+
+- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Private-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private-Subkey packet
+- A v6 subkey binding signature
+
+The primary key has the fingerprint `6a498c10ff01ddfb1c28d0af05afe75d4c0e625d73fe8ab3cca227bd162d57b7`.
+
+The subkey has the fingerprint `408b08b20df93c6abdefb25d87a642766e6455caac621e8ca8204234de7bdedb`.
+
+{: sourcecode-name="seckey-primary106-sub102.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary106-sub102.asc}
+~~~
+
+
+### Transferable Public Key {#test-vector-3-pub}
+
+Here is the corresponding Transferable Public Key for {{test-vector-3-sec}} consisting of:
+
+- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Public-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Public-Subkey packet
+- A v6 subkey binding signature
+
+{: sourcecode-name="seckey-primary106-sub102.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary106-sub102.asc}
+~~~
+
+### Encrypted and Signed Message
+
+Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-3-pub}} and signed by the secret key {{test-vector-3-sec}}:
+
+- A v6 PKESK
+- A v2 SEIPD
+
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `1eaa02a4cd82d01573d84c6e1326c19fe8d3cc6bca297e6525a7d84faff68cdf`.
+
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `0521a1adda540cc7b8589dc9cbe360d51139b3b1fc58f6b4a452baa2ec16022027b3495c04c4abb34e8bbd603d0ebeb7`.
+
+The hex-encoded output of `multiKeyCombine` is `ed4010d69f98dc64db6df1d9d59331708057b8027ea0336c03bad6ea3990b25a`.
+
+The hex-encoded session key is `b89c0629753f9e849a2bb176ba564fb7c674aecbe1f9c1d7f71001533871c20b`.
+
+{: sourcecode-name="encrypted-alg102_signed-alg106.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/encrypted-alg102_signed-alg106.asc}
+~~~
+
+
+## Sample ML-DSA-87+ECDSA-brainpoolP512r1 with ML-KEM-1024+ECDH-brainpoolP512r1 Data
+
+### Transferable Secret Key {#test-vector-4-sec}
+
+Here is a Transferable Secret Key consisting of:
+
+- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Private-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private-Subkey packet
+- A v6 subkey binding signature
+
+The primary key has the fingerprint `b89e98c38b82bf6f859e7d259bc4d4526c7e6f3448a0b82d0dbe580e3278dba3`.
+
+The subkey has the fingerprint `033fa728eb4a55a4d59a0496e51c90b67f70846de0ed3cdfb8f28124ec90d3fd`.
+
+{: sourcecode-name="seckey-primary107-sub103.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary107-sub103.asc}
+~~~
+
+### Transferable Public Key {#test-vector-4-pub}
+
+Here is the corresponding Transferable Public Key for {{test-vector-4-sec}} consisting of:
+
+- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Public-Key packet
+- A v6 direct key self-signature
+- A User ID packet
+- A v6 positive certification self-signature
+- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Public-Subkey packet
+- A v6 subkey binding signature
+
+{: sourcecode-name="seckey-primary107-sub103.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/seckey-primary107-sub103.asc}
+~~~
+
+### Encrypted and Signed Message
+
+Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-4-pub}} and signed by the secret key {{test-vector-4-sec}}:
+
+- A v6 PKESK
+- A v2 SEIPD
+
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `66c0163a0f68f7b783b58cae6feeb4d2d6ad9b99cd2a7ac311fb78fdc42055c8`.
+
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `83662068efed595bbf0f3857bf2d31b4b1c85c1252803761758979819cbb060b0576cef35b3784913bf5a6fed92641bf0fd726f0dac4b137a7830a23e6adc070`.
+
+The hex-encoded output of `multiKeyCombine` is `ee6aa72fb27d4a5b6399761610ea0b52aadc391ead369656e3f5d136752d0bb9`.
+
+The hex-encoded session key is `3fed681f8c216acbf665591f8b4618b455f8652c31f329664127a26b7677263e`.
+
+{: sourcecode-name="encrypted-alg103_signed-alg107.asc"}
+~~~ application/pgp-keys
+{::include test-vectors/encrypted-alg103_signed-alg107.asc}
+~~~
+
 
 # Acknowledgments
 {:numbered="false"}
