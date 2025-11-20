@@ -148,7 +148,7 @@ informative:
 
 --- abstract
 
-This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol.
+This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol.
 
 --- middle
 
@@ -170,7 +170,6 @@ The terminology in this document is oriented towards the definitions in {{?RFC97
 Specifically, the terms "multi-algorithm", "composite" and "non-composite" are used in correspondence with the definitions therein.
 The abbreviation "PQ" is used for post-quantum schemes.
 To denote the combination of post-quantum and traditional schemes, the abbreviation "PQ/T" is used.
-The short form "PQ(/T)" stands for PQ or PQ/T.
 
 ## Post-Quantum Cryptography
 
