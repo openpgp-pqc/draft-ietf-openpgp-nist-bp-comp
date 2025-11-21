@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 14 May 2026                                         S. Kousidis
+Expires: 25 May 2026                                         S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                        10 November 2025
+                                                        21 November 2025
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -19,9 +19,10 @@ Expires: 14 May 2026                                         S. Kousidis
 
 Abstract
 
-   This document defines PQ/T composite schemes based on ML-KEM and ML-
-   DSA combined with ECDH and ECDSA algorithms using the NIST and
-   Brainpool domain parameters for the OpenPGP protocol.
+   This document defines PQ/T ("post-quantum/traditional") composite
+   schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA
+   algorithms using the NIST and Brainpool domain parameters for the
+   OpenPGP protocol.
 
 About This Document
 
@@ -53,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 May 2026.
+   This Internet-Draft will expire on 25 May 2026.
 
 Copyright Notice
 
@@ -187,8 +188,7 @@ Table of Contents
    and "non-composite" are used in correspondence with the definitions
    therein.  The abbreviation "PQ" is used for post-quantum schemes.  To
    denote the combination of post-quantum and traditional schemes, the
-   abbreviation "PQ/T" is used.  The short form "PQ(/T)" stands for PQ
-   or PQ/T.
+   abbreviation "PQ/T" is used.
 
 1.2.  Post-Quantum Cryptography
 
@@ -1172,9 +1172,9 @@ Table of Contents
    [I-D.draft-ietf-openpgp-pqc]
               Kousidis, S., Roth, J., Strenzke, F., and A. Wussler,
               "Post-Quantum Cryptography in OpenPGP", Work in Progress,
-              Internet-Draft, draft-ietf-openpgp-pqc-13, 14 October
+              Internet-Draft, draft-ietf-openpgp-pqc-14, 13 November
               2025, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              openpgp-pqc-13>.
+              openpgp-pqc-14>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
