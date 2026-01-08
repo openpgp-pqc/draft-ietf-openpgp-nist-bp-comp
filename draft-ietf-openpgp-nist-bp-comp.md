@@ -670,6 +670,10 @@ IANA is asked to add the following note to this registry:
 
 This section gives the history of changes in the respective document versions. The order is newest first.
 
+## draft-ietf-openpgp-nist-bp-comp-03
+
+- Display test vector public keys (instead of secret keys).
+
 ## draft-ietf-openpgp-nist-bp-comp-02
 
 - Updated algorithm selection and assigned experimental code points 100-107.
@@ -792,9 +796,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-2-sec}} cons
 - A v6 ML-KEM-1024+ECDH-NIST-P-521 Public-Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="seckey-primary105-sub101.asc"}
+{: sourcecode-name="pubkey-primary105-sub101.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary105-sub101.asc}
+{::include test-vectors/pubkey-primary105-sub101.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -852,9 +856,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-3-sec}} cons
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Public-Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="seckey-primary106-sub102.asc"}
+{: sourcecode-name="pubkey-primary106-sub102.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary106-sub102.asc}
+{::include test-vectors/pubkey-primary106-sub102.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -911,9 +915,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-4-sec}} cons
 - A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Public-Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="seckey-primary107-sub103.asc"}
+{: sourcecode-name="pubkey-primary107-sub103.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary107-sub103.asc}
+{::include test-vectors/pubkey-primary107-sub103.asc}
 ~~~
 
 ### Encrypted and Signed Message
