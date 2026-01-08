@@ -1,6 +1,6 @@
 ---
 title: "PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic Curve Domain Parameters"
-abbrev: "NIST Brainpool PQC"
+abbrev: "NIST Brainpool PQC in OpenPGP"
 category: info
 
 docname: draft-ietf-openpgp-nist-bp-comp-latest
@@ -14,7 +14,7 @@ venue:
   type: Working Group
   mail: openpgp@ietf.org
   arch: "https://mailarchive.ietf.org/arch/browse/openpgp/"
-  repo: "https://github.com/openpgp-pqc/draft-ehlen-openpgp-nist-bp-comp"
+  repo: "https://github.com/openpgp-pqc/draft-ietf-openpgp-nist-bp-comp"
 
 author:
  -
@@ -83,6 +83,12 @@ normative:
         - org: National Institute of Standards and Technology
       date: August 2024
 
+  IANA-OPENPGP:
+      target: https://www.iana.org/assignments/openpgp/openpgp.xhtml#openpgp-public-key-algorithms
+      title: OpenPGP Public Key Algorithms
+      author:
+        - org: IANA
+
   SP800-186:
     target: https://doi.org/10.6028/NIST.SP.800-186
     title: 'Recommendations for Discrete Logarithm-Based Cryptography:  Elliptic Curve Domain Parameters'
@@ -148,13 +154,13 @@ informative:
 
 --- abstract
 
-This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol.
+This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580], and as such extends [I-D.draft-ietf-openpgp-pqc].
 
 --- middle
 
 # Introduction
 
-This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol. It is an extension of {{I-D.draft-ietf-openpgp-pqc}}, which introduces post-quantum cryptography in OpenPGP using hybrid KEMs and digital signatures combining ML-KEM and ML-DSA with ECC algorithms based on the Edwards Curves defined in {{RFC7748}} and {{RFC8032}}.
+This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580]. It is an extension of {{I-D.draft-ietf-openpgp-pqc}}, which introduces post-quantum cryptography in OpenPGP using hybrid KEMs and digital signatures combining ML-KEM and ML-DSA with ECC algorithms based on the Edwards Curves defined in {{RFC7748}} and {{RFC8032}}.
 
 Due to their long-standing and wide deployment, there are well-tested, secure, and efficient implementations of ECDSA and ECDH with NIST-curves {{SP800-186}}. The same applies to Brainpool curves {{RFC5639}} which are recommended or required in certain regulatory domains, for instance in Germany {{TR-03111}}.  The purpose of this document is to support users who would like to or have to use such hybrid KEMs and/or signatures with OpenPGP.
 
@@ -174,7 +180,7 @@ To denote the combination of post-quantum and traditional schemes, the abbreviat
 ## Post-Quantum Cryptography
 
 This section describes the individual post-quantum cryptographic schemes.
-All schemes listed here are believed to provide security in the presence of a cryptographically relevant quantum computer.
+All schemes listed here are designed to provide security in the presence of a cryptographically relevant quantum computer.
 
 ### ML-KEM {#mlkem-intro}
 
@@ -220,7 +226,7 @@ This encoding is compatible with the definition given in [SEC1].
 
 In the following measures are described that ensure secure implementations according to existing best practices and standards defining the operations of Elliptic Curve Cryptography.
 
-Even though the zero point, also called the point at infinity, may occur as a result of arithmetic operations on points of an elliptic curve, it MUST NOT appear in any ECC data structure defined in this document.
+Even though the zero point, also called the point at infinity, may occur as a result of arithmetic operations on points of an elliptic curve, it MUST NOT appear in any ECC data structure defined in this document. An implementation MAY signal an error if this condition is encountered.
 
 Furthermore, when performing the explicitly listed operations in {{ecdh-kem}} it is REQUIRED to follow the specification and security advisory mandated from the respective elliptic curve specification.
 
@@ -252,6 +258,8 @@ ID                     | Algorithm                          | Requirement | Defi
 106                    | ML-DSA-65+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
 107                    | ML-DSA-87+ECDSA-brainpoolP512r1    | MAY         | {{ecc-mldsa}}
 
+An implementation MAY implement any of the listed algorithms.
+
 ### Experimental Codepoints for Interop Testing
 
 \[ Note: this section to be removed before publication \]
@@ -264,8 +272,10 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 
 ## Composite KEMs
 
-The ML-KEM + ECDH public-key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
+The ML-KEM + ECDH public key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
 This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
+
+As explained in {{Section 1.4.2 of I-D.draft-ietf-openpgp-pqc}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ(/T) encryption schemes.
 
 ## Composite Signatures
 
@@ -281,7 +291,7 @@ All PQ/T asymmetric algorithms defined in this document are to be used only in v
 
 ### ECDH KEM {#ecc-kem}
 
-In this section we define the encryption, decryption, and data formats for the ECDH component of the composite algorithms.
+In this section the encryption, decryption, and data formats for the ECDH component of the composite algorithms are defined.
 
 {{tab-ecdh-nist-artifacts}} and {{tab-ecdh-brainpool-artifacts}} describe the ECDH KEM parameters and artifact lengths.
 
@@ -361,19 +371,19 @@ ML-KEM has the parametrization with the corresponding artifact lengths in octets
 All artifacts are encoded as defined in [FIPS-203].
 
 {: title="ML-KEM parameters and artifact lengths" #tab-mlkem-artifacts}
-|                        | ML-KEM-768  | ML-KEM-1024 |
-|------------------------| ----------- | ----------- |
-| Algorithm ID reference | 100, 102    | 101, 103    |
-| Public key             | 1184 octets | 1568 octets |
-| Secret key             | 64 octets   | 64 octets   |
-| Ciphertext             | 1088 octets | 1568 octets |
-| Key share              | 32 octets   | 32 octets   |
+|                               | ML-KEM-768  | ML-KEM-1024 |
+|-------------------------------| ----------- | ----------- |
+| Algorithm ID reference        | 100, 102    | 101, 103    |
+| Public (encapsulation) key    | 1184 octets | 1568 octets |
+| Secret (decapsulation) key    | 64 octets   | 64 octets   |
+| Ciphertext                    | 1088 octets | 1568 octets |
+| Key share (shared secret key) | 32 octets   | 32 octets   |
 
 To instantiate `ML-KEM`, one must select a parameter set from the column "ML-KEM" of {{tab-mlkem-artifacts}}.
 
 ## Composite Encryption Schemes with ML-KEM {#ecc-mlkem}
 
-{{kem-alg-specs}} specifies the following ML-KEM + ECDH composite public-key encryption schemes:
+{{kem-alg-specs}} specifies the following ML-KEM + ECDH composite public key encryption schemes:
 
 {: title="ML-KEM + ECDH composite schemes" #tab-mlkem-ecc-composite}
 Algorithm ID reference     | ML-KEM       |  ECDH-KEM curve  |
@@ -383,17 +393,17 @@ Algorithm ID reference     | ML-KEM       |  ECDH-KEM curve  |
 102                        | ML-KEM-768   |  brainpoolP384r1 |
 103                        | ML-KEM-1024  |  brainpoolP512r1 |
 
-The ML-KEM + ECDH composite public-key encryption schemes are built according to the following principal design:
+The ML-KEM + ECDH composite public key encryption schemes are built according to the following principal design:
 
  - The ML-KEM encapsulation algorithm is invoked to create an ML-KEM ciphertext together with an ML-KEM symmetric key share.
 
  - The encapsulation algorithm of an ECDH KEM is invoked to create an ECDH ciphertext together with an ECDH symmetric key share.
 
- - A Key-Encryption-Key (KEK) is computed as the output of a key combiner that receives as input both of the above created symmetric key shares, the ECDH ciphertext, the ECDH public key, and the protocol binding information.
+ - A Key Encryption Key (KEK) is computed as the output of a key combiner that receives as input both of the above created symmetric key shares, the ECDH ciphertext, the ECDH public key, and the protocol binding information.
 
- - The session key for content encryption is then wrapped as described in {{RFC3394}} using AES-256 as algorithm and the KEK as key.
+ - The session key for content encryption, generated as specified in [RFC9580], is then wrapped as described in {{RFC3394}} using AES-256 as algorithm and the KEK as key.
 
- - The PKESK packet's algorithm-specific parts are made up of the ML-KEM ciphertext, the ECDH ciphertext, and the wrapped session key.
+ - The Public Key Encrypted Session Key (PKESK) packet's algorithm-specific parts are made up of the ML-KEM ciphertext, the ECDH ciphertext, and the wrapped session key.
 
 ### Key Combiner {#kem-key-combiner}
 
@@ -407,9 +417,9 @@ ECDH key generation follows the specification in {{SP800-186}} or {{RFC5639}}, a
 
 ### Encryption Procedure {#ecc-mlkem-encryption}
 
-The procedure to perform public-key encryption with an ML-KEM + ECDH composite scheme is as follows:
+The procedure to perform public key encryption with an ML-KEM + ECDH composite scheme is as follows:
 
- 1. Take the recipient's authenticated public-key packet `pkComposite` and `sessionKey` as input
+ 1. Take the recipient's authenticated public key packet `pkComposite` and `sessionKey` as input
 
  2. Parse the algorithm ID from `pkComposite` and set it as `algId`
 
@@ -429,7 +439,7 @@ The procedure to perform public-key encryption with an ML-KEM + ECDH composite s
 
 ### Decryption Procedure
 
-The procedure to perform public-key decryption with an ML-KEM + ECDH composite scheme is as follows:
+The procedure to perform public key decryption with an ML-KEM + ECDH composite scheme is as follows:
 
  1. Take the matching PKESK and own secret key packet as input
 
@@ -455,7 +465,7 @@ The procedure to perform public-key decryption with an ML-KEM + ECDH composite s
 
 ## Packet Specifications
 
-### Public-Key Encrypted Session Key Packets (Packet Type ID 1) {#ecc-mlkem-pkesk}
+### Public Key Encrypted Session Key Packets (Packet Type ID 1) {#ecc-mlkem-pkesk}
 
 The algorithm-specific fields consist of the output of the encryption procedure described in {{ecc-mlkem-encryption}}:
 
@@ -530,7 +540,7 @@ The following table describes the ECDSA parameters and artifact lengths:
 Algorithm ID reference | 104        | 105         | 106             | 107             |
 Field size             | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 Public key             | 97 octets  | 133 octets  | 97 octets       | 129 octets      |
-Secret key             | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
+Secret (Private) key   | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 Signature value R      | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 Signature value S      | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 
@@ -556,7 +566,7 @@ All artifacts are encoded as defined in [FIPS-204].
 |------------------------| ----------- | ----------- |
 | Algorithm ID reference | 104, 106    | 105, 107    |
 | Public key             | 1952 octets | 2592 octets |
-| Secret key             | 32 octets   | 32 octets   |
+| Secret (Private) key   | 32 octets   | 32 octets   |
 | Signature              | 3309 octets | 4627 octets |
 
 ## Composite Signature Schemes with ML-DSA {#ecc-mldsa}
@@ -633,19 +643,20 @@ The algorithm-specific secret key for ML-DSA + ECDSA keys is this series of valu
 
 The following security considerations given in {{I-D.draft-ietf-openpgp-pqc}} equally apply to this document:
 
-- the security aspects of composite signatures (Section 9.1 in {{I-D.draft-ietf-openpgp-pqc}}),
-- the arguments for the security features of the KEM combiner given in Section 9.2 of {{I-D.draft-ietf-openpgp-pqc}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
-- the considerations regarding domain separation and context binding for the KEM combiner (Section 9.2.1 in {{I-D.draft-ietf-openpgp-pqc}}),
-- the use of the hedged variant of ML-DSA (Section 9.3 in {{I-D.draft-ietf-openpgp-pqc}}),
-- the minimum digest size for PQ/T signatures (Section 9.4 in {{I-D.draft-ietf-openpgp-pqc}}),
-- the use of symmetric encryption in SEIPD packets (Section 9.5 in {{I-D.draft-ietf-openpgp-pqc}}),
-- and key generation for composite schemes (Section 9.6 in {{I-D.draft-ietf-openpgp-pqc}}).
+- the security aspects of composite signatures ({{Section 9.1 of I-D.draft-ietf-openpgp-pqc}}),
+- the arguments for the security features of the KEM combiner given in {{Section 9.2 of I-D.draft-ietf-openpgp-pqc}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
+- the considerations regarding domain separation and context binding for the KEM combiner ({{Section 9.2.1 of I-D.draft-ietf-openpgp-pqc}}),
+- the use of the hedged variant of ML-DSA ({{Section 9.3 of I-D.draft-ietf-openpgp-pqc}}),
+- the minimum digest size for PQ/T signatures ({{Section 9.4 of I-D.draft-ietf-openpgp-pqc}}),
+- the use of symmetric encryption in SEIPD packets ({{Section 9.5 of I-D.draft-ietf-openpgp-pqc}}),
+- the key generation for composite schemes ({{Section 9.6 of I-D.draft-ietf-openpgp-pqc}}),
+- and random number generation and seeding ({{Section 9.7 of I-D.draft-ietf-openpgp-pqc}}).
 
 When implementing or using any of the algorithms defined in this specification, the above referenced security considerations should be noted.
 
 # IANA Considerations
 
-IANA is requested to add the algorithm IDs defined in {{iana-pubkey-algos}} to the existing registry `OpenPGP Public Key Algorithms`.
+IANA is requested to add the algorithm IDs defined in {{iana-pubkey-algos}} to the existing registry `OpenPGP Public Key Algorithms` maintained at {{IANA-OPENPGP}}.
 The field specifications enclosed in brackets for the ML-KEM + ECDH composite algorithms denote fields that are only conditionally contained in the data structure.
 
 \[Note: Once the working group has agreed on the actual algorithm choice, the following table with the requested IANA updates will be filled out.\]
@@ -711,11 +722,11 @@ This section gives the history of changes in the respective document versions. T
 
 Here is a Transferable Secret Key consisting of:
 
-- A v6 ML-DSA-65+ECDSA-NIST-P-384 Private-Key packet
+- A v6 ML-DSA-65+ECDSA-NIST-P-384 Private Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-768+ECDH-NIST-P-384 Private-Subkey packet
+- A v6 ML-KEM-768+ECDH-NIST-P-384 Private Subkey packet
 - A v6 subkey binding signature
 
 The primary key has the fingerprint `a3f3ea658b8324df76694581f4f6fede3e15bb0b67c7520255d2f7868208d756`.
@@ -731,11 +742,11 @@ The subkey has the fingerprint `16addcbd549eb8c4153c9626b6aa4dac17adeac4f79c54df
 
 Here is the corresponding Transferable Public Key for {{test-vector-1-sec}} consisting of:
 
-- A v6 ML-DSA-65+ECDSA-NIST-P-384 Public-Key packet
+- A v6 ML-DSA-65+ECDSA-NIST-P-384 Public Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-768+ECDH-NIST-P-384 Public-Subkey packet
+- A v6 ML-KEM-768+ECDH-NIST-P-384 Public Subkey packet
 - A v6 subkey binding signature
 
 {: sourcecode-name="pubkey-primary104-sub100.asc"}
@@ -769,11 +780,11 @@ The hex-encoded session key is `0c251def2936896735f8903bf6382d822e6aa3791104b1a2
 
 Here is a Transferable Secret Key consisting of:
 
-- A v6 ML-DSA-87+ECDSA-NIST-P-521 Private-Key packet
+- A v6 ML-DSA-87+ECDSA-NIST-P-521 Private Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-1024+ECDH-NIST-P-521 Private-Subkey packet
+- A v6 ML-KEM-1024+ECDH-NIST-P-521 Private Subkey packet
 - A v6 subkey binding signature
 
 The primary key has the fingerprint `e3674a3dcbfc35fcc24b1cd7f55213a3866d17b6081c3ad5933af3d78e8c8bce`.
@@ -789,11 +800,11 @@ The subkey has the fingerprint `c22c679c40289df8111fda26f1cc8eca6c08dcbc8e20ceaa
 
 Here is the corresponding Transferable Public Key for {{test-vector-2-sec}} consisting of:
 
-- A v6 ML-DSA-87+ECDSA-NIST-P-521 Public-Key packet
+- A v6 ML-DSA-87+ECDSA-NIST-P-521 Public Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-1024+ECDH-NIST-P-521 Public-Subkey packet
+- A v6 ML-KEM-1024+ECDH-NIST-P-521 Public Subkey packet
 - A v6 subkey binding signature
 
 {: sourcecode-name="pubkey-primary105-sub101.asc"}
@@ -828,11 +839,11 @@ The hex-encoded session key is `371de99d254c0a0d4ee2c1b63d2a4956bbfe84cdafa4b264
 
 Here is a Transferable Secret Key consisting of:
 
-- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Private-Key packet
+- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Private Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private-Subkey packet
+- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private Subkey packet
 - A v6 subkey binding signature
 
 The primary key has the fingerprint `6a498c10ff01ddfb1c28d0af05afe75d4c0e625d73fe8ab3cca227bd162d57b7`.
@@ -849,11 +860,11 @@ The subkey has the fingerprint `408b08b20df93c6abdefb25d87a642766e6455caac621e8c
 
 Here is the corresponding Transferable Public Key for {{test-vector-3-sec}} consisting of:
 
-- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Public-Key packet
+- A v6 ML-DSA-65+ECDSA-brainpoolP384r1 Public Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Public-Subkey packet
+- A v6 ML-KEM-768+ECDH-brainpoolP384r1 Public Subkey packet
 - A v6 subkey binding signature
 
 {: sourcecode-name="pubkey-primary106-sub102.asc"}
@@ -888,11 +899,11 @@ The hex-encoded session key is `b89c0629753f9e849a2bb176ba564fb7c674aecbe1f9c1d7
 
 Here is a Transferable Secret Key consisting of:
 
-- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Private-Key packet
+- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Private Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private-Subkey packet
+- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private Subkey packet
 - A v6 subkey binding signature
 
 The primary key has the fingerprint `b89e98c38b82bf6f859e7d259bc4d4526c7e6f3448a0b82d0dbe580e3278dba3`.
@@ -908,11 +919,11 @@ The subkey has the fingerprint `033fa728eb4a55a4d59a0496e51c90b67f70846de0ed3cdf
 
 Here is the corresponding Transferable Public Key for {{test-vector-4-sec}} consisting of:
 
-- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Public-Key packet
+- A v6 ML-DSA-87+ECDSA-brainpoolP512r1 Public Key packet
 - A v6 direct key self-signature
 - A User ID packet
 - A v6 positive certification self-signature
-- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Public-Subkey packet
+- A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Public Subkey packet
 - A v6 subkey binding signature
 
 {: sourcecode-name="pubkey-primary107-sub103.asc"}
