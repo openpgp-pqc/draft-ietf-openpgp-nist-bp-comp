@@ -683,7 +683,8 @@ This section gives the history of changes in the respective document versions. T
 
 ## draft-ietf-openpgp-nist-bp-comp-03
 
-- Display test vector public keys (instead of secret keys).
+- Fix: Display test vector public keys (instead of secret keys).
+- Align with (relevant) editorial changes from IESG review of {{I-D.draft-ietf-openpgp-pqc}}.
 
 ## draft-ietf-openpgp-nist-bp-comp-02
 
