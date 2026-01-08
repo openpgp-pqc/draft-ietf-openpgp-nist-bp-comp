@@ -1142,7 +1142,10 @@ Table of Contents
 
 9.1.  draft-ietf-openpgp-nist-bp-comp-03
 
-   *  Display test vector public keys (instead of secret keys).
+   *  Fix: Display test vector public keys (instead of secret keys).
+
+   *  Align with (relevant) editorial changes from IESG review of
+      [I-D.draft-ietf-openpgp-pqc].
 
 9.2.  draft-ietf-openpgp-nist-bp-comp-02
 
