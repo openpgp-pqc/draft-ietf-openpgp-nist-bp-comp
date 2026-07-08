@@ -46,7 +46,7 @@ author:
     name: Falko Strenzke
     org: MTG AG
     country: Germany
-    email: falko.strenzke@mtg.de
+    email: fstrenzke@cryptosource.de
 
 normative:
 
@@ -679,7 +679,12 @@ IANA is asked to add the following note to this registry:
 
 # Changelog
 
-This section gives the history of changes in the respective document versions. The order is newest first.
+This section gives the history of changes in the respective document versions. The order is newest-first.
+
+## draft-ietf-openpgp-nist-bp-comp-04
+
+- Change email address of one author.
+- No changes in content, mainly only bump the draft version.
 
 ## draft-ietf-openpgp-nist-bp-comp-03
 
