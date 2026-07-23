@@ -60,7 +60,7 @@ normative:
 
   RFC5639:
 
-  I-D.draft-ietf-openpgp-pqc:
+  RFC9980:
 
   SEC1:
     target: https://secg.org/sec1-v2.pdf
@@ -177,13 +177,13 @@ informative:
 
 --- abstract
 
-This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580], and as such extends [I-D.draft-ietf-openpgp-pqc].
+This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580], and as such extends [RFC9980].
 
 --- middle
 
 # Introduction
 
-This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580]. It is an extension of {{I-D.draft-ietf-openpgp-pqc}}, which introduces post-quantum cryptography in OpenPGP using hybrid KEMs and digital signatures combining ML-KEM and ML-DSA with ECC algorithms based on the Edwards Curves defined in {{RFC7748}} and {{RFC8032}}.
+This document defines PQ/T composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA using the NIST and Brainpool domain parameters for the OpenPGP protocol [RFC9580]. It is an extension of {{RFC9980}}, which introduces post-quantum cryptography in OpenPGP using hybrid KEMs and digital signatures combining ML-KEM and ML-DSA with ECC algorithms based on the Edwards Curves defined in {{RFC7748}} and {{RFC8032}}.
 
 Due to their long-standing and wide deployment, there are well-tested, secure, and efficient implementations of ECDSA and ECDH with NIST-curves {{SP800-186}}. The same applies to Brainpool curves {{RFC5639}} which are recommended or required in certain regulatory domains, for instance in Germany {{TR-03111}}.  The purpose of this document is to support users who would like to or have to use such hybrid KEMs and/or signatures with OpenPGP.
 
@@ -226,8 +226,8 @@ For interoperability this extension offers ML-* in composite combinations with t
 
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
-This document is to be understood as an extension of {{I-D.draft-ietf-openpgp-pqc}}, which introduced PQC in OpenPGP, in that it defines further algorithm code points.
-All general specifications in {{I-D.draft-ietf-openpgp-pqc}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
+This document is to be understood as an extension of {{RFC9980}}, which introduced PQC in OpenPGP, in that it defines further algorithm code points.
+All general specifications in {{RFC9980}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
 
 # Preliminaries
 
@@ -298,7 +298,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 The ML-KEM + ECDH public key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
 This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
-As explained in {{Section 1.4.2 of I-D.draft-ietf-openpgp-pqc}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ/T encryption schemes.
+As explained in {{Section 1.4.2 of RFC9980}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ/T encryption schemes.
 
 ## Composite Signatures
 
@@ -435,7 +435,7 @@ The ML-KEM + ECDH composite public key encryption schemes are built according to
 
 ### Key Combiner {#kem-key-combiner}
 
-For the composite KEM schemes defined in this document the procedure `multiKeyCombine` that is defined in {{Section 4.2.1 of I-D.draft-ietf-openpgp-pqc}} MUST be used to compute the KEK that wraps a session key.
+For the composite KEM schemes defined in this document the procedure `multiKeyCombine` that is defined in {{Section 4.2.1 of RFC9980}} MUST be used to compute the KEK that wraps a session key.
 
 ### Key Generation Procedure {#ecc-mlkem-generation}
 
@@ -669,22 +669,22 @@ The algorithm-specific secret key for ML-DSA + ECDSA keys is this series of valu
 
 # Security Considerations
 
-The following security considerations given in {{I-D.draft-ietf-openpgp-pqc}} equally apply to this document:
+The following security considerations given in {{RFC9980}} equally apply to this document:
 
-- the security aspects of composite signatures ({{Section 9.1 of I-D.draft-ietf-openpgp-pqc}}),
-- the arguments for the security features of the KEM combiner given in {{Section 9.2 of I-D.draft-ietf-openpgp-pqc}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
-- the considerations regarding domain separation and context binding for the KEM combiner ({{Section 9.2.1 of I-D.draft-ietf-openpgp-pqc}}),
-- the use of the hedged variant of ML-DSA ({{Section 9.3 of I-D.draft-ietf-openpgp-pqc}}),
-- the minimum digest size for PQ/T signatures ({{Section 9.4 of I-D.draft-ietf-openpgp-pqc}}),
-- the use of symmetric encryption in SEIPD packets ({{Section 9.5 of I-D.draft-ietf-openpgp-pqc}}),
-- the key generation for composite schemes ({{Section 9.6 of I-D.draft-ietf-openpgp-pqc}}),
-- and random number generation and seeding ({{Section 9.7 of I-D.draft-ietf-openpgp-pqc}}).
+- the security aspects of composite signatures ({{Section 9.1 of RFC9980}}),
+- the arguments for the security features of the KEM combiner given in {{Section 9.2 of RFC9980}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
+- the considerations regarding domain separation and context binding for the KEM combiner ({{Section 9.2.1 of RFC9980}}),
+- the use of the hedged variant of ML-DSA ({{Section 9.3 of RFC9980}}),
+- the minimum digest size for PQ/T signatures ({{Section 9.4 of RFC9980}}),
+- the use of symmetric encryption in SEIPD packets ({{Section 9.5 of RFC9980}}),
+- the key generation for composite schemes ({{Section 9.6 of RFC9980}}),
+- and random number generation and seeding ({{Section 9.7 of RFC9980}}).
 
 When implementing or using any of the algorithms defined in this specification, the above referenced security considerations should be noted.
 
 ## Elliptic Curve Point Validation {#ec-point-validation}
 
-In contrast to the Montgomery and Edwards curves used for the composite schemes defined in {{I-D.draft-ietf-openpgp-pqc}}, the NIST and Brainpool curves used in this document are curves in short Weierstrass form.
+In contrast to the Montgomery and Edwards curves used for the composite schemes defined in {{RFC9980}}, the NIST and Brainpool curves used in this document are curves in short Weierstrass form.
 For these curves, performing a scalar multiplication of a secret scalar with an attacker-controlled point that does not lie on the curve can enable invalid-curve attacks, which can lead to the recovery of the ECDH secret key.
 To prevent these attacks, {{ecdh-kem}} requires implementations to perform full public key validation according to Section 5.6.2.3.3 of {{SP800-56A}} on all EC points that are input to the ECDH-KEM operations.
 
@@ -717,10 +717,11 @@ This section gives the history of changes in the respective document versions. T
 
 - Added the requirement to perform full public key validation on received EC points in the ECDH-KEM operations, and a corresponding security consideration regarding invalid-curve attacks.
 - Fixed errors in the IANA table: ECDH secret key length for P-521 (66 instead of 64 octets), ML-KEM-1024 public key labels, and a wrong table reference for the ECDH secret key format.
-- Corrected the description of the placement of the symmetric algorithm identifier in v3 PKESK packets to match the wire format and {{I-D.draft-ietf-openpgp-pqc}}.
+- Corrected the description of the placement of the symmetric algorithm identifier in v3 PKESK packets to match the wire format and {{RFC9980}}.
 - Fixed the mislabeled reference to FIPS 186-5 (previously labeled as SP 800-186) and cite FIPS 186-5 Appendix A for EC key generation.
 - Decryption procedure: clarified that `ecdhPublicKey` is taken from the public key part of the own secret key packet.
 - Removed a stale editor's note above the IANA table.
+- Update reference I-D.draft-ietf-openpgp-pqc to RFC 9980
 
 ## draft-ietf-openpgp-nist-bp-comp-04
 
@@ -730,7 +731,7 @@ This section gives the history of changes in the respective document versions. T
 ## draft-ietf-openpgp-nist-bp-comp-03
 
 - Fix: Display test vector public keys (instead of secret keys).
-- Align with (relevant) editorial changes from IESG review of {{I-D.draft-ietf-openpgp-pqc}}.
+- Align with (relevant) editorial changes from IESG review of {{RFC9980}}.
 
 ## draft-ietf-openpgp-nist-bp-comp-02
 
@@ -739,7 +740,7 @@ This section gives the history of changes in the respective document versions. T
 
 ## draft-ietf-openpgp-nist-bp-comp-01
 
-- Editorial alignment to {{I-D.draft-ietf-openpgp-pqc}}.
+- Editorial alignment to {{RFC9980}}.
 
 ## draft-ietf-openpgp-nist-bp-comp-00
 
@@ -749,12 +750,12 @@ This section gives the history of changes in the respective document versions. T
 
 - Completed the IANA table.
 - Added "Security Considerations" section.
-- Alignment of various technical details to {{I-D.draft-ietf-openpgp-pqc}}.
-- Various editorial alignments to {{I-D.draft-ietf-openpgp-pqc}}.
+- Alignment of various technical details to {{RFC9980}}.
+- Various editorial alignments to {{RFC9980}}.
 
 ## draft-ehlen-openpgp-nist-bp-comp-01
 
-- Replaced the explicit description of the KEM combiner with a reference to {{I-D.draft-ietf-openpgp-pqc}}.
+- Replaced the explicit description of the KEM combiner with a reference to {{RFC9980}}.
 
 
 # Contributors
