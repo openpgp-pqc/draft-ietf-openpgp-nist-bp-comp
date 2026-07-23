@@ -380,7 +380,7 @@ The operation `ECDH-KEM.Decaps()` is defined as follows:
 
  3. Set the output `ecdhKeyShare` to `X`
 
-For both of the above operations, the security measures defined in {{sec-impl}} have to be realised.
+For both of the above operations, elliptic curve point validation as specified in {{sec-impl}} has to be realised.
 
 ### ML-KEM {#mlkem-ops}
 
@@ -475,7 +475,10 @@ The procedure to perform public key decryption with an ML-KEM + ECDH composite s
 
  3. Check that the own and the extracted algorithm ID match
 
- 4. Parse the `ecdhSecretKey` and `mlkemSecretKey` from the algorithm specific data of the own secret key encoded in the format specified in {{mlkem-ecc-key}}, and take `ecdhPublicKey` from the public key part of the own secret key packet
+ 4. Parse the ecdhSecretKey and mlkemSecretKey from the algorithm-
+        specific data of the own secret key, and the ecdhPublicKey from
+        the algorithm-specific data of the own public key, encoded in
+        the format specified in Section 4.3.2
 
  5. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
