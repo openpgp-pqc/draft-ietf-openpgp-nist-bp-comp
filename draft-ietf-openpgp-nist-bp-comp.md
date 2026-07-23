@@ -109,15 +109,38 @@ normative:
     seriesinfo:
       NIST Special Publication 800-186
 
-  SP800-186-5:
+  FIPS-186-5:
     target: https://doi.org/10.6028/NIST.FIPS.186-5
     title: 'Digital Signature Standard (DSS)'
     author:
       -
         org: Information Technology Laboratory, National Institute of Standards and Technology
-    date: February, 3 2023
+    date: February 2023
     seriesinfo:
-      NIST Special Publication 800-186
+      NIST FIPS 186-5
+
+  SP800-56A:
+    target: https://doi.org/10.6028/NIST.SP.800-56Ar3
+    title: 'Recommendation for Pair-Wise Key-Establishment Schemes Using Discrete Logarithm Cryptography'
+    author:
+      -
+        ins: E. Barker
+        name: Elaine Barker
+      -
+        ins: L. Chen
+        name: Lily Chen
+      -
+        ins: A. Roginsky
+        name: Allen Roginsky
+      -
+        ins: A. Vassilev
+        name: Apostol Vassilev
+      -
+        ins: R. Davis
+        name: Richard Davis
+    date: April 2018
+    seriesinfo:
+      NIST Special Publication 800-56A Revision 3
 
 informative:
 
@@ -219,16 +242,16 @@ Elliptic curve points of the generic prime curves are encoded using the SEC1 (un
     B = 04 || X || Y
 
 where `X` and `Y` are coordinates of the elliptic curve point `P = (X, Y)`, and each coordinate is encoded in the big-endian format and zero-padded to the adjusted underlying field size.
-The adjusted underlying field size is the underlying field size rounded up to the nearest 8-bit boundary, as noted in the "Field size" column in {{tab-ecdh-nist-artifacts}}, {{tab-ecdh-brainpool-artifacts}}, or {{tab-ecdsa-artifacts}}.
+The adjusted underlying field size is the underlying field size rounded up to the nearest 8-bit boundary, as noted in the "Field size" row in {{tab-ecdh-nist-artifacts}}, {{tab-ecdh-brainpool-artifacts}}, or {{tab-ecdsa-artifacts}}.
 This encoding is compatible with the definition given in [SEC1].
 
 ### Measures to Ensure Secure Implementations
 
-In the following measures are described that ensure secure implementations according to existing best practices and standards defining the operations of Elliptic Curve Cryptography.
+In the following, measures are described that ensure secure implementations according to existing best practices and standards defining the operations of Elliptic Curve Cryptography.
 
 Even though the zero point, also called the point at infinity, may occur as a result of arithmetic operations on points of an elliptic curve, it MUST NOT appear in any ECC data structure defined in this document. An implementation MAY signal an error if this condition is encountered.
 
-Furthermore, when performing the explicitly listed operations in {{ecdh-kem}} it is REQUIRED to follow the specification and security advisory mandated from the respective elliptic curve specification.
+Furthermore, when performing the explicitly listed operations in {{ecdh-kem}} it is REQUIRED to follow the specification and security advisory mandated by the respective elliptic curve specification.
 
 
 # Supported Public Key Algorithms
@@ -275,7 +298,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 The ML-KEM + ECDH public key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
 This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
-As explained in {{Section 1.4.2 of I-D.draft-ietf-openpgp-pqc}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ(/T) encryption schemes.
+As explained in {{Section 1.4.2 of I-D.draft-ietf-openpgp-pqc}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ/T encryption schemes.
 
 ## Composite Signatures
 
@@ -336,7 +359,7 @@ To instantiate `ECDH-KEM`, one must select a parameter set from {{tab-ecdh-nist-
 
 The operation `ECDH-KEM.Encaps()` is defined as follows:
 
-1. Generate an ephemeral key pair {`v`, `V=vG`} as defined in {{SP800-186}} or {{RFC5639}} where `v` is a random scalar with `0 < v < n`, `n` being the base point order of the elliptic curve domain parameters
+1. Generate an ephemeral key pair {`v`, `V=vG`} as defined in Appendix A of {{FIPS-186-5}} where `v` is a random scalar with `0 < v < n`, `n` being the base point order of the elliptic curve domain parameters
 
  2. Compute the shared point `S = vR`, where `R` is the recipient's public key `ecdhPublicKey`, according to {{SP800-186}} or {{RFC5639}}
 
@@ -353,6 +376,11 @@ The operation `ECDH-KEM.Decaps()` is defined as follows:
  2. Extract the `X` coordinate from the SEC1 encoded point `S = 04 || X || Y` as defined in section {{sec1-format}}
 
  3. Set the output `ecdhKeyShare` to `X`
+
+Before performing the operations `ECDH-KEM.Encaps()` and `ECDH-KEM.Decaps()` defined above, an implementation MUST perform full public key validation, as defined in Section 5.6.2.3.3 of {{SP800-56A}}, on the received EC point that is input to the operation, that is, on the recipient's public key `ecdhPublicKey` in the case of encapsulation, and on the ephemeral public key `ecdhCipherText` in the case of decapsulation.
+That is, the implementation MUST verify that the point is not the point at infinity, that both of its coordinates are elements of the underlying field, and that the point satisfies the curve equation.
+Since all curves specified in this document have a cofactor of 1, a successful full public key validation implies that the point lies in the subgroup generated by the base point, and no further subgroup membership check is required.
+If the validation fails, the operation MUST be aborted with an error.
 
 ### ML-KEM {#mlkem-ops}
 
@@ -379,7 +407,7 @@ All artifacts are encoded as defined in [FIPS-203].
 | Ciphertext                    | 1088 octets | 1568 octets |
 | Key share (shared secret key) | 32 octets   | 32 octets   |
 
-To instantiate `ML-KEM`, one must select a parameter set from the column "ML-KEM" of {{tab-mlkem-artifacts}}.
+To instantiate `ML-KEM`, one must select a parameter set from the respective column of {{tab-mlkem-artifacts}}.
 
 ## Composite Encryption Schemes with ML-KEM {#ecc-mlkem}
 
@@ -412,8 +440,8 @@ For the composite KEM schemes defined in this document the procedure `multiKeyCo
 ### Key Generation Procedure {#ecc-mlkem-generation}
 
 The implementation MUST generate the ML-KEM and the ECDH component keys independently.
-ML-KEM key generation follows the specification in [FIPS-203], and the artifacts are encoded as fixed-length octet strings whose sizes are listed {{mlkem-ops}}.
-ECDH key generation follows the specification in {{SP800-186}} or {{RFC5639}}, and the artifacts are encoded as fixed-length octet strings whose sizes and format are listed in {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
+ML-KEM key generation follows the specification in [FIPS-203], and the artifacts are encoded as fixed-length octet strings whose sizes are listed in {{tab-mlkem-artifacts}}.
+ECDH key generation follows the specification in Appendix A of {{FIPS-186-5}}, and the artifacts are encoded as fixed-length octet strings whose sizes and format are listed in {{tab-ecdh-nist-artifacts}} or {{tab-ecdh-brainpool-artifacts}}.
 
 ### Encryption Procedure {#ecc-mlkem-encryption}
 
@@ -447,7 +475,7 @@ The procedure to perform public key decryption with an ML-KEM + ECDH composite s
 
  3. Check that the own and the extracted algorithm ID match
 
- 4. Parse the `ecdhSecretKey` and `mlkemSecretKey` from the algorithm specific data of the own secret key encoded in the format specified in {{mlkem-ecc-key}}
+ 4. Parse the `ecdhSecretKey` and `mlkemSecretKey` from the algorithm specific data of the own secret key encoded in the format specified in {{mlkem-ecc-key}}, and take `ecdhPublicKey` from the public key part of the own secret key packet
 
  5. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
@@ -480,7 +508,7 @@ The algorithm-specific fields consist of the output of the encryption procedure 
  - The wrapped session key represented as an octet string.
 
 Note that like in the case of the algorithms X25519 and X448 specified in [RFC9580], for the ML-KEM composite schemes, in the case of a v3 PKESK packet, the symmetric algorithm identifier is not encrypted.
-Instead, it is placed in plaintext after the `mlkemCipherText` and before the length octet preceding the wrapped session key.
+Instead, it is prepended to the wrapped session key in plaintext and its length is included in the preceding length field.
 In the case of v3 PKESK packets for ML-KEM composite schemes, the symmetric algorithm used MUST be AES-128, AES-192 or AES-256 (algorithm ID 7, 8 or 9).
 
 In the case of a v3 PKESK, a receiving implementation MUST check if the length of the unwrapped symmetric key matches the symmetric algorithm identifier, and abort if this is not the case.
@@ -526,8 +554,8 @@ and
     (verified) <- ECDSA.Verify(ecdsaPublicKey, dataDigest,
                                ecdsaSignatureR, ecdsaSignatureS)
 
-Here, the operation `ECDSA.Sign()` is defined as the algorithm in Section "6.4.1 ECDSA Signature Generation Algorithm" of {{SP800-186-5}}, however, excluding Step 1: `H = Hash(M)` in that algorithm specification, as in this specification the message digest `H` is a direct input to the operation `ECDSA.Sign()`. Equivalently, the operation `ECDSA.Sign()` can be understood as representing the algorithm under Section "4.2.1.1. Signature Algorithm" in {{TR-03111}}, again with the difference that in this specification the message digest `H_Tau(M)` appearing in Step 5 of the algorithm specification is the direct input to the operation `ECDSA.Sign()` and thus the hash computation is not carried out.
-The same statement holds for the definition of the verification operation `ECDSA.Verify()`: it is given either through the algorithm defined in Section "6.4.2 ECDSA Signature Verification Algorithm" of {{SP800-186-5}} omitting the message digest computation in Step 2 or by the algorithm in Section "4.2.1.2. Verification Algorithm" of {{TR-03111}} omitting the message digest computation in Step 3.
+Here, the operation `ECDSA.Sign()` is defined as the algorithm in Section "6.4.1 ECDSA Signature Generation Algorithm" of {{FIPS-186-5}}, however, excluding Step 1: `H = Hash(M)` in that algorithm specification, as in this specification the message digest `H` is a direct input to the operation `ECDSA.Sign()`. Equivalently, the operation `ECDSA.Sign()` can be understood as representing the algorithm under Section "4.2.1.1. Signature Algorithm" in {{TR-03111}}, again with the difference that in this specification the message digest `H_Tau(M)` appearing in Step 5 of the algorithm specification is the direct input to the operation `ECDSA.Sign()` and thus the hash computation is not carried out.
+The same statement holds for the definition of the verification operation `ECDSA.Verify()`: it is given either through the algorithm defined in Section "6.4.2 ECDSA Signature Verification Algorithm" of {{FIPS-186-5}} omitting the message digest computation in Step 2 or by the algorithm in Section "4.2.1.2. Verification Algorithm" of {{TR-03111}} omitting the message digest computation in Step 3.
 
 The public keys MUST be encoded in SEC1 format as defined in section {{sec1-format}}.
 The secret key, as well as both values `R` and `S` of the signature MUST each be encoded as a big-endian integer in a fixed-length octet string of the specified size.
@@ -575,7 +603,7 @@ All artifacts are encoded as defined in [FIPS-204].
 
 The implementation MUST generate the ML-DSA and the ECDSA component keys independently.
 ML-DSA key generation follows the specification in [FIPS-204] and the artifacts are encoded as fixed-length octet strings whose sizes are listed in {{mldsa-signature}}.
-ECDSA key generation follows the specification in {{SP800-186}} or {{RFC5639}}, and the artifacts are encoded as fixed-length octet strings whose sizes are listed in {{ecdsa-signature}}.
+ECDSA key generation follows the specification in Appendix A of {{FIPS-186-5}}, and the artifacts are encoded as fixed-length octet strings whose sizes are listed in {{ecdsa-signature}}.
 
 ### Signature Generation
 
@@ -654,20 +682,24 @@ The following security considerations given in {{I-D.draft-ietf-openpgp-pqc}} eq
 
 When implementing or using any of the algorithms defined in this specification, the above referenced security considerations should be noted.
 
+## Elliptic Curve Point Validation {#ec-point-validation}
+
+In contrast to the Montgomery and Edwards curves used for the composite schemes defined in {{I-D.draft-ietf-openpgp-pqc}}, the NIST and Brainpool curves used in this document are curves in short Weierstrass form.
+For these curves, performing a scalar multiplication of a secret scalar with an attacker-controlled point that does not lie on the curve can enable invalid-curve attacks, which can lead to the recovery of the ECDH secret key.
+To prevent these attacks, {{ecdh-kem}} requires implementations to perform full public key validation according to Section 5.6.2.3.3 of {{SP800-56A}} on all EC points that are input to the ECDH-KEM operations.
+
 # IANA Considerations
 
 IANA is requested to add the algorithm IDs defined in {{iana-pubkey-algos}} to the existing registry `OpenPGP Public Key Algorithms` maintained at {{IANA-OPENPGP}}.
 The field specifications enclosed in brackets for the ML-KEM + ECDH composite algorithms denote fields that are only conditionally contained in the data structure.
 
-\[Note: Once the working group has agreed on the actual algorithm choice, the following table with the requested IANA updates will be filled out.\]
-
 {: title="IANA updates for registry 'OpenPGP Public Key Algorithms'" #iana-pubkey-algos}
 ID     | Algorithm                        | Public Key Format                                                                                                    | Secret Key Format                                                                                                   | Signature Format                                                                                              | PKESK Format                                                                                                                                                                                | Reference
 ---  : | -----                            | ---------:                                                                                                           | --------:                                                                                                           | --------:                                                                                                     | -----:                                                                                                                                                                                      | -----:
-TBD    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdsa-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-NIST-P-521      | 133 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 133 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+TBD    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
+TBD    | ML-KEM-1024+ECDH-NIST-P-521      | 133 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 66 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 133 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
 TBD    | ML-KEM-768+ECDH-brainpoolP384r1  | 97 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-brainpoolP512r1 | 129 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1568 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 129 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+TBD    | ML-KEM-1024+ECDH-brainpoolP512r1 | 129 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 129 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
 TBD    | ML-DSA-65+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
 TBD    | ML-DSA-87+ECDSA-NIST-P-521       | 133 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 66 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 132 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
 TBD    | ML-DSA-65+ECDSA-brainpoolP384r1  | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
@@ -680,6 +712,15 @@ IANA is asked to add the following note to this registry:
 # Changelog
 
 This section gives the history of changes in the respective document versions. The order is newest-first.
+
+## draft-ietf-openpgp-nist-bp-comp-05
+
+- Added the requirement to perform full public key validation on received EC points in the ECDH-KEM operations, and a corresponding security consideration regarding invalid-curve attacks.
+- Fixed errors in the IANA table: ECDH secret key length for P-521 (66 instead of 64 octets), ML-KEM-1024 public key labels, and a wrong table reference for the ECDH secret key format.
+- Corrected the description of the placement of the symmetric algorithm identifier in v3 PKESK packets to match the wire format and {{I-D.draft-ietf-openpgp-pqc}}.
+- Fixed the mislabeled reference to FIPS 186-5 (previously labeled as SP 800-186) and cite FIPS 186-5 Appendix A for EC key generation.
+- Decryption procedure: clarified that `ecdhPublicKey` is taken from the public key part of the own secret key packet.
+- Removed a stale editor's note above the IANA table.
 
 ## draft-ietf-openpgp-nist-bp-comp-04
 
