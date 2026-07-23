@@ -120,14 +120,13 @@ Table of Contents
      7.1.  Elliptic Curve Point Validation
    8.  IANA Considerations
    9.  Changelog
-     9.1.  draft-ietf-openpgp-nist-bp-comp-05
-     9.2.  draft-ietf-openpgp-nist-bp-comp-04
-     9.3.  draft-ietf-openpgp-nist-bp-comp-03
-     9.4.  draft-ietf-openpgp-nist-bp-comp-02
-     9.5.  draft-ietf-openpgp-nist-bp-comp-01
-     9.6.  draft-ietf-openpgp-nist-bp-comp-00
-     9.7.  draft-ehlen-openpgp-nist-bp-comp-02
-     9.8.  draft-ehlen-openpgp-nist-bp-comp-01
+     9.1.  draft-ietf-openpgp-nist-bp-comp-04
+     9.2.  draft-ietf-openpgp-nist-bp-comp-03
+     9.3.  draft-ietf-openpgp-nist-bp-comp-02
+     9.4.  draft-ietf-openpgp-nist-bp-comp-01
+     9.5.  draft-ietf-openpgp-nist-bp-comp-00
+     9.6.  draft-ehlen-openpgp-nist-bp-comp-02
+     9.7.  draft-ehlen-openpgp-nist-bp-comp-01
    10. Contributors
    11. References
      11.1.  Normative References
@@ -1163,7 +1162,7 @@ Table of Contents
    This section gives the history of changes in the respective document
    versions.  The order is newest-first.
 
-9.1.  draft-ietf-openpgp-nist-bp-comp-05
+9.1.  draft-ietf-openpgp-nist-bp-comp-04
 
    *  Added the requirement to perform full public key validation on
       received EC points in the ECDH-KEM operations, and a corresponding
@@ -1188,35 +1187,31 @@ Table of Contents
 
    *  Update reference I-D.draft-ietf-openpgp-pqc to RFC 9980
 
-9.2.  draft-ietf-openpgp-nist-bp-comp-04
-
    *  Change email address of one author.
 
-   *  No changes in content, mainly only bump the draft version.
-
-9.3.  draft-ietf-openpgp-nist-bp-comp-03
+9.2.  draft-ietf-openpgp-nist-bp-comp-03
 
    *  Fix: Display test vector public keys (instead of secret keys).
 
    *  Align with (relevant) editorial changes from IESG review of
       [RFC9980].
 
-9.4.  draft-ietf-openpgp-nist-bp-comp-02
+9.3.  draft-ietf-openpgp-nist-bp-comp-02
 
    *  Updated algorithm selection and assigned experimental code points
       100-107.
 
    *  Added test vectors.
 
-9.5.  draft-ietf-openpgp-nist-bp-comp-01
+9.4.  draft-ietf-openpgp-nist-bp-comp-01
 
    *  Editorial alignment to [RFC9980].
 
-9.6.  draft-ietf-openpgp-nist-bp-comp-00
+9.5.  draft-ietf-openpgp-nist-bp-comp-00
 
    *  Changed draft title.
 
-9.7.  draft-ehlen-openpgp-nist-bp-comp-02
+9.6.  draft-ehlen-openpgp-nist-bp-comp-02
 
    *  Completed the IANA table.
 
@@ -1226,7 +1221,7 @@ Table of Contents
 
    *  Various editorial alignments to [RFC9980].
 
-9.8.  draft-ehlen-openpgp-nist-bp-comp-01
+9.7.  draft-ehlen-openpgp-nist-bp-comp-01
 
    *  Replaced the explicit description of the KEM combiner with a
       reference to [RFC9980].
