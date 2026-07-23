@@ -713,7 +713,7 @@ IANA is asked to add the following note to this registry:
 
 This section gives the history of changes in the respective document versions. The order is newest-first.
 
-## draft-ietf-openpgp-nist-bp-comp-05
+## draft-ietf-openpgp-nist-bp-comp-04
 
 - Added the requirement to perform full public key validation on received EC points in the ECDH-KEM operations, and a corresponding security consideration regarding invalid-curve attacks.
 - Fixed errors in the IANA table: ECDH secret key length for P-521 (66 instead of 64 octets), ML-KEM-1024 public key labels, and a wrong table reference for the ECDH secret key format.
@@ -722,11 +722,7 @@ This section gives the history of changes in the respective document versions. T
 - Decryption procedure: clarified that `ecdhPublicKey` is taken from the public key part of the own secret key packet.
 - Removed a stale editor's note above the IANA table.
 - Update reference I-D.draft-ietf-openpgp-pqc to RFC 9980
-
-## draft-ietf-openpgp-nist-bp-comp-04
-
 - Change email address of one author.
-- No changes in content, mainly only bump the draft version.
 
 ## draft-ietf-openpgp-nist-bp-comp-03
 
