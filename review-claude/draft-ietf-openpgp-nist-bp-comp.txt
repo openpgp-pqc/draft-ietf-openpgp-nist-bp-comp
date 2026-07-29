@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 24 January 2027                                     S. Kousidis
+Expires: 30 January 2027                                     S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                            23 July 2026
+                                                            29 July 2026
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 January 2027.
+   This Internet-Draft will expire on 30 January 2027.
 
 Copyright Notice
 
@@ -359,8 +359,8 @@ Table of Contents
    As explained in Section 1.4.2 of [RFC9980], the OpenPGP protocol
    inherently supports parallel encryption to different keys.  Note that
    the confidentiality of a message is not post-quantum secure when
-   encrypting to different keys unless all keys support PQ/T encryption
-   schemes.
+   encrypting to different keys unless all keys support PQ or PQ/T
+   encryption schemes.
 
 4.2.  Composite Signatures
 
