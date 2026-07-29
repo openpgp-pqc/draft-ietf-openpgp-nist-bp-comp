@@ -301,7 +301,7 @@ This draft will not be sent to IANA without every listed algorithm having a non-
 The ML-KEM + ECDH public key encryption involves both the ML-KEM and an ECDH KEM in a non-separable manner.
 This is achieved via KEM combination, that is, both key encapsulations/decapsulations are performed in parallel, and the resulting key shares are fed into a key combiner to produce a single shared secret for message encryption.
 
-As explained in {{Section 1.4.2 of RFC9980}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ/T encryption schemes.
+As explained in {{Section 1.4.2 of RFC9980}}, the OpenPGP protocol inherently supports parallel encryption to different keys. Note that the confidentiality of a message is not post-quantum secure when encrypting to different keys unless all keys support PQ or PQ/T encryption schemes.
 
 ## Composite Signatures
 
