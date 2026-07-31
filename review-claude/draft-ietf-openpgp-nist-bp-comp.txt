@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 30 January 2027                                     S. Kousidis
+Expires: 1 February 2027                                     S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                            29 July 2026
+                                                            31 July 2026
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 January 2027.
+   This Internet-Draft will expire on 1 February 2027.
 
 Copyright Notice
 
@@ -637,7 +637,7 @@ Table of Contents
    4.   Parse the ecdhSecretKey and mlkemSecretKey from the algorithm-
         specific data of the own secret key, and the ecdhPublicKey from
         the algorithm-specific data of the own public key, encoded in
-        the format specified in Section 4.3.2
+        the formats specified in Section 5.3.2.
 
    5.   Instantiate the ECDH-KEM and the ML-KEM depending on the
         algorithm ID according to Table 6
@@ -989,10 +989,10 @@ Table of Contents
    these curves, performing a scalar multiplication of a secret scalar
    with an attacker-controlled point that does not lie on the curve can
    enable invalid-curve attacks, which can lead to the recovery of the
-   ECDH secret key.  To prevent these attacks, Section 5.1.1.1 requires
-   implementations to perform full public key validation according to
-   Section 5.6.2.3.3 of [SP800-56A] on all EC points that are input to
-   the ECDH-KEM operations.
+   ECDH secret key.  To prevent these attacks, the procedures described
+   in Section 5.1.1.1 require implementations to perform full public key
+   validation according to Section 5.6.2.3.3 of [SP800-56A] on all EC
+   points that are input to the ECDH-KEM operations.
 
 8.  IANA Considerations
 
