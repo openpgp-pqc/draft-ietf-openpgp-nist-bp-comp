@@ -478,8 +478,8 @@ The procedure to perform public key decryption with an ML-KEM + ECDH composite s
  4. Parse the ecdhSecretKey and mlkemSecretKey from the algorithm-
         specific data of the own secret key, and the ecdhPublicKey from
         the algorithm-specific data of the own public key, encoded in
-        the format specified in Section 4.3.2
-
+        the formats specified in {{mlkem-ecc-key}}.
+        
  5. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
  6. Parse `ecdhCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `ecdhCipherText || mlkemCipherText || len(C, symAlgId) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
@@ -689,7 +689,7 @@ When implementing or using any of the algorithms defined in this specification, 
 
 In contrast to the Montgomery and Edwards curves used for the composite schemes defined in {{RFC9980}}, the NIST and Brainpool curves used in this document are curves in short Weierstrass form.
 For these curves, performing a scalar multiplication of a secret scalar with an attacker-controlled point that does not lie on the curve can enable invalid-curve attacks, which can lead to the recovery of the ECDH secret key.
-To prevent these attacks, {{ecdh-kem}} requires implementations to perform full public key validation according to Section 5.6.2.3.3 of {{SP800-56A}} on all EC points that are input to the ECDH-KEM operations.
+To prevent these attacks, the procedures described in {{ecdh-kem}} require implementations to perform full public key validation according to Section 5.6.2.3.3 of {{SP800-56A}} on all EC points that are input to the ECDH-KEM operations.
 
 # IANA Considerations
 
