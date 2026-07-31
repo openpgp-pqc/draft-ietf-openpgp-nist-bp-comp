@@ -479,7 +479,7 @@ The procedure to perform public key decryption with an ML-KEM + ECDH composite s
         specific data of the own secret key, and the ecdhPublicKey from
         the algorithm-specific data of the own public key, encoded in
         the formats specified in {{mlkem-ecc-key}}.
-        
+
  5. Instantiate the ECDH-KEM and the ML-KEM depending on the algorithm ID according to {{tab-mlkem-ecc-composite}}
 
  6. Parse `ecdhCipherText`, `mlkemCipherText`, and `C` from `encryptedKey` encoded as `ecdhCipherText || mlkemCipherText || len(C, symAlgId) (|| symAlgId) || C` as specified in {{ecc-mlkem-pkesk}}, where `symAlgId` is present only in the case of a v3 PKESK.
