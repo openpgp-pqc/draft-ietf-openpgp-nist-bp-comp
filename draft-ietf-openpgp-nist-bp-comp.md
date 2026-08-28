@@ -269,30 +269,22 @@ For encryption, the following composite KEM schemes are specified:
 {: title="KEM algorithm specifications" #kem-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
-100                    | ML-KEM-768+ECDH-NIST-P-384         | MAY         | {{ecc-mlkem}}
-101                    | ML-KEM-1024+ECDH-NIST-P-521        | MAY         | {{ecc-mlkem}}
-102                    | ML-KEM-768+ECDH-brainpoolP384r1    | MAY         | {{ecc-mlkem}}
-103                    | ML-KEM-1024+ECDH-brainpoolP512r1   | MAY         | {{ecc-mlkem}}
+37                     | ML-KEM-768+ECDH-NIST-P-384         | MAY         | {{ecc-mlkem}}
+38                     | ML-KEM-1024+ECDH-NIST-P-521        | MAY         | {{ecc-mlkem}}
+39                     | ML-KEM-768+ECDH-brainpoolP384r1    | MAY         | {{ecc-mlkem}}
+40                     | ML-KEM-1024+ECDH-brainpoolP512r1   | MAY         | {{ecc-mlkem}}
 
 For signatures, the following composite signature schemes are specified:
 
 {: title="Signature algorithm specifications" #sig-alg-specs}
 ID                     | Algorithm                          | Requirement | Definition
 ---------------------: | ---------------------------------- | ----------- | --------------------
-104                    | ML-DSA-65+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
-105                    | ML-DSA-87+ECDSA-NIST-P-521         | MAY         | {{ecc-mldsa}}
-106                    | ML-DSA-65+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
-107                    | ML-DSA-87+ECDSA-brainpoolP512r1    | MAY         | {{ecc-mldsa}}
+41                     | ML-DSA-65+ECDSA-NIST-P-384         | MAY         | {{ecc-mldsa}}
+42                     | ML-DSA-87+ECDSA-NIST-P-521         | MAY         | {{ecc-mldsa}}
+43                     | ML-DSA-65+ECDSA-brainpoolP384r1    | MAY         | {{ecc-mldsa}}
+44                     | ML-DSA-87+ECDSA-brainpoolP512r1    | MAY         | {{ecc-mldsa}}
 
 An implementation MAY implement any of the listed algorithms.
-
-### Experimental Codepoints for Interop Testing
-
-\[ Note: this section to be removed before publication \]
-
-The use of private/experimental codepoints during development are intended to be used in non-released software only, for experimentation and interop testing purposes only.
-An OpenPGP implementation MUST NOT produce a formal release using these experimental codepoints.
-This draft will not be sent to IANA without every listed algorithm having a non-experimental codepoint.
 
 # Algorithm Combinations
 
@@ -325,7 +317,7 @@ In this section the encryption, decryption, and data formats for the ECDH compon
 {: title="NIST curves parameters and artifact lengths" #tab-ecdh-nist-artifacts}
 |                          | NIST P-384                                                        | NIST P-521                                              |
 | ------------------------ | --------------------------------------------------------          | --------------------------------------------------------|
-| Algorithm ID reference   | 100                                                               | 101                                                     |
+| Algorithm ID reference   | 37                                                                | 38                                                      |
 | Field size               | 48 octets                                                         | 66 octets                                               |
 | ECDH KEM                 | ECDH-KEM {{ecdh-kem}}                                             | ECDH-KEM {{ecdh-kem}}                                   |
 | ECDH public key          | 97 octets of SEC1-encoded public point                            | 133 octets of SEC1-encoded public point                 |
@@ -336,7 +328,7 @@ In this section the encryption, decryption, and data formats for the ECDH compon
 {: title="Brainpool curves parameters and artifact lengths" #tab-ecdh-brainpool-artifacts}
 |                          | brainpoolP384r1                                          | brainpoolP512r1                                          |
 | ------------------------ | -------------------------------------------------------- | -------------------------------------------------------- |
-| Algorithm ID reference   | 102                                                      | 103                                                      |
+| Algorithm ID reference   | 39                                                       | 40                                                       |
 | Field size               | 48 octets                                                | 64 octets                                                |
 | ECDH KEM                 | ECDH-KEM {{ecdh-kem}}                                    | ECDH-KEM {{ecdh-kem}}                                    |
 | ECDH public key          | 97 octets of SEC1-encoded public point                   | 129 octets of SEC1-encoded public point                  |
@@ -401,7 +393,7 @@ All artifacts are encoded as defined in [FIPS-203].
 {: title="ML-KEM parameters and artifact lengths" #tab-mlkem-artifacts}
 |                               | ML-KEM-768  | ML-KEM-1024 |
 |-------------------------------| ----------- | ----------- |
-| Algorithm ID reference        | 100, 102    | 101, 103    |
+| Algorithm ID reference        | 37, 39      | 38, 40      |
 | Public (encapsulation) key    | 1184 octets | 1568 octets |
 | Secret (decapsulation) key    | 64 octets   | 64 octets   |
 | Ciphertext                    | 1088 octets | 1568 octets |
@@ -416,10 +408,10 @@ To instantiate `ML-KEM`, one must select a parameter set from the respective col
 {: title="ML-KEM + ECDH composite schemes" #tab-mlkem-ecc-composite}
 Algorithm ID reference     | ML-KEM       |  ECDH-KEM curve  |
 -------------------------: | ------------ | ---------------- |
-100                        | ML-KEM-768   |  NIST P-384      |
-101                        | ML-KEM-1024  |  NIST P-521      |
-102                        | ML-KEM-768   |  brainpoolP384r1 |
-103                        | ML-KEM-1024  |  brainpoolP512r1 |
+37                         | ML-KEM-768   |  NIST P-384      |
+38                         | ML-KEM-1024  |  NIST P-521      |
+39                         | ML-KEM-768   |  brainpoolP384r1 |
+40                         | ML-KEM-1024  |  brainpoolP512r1 |
 
 The ML-KEM + ECDH composite public key encryption schemes are built according to the following principal design:
 
@@ -568,7 +560,7 @@ The following table describes the ECDSA parameters and artifact lengths:
 {: title="ECDSA parameters and artifact lengths" #tab-ecdsa-artifacts}
 |                      | NIST P-384 | NIST-P-521  | brainpoolP384r1 | brainpoolP512r1 |
 ---------------------: | ---------- | ----------- | --------------- | --------------- |
-Algorithm ID reference | 104        | 105         | 106             | 107             |
+Algorithm ID reference | 41         | 42          | 43              | 44              |
 Field size             | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
 Public key             | 97 octets  | 133 octets  | 97 octets       | 129 octets      |
 Secret (Private) key   | 48 octets  | 66 octets   | 48 octets       | 64 octets       |
@@ -595,7 +587,7 @@ All artifacts are encoded as defined in [FIPS-204].
 {: title="ML-DSA parameters and artifact lengths" #tab-mldsa-artifacts}
 |                        | ML-DSA-65   | ML-DSA-87   |
 |------------------------| ----------- | ----------- |
-| Algorithm ID reference | 104, 106    | 105, 107    |
+| Algorithm ID reference | 41, 43      | 42, 44      |
 | Public key             | 1952 octets | 2592 octets |
 | Secret (Private) key   | 32 octets   | 32 octets   |
 | Signature              | 3309 octets | 4627 octets |
@@ -699,14 +691,14 @@ The field specifications enclosed in brackets for the ML-KEM + ECDH composite al
 {: title="IANA updates for registry 'OpenPGP Public Key Algorithms'" #iana-pubkey-algos}
 ID     | Algorithm                        | Public Key Format                                                                                                    | Secret Key Format                                                                                                   | Signature Format                                                                                              | PKESK Format                                                                                                                                                                                | Reference
 ---  : | -----                            | ---------:                                                                                                           | --------:                                                                                                           | --------:                                                                                                     | -----:                                                                                                                                                                                      | -----:
-TBD    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-NIST-P-521      | 133 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 66 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 133 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
-TBD    | ML-KEM-768+ECDH-brainpoolP384r1  | 97 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
-TBD    | ML-KEM-1024+ECDH-brainpoolP512r1 | 129 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 129 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
-TBD    | ML-DSA-65+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-87+ECDSA-NIST-P-521       | 133 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 66 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 132 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-65+ECDSA-brainpoolP384r1  | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
-TBD    | ML-DSA-87+ECDSA-brainpoolP512r1  | 129 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 64 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 128 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+37    | ML-KEM-768+ECDH-NIST-P-384       | 97 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
+38    | ML-KEM-1024+ECDH-NIST-P-521      | 133 octets ECDH public key ({{tab-ecdh-nist-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 66 octets ECDH secret key ({{tab-ecdh-nist-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 133 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+39    | ML-KEM-768+ECDH-brainpoolP384r1  | 97 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1184 octets ML-KEM-768 public key ({{tab-mlkem-artifacts}}) | 48 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-768 secret key ({{tab-mlkem-artifacts}})  | N/A                                                                                                           | 97 octets ECDH ciphertext, 1088 octets ML-KEM-768 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}})  | {{ecc-mlkem}}
+40    | ML-KEM-1024+ECDH-brainpoolP512r1 | 129 octets ECDH public key ({{tab-ecdh-brainpool-artifacts}}), 1568 octets ML-KEM-1024 public key ({{tab-mlkem-artifacts}}) | 64 octets ECDH secret key ({{tab-ecdh-brainpool-artifacts}}), 64 octets ML-KEM-1024 secret key ({{tab-mlkem-artifacts}}) | N/A                                                                                                           | 129 octets ECDH ciphertext, 1568 octets ML-KEM-1024 ciphertext, 1 octet remaining length, \[1 octet algorithm ID in case of v3 PKESK,\] `n` octets wrapped session key ({{ecc-mlkem-pkesk}}) | {{ecc-mlkem}}
+41    | ML-DSA-65+ECDSA-NIST-P-384       | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+42    | ML-DSA-87+ECDSA-NIST-P-521       | 133 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 66 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 132 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+43    | ML-DSA-65+ECDSA-brainpoolP384r1  | 97 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 1952 octets ML-DSA-65 public key ({{tab-mldsa-artifacts}})  | 48 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-65 secret key ({{tab-mldsa-artifacts}})   | 96 octets ECDSA signature {{tab-ecdsa-artifacts}} , 3309 octets ML-DSA-65 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
+44    | ML-DSA-87+ECDSA-brainpoolP512r1  | 129 octets ECDSA public key ({{tab-ecdsa-artifacts}}), 2592 octets ML-DSA-87 public key ({{tab-mldsa-artifacts}})  | 64 octets ECDSA secret key ({{tab-ecdsa-artifacts}}), 32 octets ML-DSA-87 secret key ({{tab-mldsa-artifacts}})   | 128 octets ECDSA signature {{tab-ecdsa-artifacts}} , 4627 octets ML-DSA-87 signature ({{tab-mldsa-artifacts}}) | N/A                                                                                                                                                                                         | {{ecc-mldsa}}
 
 IANA is asked to add the following note to this registry:
 
@@ -716,6 +708,13 @@ IANA is asked to add the following note to this registry:
 
 This section gives the history of changes in the respective document versions. The order is newest-first.
 
+## draft-ietf-openpgp-nist-bp-comp-05
+
+- Replaced experimental algorithm IDs 100-107 with the assigned algorithm IDs 37-44.
+- Removed the note about using experimental code points for interoperability testing.
+- Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate  composite KEM values.
+- Added detached signature test vectors for all four composite signature algorithms.
+
 ## draft-ietf-openpgp-nist-bp-comp-04
 
 - Added the requirement to perform full public key validation on received EC points in the ECDH-KEM operations, and a corresponding security consideration regarding invalid-curve attacks.
@@ -724,7 +723,7 @@ This section gives the history of changes in the respective document versions. T
 - Fixed the mislabeled reference to FIPS 186-5 (previously labeled as SP 800-186) and cite FIPS 186-5 Appendix A for EC key generation.
 - Decryption procedure: clarified that `ecdhPublicKey` is taken from the public key part of the own secret key packet.
 - Removed a stale editor's note above the IANA table.
-- Update reference I-D.draft-ietf-openpgp-pqc to RFC 9980
+- Update reference I-D.draft-ietf-openpgp-pqc to RFC 9980.
 - Change email address of one author.
 
 ## draft-ietf-openpgp-nist-bp-comp-03
@@ -776,13 +775,15 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-NIST-P-384 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint `a3f3ea658b8324df76694581f4f6fede3e15bb0b67c7520255d2f7868208d756`.
+The primary key has the fingerprint
+`44F8AEA123A5BB7B747C714A3749876A84ECC7EFCAC6CB5ACCD1A152F6351DE6`.
 
-The subkey has the fingerprint `16addcbd549eb8c4153c9626b6aa4dac17adeac4f79c54dfcbe4aabaa28aba1b`.
+The subkey has the fingerprint
+`175BCF4EA2AC9C2C35809D071B2549C9DB1898878863D12D374C5A0C794F0AFE`.
 
-{: sourcecode-name="seckey-primary104-sub100.asc"}
+{: sourcecode-name="seckey-primary41-sub37.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary104-sub100.asc}
+{::include test-vectors/seckey-primary41-sub37.asc}
 ~~~
 
 ### Transferable Public Key {#test-vector-1-pub}
@@ -796,9 +797,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-1-sec}} cons
 - A v6 ML-KEM-768+ECDH-NIST-P-384 Public Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="pubkey-primary104-sub100.asc"}
+{: sourcecode-name="pubkey-primary41-sub37.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/pubkey-primary104-sub100.asc}
+{::include test-vectors/pubkey-primary41-sub37.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -808,17 +809,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `26da669cc569a460708f96b0e4132488c2f990b931a7fa4e02625f3f4293e7b5`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `6FC2B62C8A99B3ACE887055CEF120E763820D8742373FB9FBED1AE140056F34D`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `b1564c7701bdf47ac5825908aac109cd4fafa0c528beefe73be02248dff8f2665e8e01d38fd17424af32c8acaabdfe17`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `849DB1550BC587A213684D607C4B2A888FAADBEAC9B86F4D940CEDFF7CC6F2C6FEA19640135D2676E3309F3B496B114C`.
 
-The hex-encoded output of `multiKeyCombine` is `ea93bb3825128c37f318018d74867cdb451317ae3fa6b64da0eca7931cd8bd7c`.
+The hex-encoded output of `multiKeyCombine` is `E32208735F54262A792303915B26BD37BE621FC278617CE81EE62FB41C60F3FD`.
 
-The hex-encoded session key is `0c251def2936896735f8903bf6382d822e6aa3791104b1a2da02e142a10dc38f`.
+The hex-encoded session key is `3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271F496A4699075D265`.
 
-{: sourcecode-name="encrypted-alg100_signed-alg104.asc"}
+{: sourcecode-name="encrypted-alg37_signed-alg41.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/encrypted-alg100_signed-alg104.asc}
+{::include test-vectors/encrypted-alg37_signed-alg41.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-1-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg41.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg41.asc}
 ~~~
 
 ## Sample ML-DSA-87+ECDSA-NIST-P-521 with ML-KEM-1024+ECDH-NIST-P-521 Data
@@ -834,13 +846,15 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-1024+ECDH-NIST-P-521 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint `e3674a3dcbfc35fcc24b1cd7f55213a3866d17b6081c3ad5933af3d78e8c8bce`.
+The primary key has the fingerprint
+`97BF5A5EB176B4830F8087EDC98048717273D9EF7A95BA81425664BEDBC81AE5`.
 
-The subkey has the fingerprint `c22c679c40289df8111fda26f1cc8eca6c08dcbc8e20ceaac7e6b7ddd3b040bb`.
+The subkey has the fingerprint
+`3838F412C21DF580C7B8A316BE850C3F26684FC713FEE9801D4D1227294DD094`.
 
-{: sourcecode-name="seckey-primary105-sub101.asc"}
+{: sourcecode-name="seckey-primary42-sub38.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary105-sub101.asc}
+{::include test-vectors/seckey-primary42-sub38.asc}
 ~~~
 
 ### Transferable Public Key {#test-vector-2-pub}
@@ -854,9 +868,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-2-sec}} cons
 - A v6 ML-KEM-1024+ECDH-NIST-P-521 Public Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="pubkey-primary105-sub101.asc"}
+{: sourcecode-name="pubkey-primary42-sub38.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/pubkey-primary105-sub101.asc}
+{::include test-vectors/pubkey-primary42-sub38.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -866,17 +880,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `cd8a9216c981c151843d48ce17a30cb69f01373c35032d313ce34244cbaa0e35`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `70864EE075F0D9DA98596201DB720283EABED187655264BA78DEB6C4830D74E6`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `016ca7330ea0a216376803717001269aeb8a94083b20bb3a1a709f8aeb322219759d9ff7872bab303e357f78507d423f59d3e2206e67537aba75280ca7937e250b5b`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `0199DF8E39D0F2707661C511630F86B3BC534759F4D47731F3DD248E8B603A1402CB055F187D35D931A7845F937414AE40EF6BBFAC260810CE1BF6596D16763AD421`.
 
-The hex-encoded output of `multiKeyCombine` is `6c514547454fbb8ff7308c80d79f59d1cde7d99a2fe2a2a1ac4e31114906b186`.
+The hex-encoded output of `multiKeyCombine` is `AE20BEC20344D38BCFBDDD5F47CB39DF6FDCF21812609989A2B8EBDB1C86E444`.
 
-The hex-encoded session key is `371de99d254c0a0d4ee2c1b63d2a4956bbfe84cdafa4b264dcc59b80ece9d8f4`.
+The hex-encoded session key is `1CF924D10F23B2AC9A4EE7F851F608C46949777722128C482053CA8DE46FE4DC`.
 
-{: sourcecode-name="encrypted-alg101_signed-alg105.asc"}
+{: sourcecode-name="encrypted-alg38_signed-alg42.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/encrypted-alg101_signed-alg105.asc}
+{::include test-vectors/encrypted-alg38_signed-alg42.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-2-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg42.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg42.asc}
 ~~~
 
 
@@ -893,13 +918,15 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint `6a498c10ff01ddfb1c28d0af05afe75d4c0e625d73fe8ab3cca227bd162d57b7`.
+The primary key has the fingerprint
+`89F721E99B3E6D46ED6D6D0BA71D4691DF5981F7EDC756527F8E35ADAD7C02BA`.
 
-The subkey has the fingerprint `408b08b20df93c6abdefb25d87a642766e6455caac621e8ca8204234de7bdedb`.
+The subkey has the fingerprint
+`B416466A0828115F0DC503A3FC7BA4A9A29D89ED12B7C16792237428619C5F51`.
 
-{: sourcecode-name="seckey-primary106-sub102.asc"}
+{: sourcecode-name="seckey-primary43-sub39.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary106-sub102.asc}
+{::include test-vectors/seckey-primary43-sub39.asc}
 ~~~
 
 
@@ -914,9 +941,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-3-sec}} cons
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Public Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="pubkey-primary106-sub102.asc"}
+{: sourcecode-name="pubkey-primary43-sub39.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/pubkey-primary106-sub102.asc}
+{::include test-vectors/pubkey-primary43-sub39.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -926,17 +953,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `1eaa02a4cd82d01573d84c6e1326c19fe8d3cc6bca297e6525a7d84faff68cdf`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `D70855BE74329189A0216FD01CB3CDE5B7A3ABCA1D2B1FE66AA7C89130B282E1`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `0521a1adda540cc7b8589dc9cbe360d51139b3b1fc58f6b4a452baa2ec16022027b3495c04c4abb34e8bbd603d0ebeb7`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `42E358469E28AD7A27DE68CE2F8FAA66C52D90BEE435D02E79E8B06617135526B129927DDEA04B18F1D810CB3AC80F70`.
 
-The hex-encoded output of `multiKeyCombine` is `ed4010d69f98dc64db6df1d9d59331708057b8027ea0336c03bad6ea3990b25a`.
+The hex-encoded output of `multiKeyCombine` is `A984B4AB2F0D371597CA0E8CEB9FE7A898E6DE4637250CB5444A734903A31A2C`.
 
-The hex-encoded session key is `b89c0629753f9e849a2bb176ba564fb7c674aecbe1f9c1d7f71001533871c20b`.
+The hex-encoded session key is `8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B7EC0104B01C67EED`.
 
-{: sourcecode-name="encrypted-alg102_signed-alg106.asc"}
+{: sourcecode-name="encrypted-alg39_signed-alg43.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/encrypted-alg102_signed-alg106.asc}
+{::include test-vectors/encrypted-alg39_signed-alg43.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-3-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg43.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg43.asc}
 ~~~
 
 
@@ -953,13 +991,15 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint `b89e98c38b82bf6f859e7d259bc4d4526c7e6f3448a0b82d0dbe580e3278dba3`.
+The primary key has the fingerprint
+`1E6A6AEB3DE4E0796F5DE5C1B0C8F234DE56DD7C724AAB3847F464A75AB30DB6`.
 
-The subkey has the fingerprint `033fa728eb4a55a4d59a0496e51c90b67f70846de0ed3cdfb8f28124ec90d3fd`.
+The subkey has the fingerprint
+`D56E2B801D217D01601AE80CCB146655004B3EB7F8329DBE59EF8C081E5EB41E`.
 
-{: sourcecode-name="seckey-primary107-sub103.asc"}
+{: sourcecode-name="seckey-primary44-sub40.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/seckey-primary107-sub103.asc}
+{::include test-vectors/seckey-primary44-sub40.asc}
 ~~~
 
 ### Transferable Public Key {#test-vector-4-pub}
@@ -973,9 +1013,9 @@ Here is the corresponding Transferable Public Key for {{test-vector-4-sec}} cons
 - A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Public Subkey packet
 - A v6 subkey binding signature
 
-{: sourcecode-name="pubkey-primary107-sub103.asc"}
+{: sourcecode-name="pubkey-primary44-sub40.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/pubkey-primary107-sub103.asc}
+{::include test-vectors/pubkey-primary44-sub40.asc}
 ~~~
 
 ### Encrypted and Signed Message
@@ -985,17 +1025,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `66c0163a0f68f7b783b58cae6feeb4d2d6ad9b99cd2a7ac311fb78fdc42055c8`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `959D22B1B1F77350228AFDD0336AB6B772E0D32B482E19C0DC6C40D8AB2A3AAA`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `83662068efed595bbf0f3857bf2d31b4b1c85c1252803761758979819cbb060b0576cef35b3784913bf5a6fed92641bf0fd726f0dac4b137a7830a23e6adc070`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `A43FDA1493FA96C50B979FE97947B7097FF9E6FD3EA1B9C1F80EB58C1BC8D88EFCD637FE1C89B0C1BEFA8C49C3413A3AE22DF087D5CC8CCD868FA7374B3CB71A`.
 
-The hex-encoded output of `multiKeyCombine` is `ee6aa72fb27d4a5b6399761610ea0b52aadc391ead369656e3f5d136752d0bb9`.
+The hex-encoded output of `multiKeyCombine` is `627468BE7E65FA4013345B23F0789FE1AF9F4D47AB4C56C143A825EF243994FE`.
 
-The hex-encoded session key is `3fed681f8c216acbf665591f8b4618b455f8652c31f329664127a26b7677263e`.
+The hex-encoded session key is `97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472A344ECFECE11B20B`.
 
-{: sourcecode-name="encrypted-alg103_signed-alg107.asc"}
+{: sourcecode-name="encrypted-alg40_signed-alg44.asc"}
 ~~~ application/pgp-keys
-{::include test-vectors/encrypted-alg103_signed-alg107.asc}
+{::include test-vectors/encrypted-alg40_signed-alg44.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-4-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg44.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg44.asc}
 ~~~
 
 
