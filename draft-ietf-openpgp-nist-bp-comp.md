@@ -710,9 +710,10 @@ This section gives the history of changes in the respective document versions. T
 
 ## draft-ietf-openpgp-nist-bp-comp-05
 
-- Replaced experimental code points 100-107 by algorithm IDs 37-44.
-- Removed note about experimental codepoints for interop testing.
-- Re-generated test vectors using algorithm IDs 37-44.
+- Replaced experimental algorithm IDs 100-107 with the assigned algorithm IDs 37-44.
+- Removed the note about using experimental code points for interoperability testing.
+- Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate  composite KEM values.
+- Added detached signature test vectors for all four composite signature algorithms.
 
 ## draft-ietf-openpgp-nist-bp-comp-04
 
@@ -774,9 +775,11 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-NIST-P-384 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint ``.
+The primary key has the fingerprint
+`44F8AEA123A5BB7B747C714A3749876A84ECC7EFCAC6CB5ACCD1A152F6351DE6`.
 
-The subkey has the fingerprint ``.
+The subkey has the fingerprint
+`175BCF4EA2AC9C2C35809D071B2549C9DB1898878863D12D374C5A0C794F0AFE`.
 
 {: sourcecode-name="seckey-primary41-sub37.asc"}
 ~~~ application/pgp-keys
@@ -806,17 +809,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `6FC2B62C8A99B3ACE887055CEF120E763820D8742373FB9FBED1AE140056F34D`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `849DB1550BC587A213684D607C4B2A888FAADBEAC9B86F4D940CEDFF7CC6F2C6FEA19640135D2676E3309F3B496B114C`.
 
-The hex-encoded output of `multiKeyCombine` is ``.
+The hex-encoded output of `multiKeyCombine` is `E32208735F54262A792303915B26BD37BE621FC278617CE81EE62FB41C60F3FD`.
 
-The hex-encoded session key is ``.
+The hex-encoded session key is `3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271F496A4699075D265`.
 
 {: sourcecode-name="encrypted-alg37_signed-alg41.asc"}
 ~~~ application/pgp-keys
 {::include test-vectors/encrypted-alg37_signed-alg41.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-1-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg41.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg41.asc}
 ~~~
 
 ## Sample ML-DSA-87+ECDSA-NIST-P-521 with ML-KEM-1024+ECDH-NIST-P-521 Data
@@ -832,9 +846,11 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-1024+ECDH-NIST-P-521 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint ``.
+The primary key has the fingerprint
+`97BF5A5EB176B4830F8087EDC98048717273D9EF7A95BA81425664BEDBC81AE5`.
 
-The subkey has the fingerprint ``.
+The subkey has the fingerprint
+`3838F412C21DF580C7B8A316BE850C3F26684FC713FEE9801D4D1227294DD094`.
 
 {: sourcecode-name="seckey-primary42-sub38.asc"}
 ~~~ application/pgp-keys
@@ -864,17 +880,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `70864EE075F0D9DA98596201DB720283EABED187655264BA78DEB6C4830D74E6`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `0199DF8E39D0F2707661C511630F86B3BC534759F4D47731F3DD248E8B603A1402CB055F187D35D931A7845F937414AE40EF6BBFAC260810CE1BF6596D16763AD421`.
 
-The hex-encoded output of `multiKeyCombine` is ``.
+The hex-encoded output of `multiKeyCombine` is `AE20BEC20344D38BCFBDDD5F47CB39DF6FDCF21812609989A2B8EBDB1C86E444`.
 
-The hex-encoded session key is ``.
+The hex-encoded session key is `1CF924D10F23B2AC9A4EE7F851F608C46949777722128C482053CA8DE46FE4DC`.
 
 {: sourcecode-name="encrypted-alg38_signed-alg42.asc"}
 ~~~ application/pgp-keys
 {::include test-vectors/encrypted-alg38_signed-alg42.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-2-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg42.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg42.asc}
 ~~~
 
 
@@ -891,9 +918,11 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint ``.
+The primary key has the fingerprint
+`89F721E99B3E6D46ED6D6D0BA71D4691DF5981F7EDC756527F8E35ADAD7C02BA`.
 
-The subkey has the fingerprint ``.
+The subkey has the fingerprint
+`B416466A0828115F0DC503A3FC7BA4A9A29D89ED12B7C16792237428619C5F51`.
 
 {: sourcecode-name="seckey-primary43-sub39.asc"}
 ~~~ application/pgp-keys
@@ -924,17 +953,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `D70855BE74329189A0216FD01CB3CDE5B7A3ABCA1D2B1FE66AA7C89130B282E1`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `42E358469E28AD7A27DE68CE2F8FAA66C52D90BEE435D02E79E8B06617135526B129927DDEA04B18F1D810CB3AC80F70`.
 
-The hex-encoded output of `multiKeyCombine` is ``.
+The hex-encoded output of `multiKeyCombine` is `A984B4AB2F0D371597CA0E8CEB9FE7A898E6DE4637250CB5444A734903A31A2C`.
 
-The hex-encoded session key is ``.
+The hex-encoded session key is `8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B7EC0104B01C67EED`.
 
 {: sourcecode-name="encrypted-alg39_signed-alg43.asc"}
 ~~~ application/pgp-keys
 {::include test-vectors/encrypted-alg39_signed-alg43.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-3-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg43.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg43.asc}
 ~~~
 
 
@@ -951,9 +991,11 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private Subkey packet
 - A v6 subkey binding signature
 
-The primary key has the fingerprint ``.
+The primary key has the fingerprint
+`1E6A6AEB3DE4E0796F5DE5C1B0C8F234DE56DD7C724AAB3847F464A75AB30DB6`.
 
-The subkey has the fingerprint ``.
+The subkey has the fingerprint
+`D56E2B801D217D01601AE80CCB146655004B3EB7F8329DBE59EF8C081E5EB41E`.
 
 {: sourcecode-name="seckey-primary44-sub40.asc"}
 ~~~ application/pgp-keys
@@ -983,17 +1025,28 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `959D22B1B1F77350228AFDD0336AB6B772E0D32B482E19C0DC6C40D8AB2A3AAA`.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is ``.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `A43FDA1493FA96C50B979FE97947B7097FF9E6FD3EA1B9C1F80EB58C1BC8D88EFCD637FE1C89B0C1BEFA8C49C3413A3AE22DF087D5CC8CCD868FA7374B3CB71A`.
 
-The hex-encoded output of `multiKeyCombine` is ``.
+The hex-encoded output of `multiKeyCombine` is `627468BE7E65FA4013345B23F0789FE1AF9F4D47AB4C56C143A825EF243994FE`.
 
-The hex-encoded session key is ``.
+The hex-encoded session key is `97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472A344ECFECE11B20B`.
 
 {: sourcecode-name="encrypted-alg40_signed-alg44.asc"}
 ~~~ application/pgp-keys
 {::include test-vectors/encrypted-alg40_signed-alg44.asc}
+~~~
+
+### Detached Signature
+
+Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-4-sec}}:
+
+- A v6 signature packet
+
+{: sourcecode-name="detached-alg44.asc"}
+~~~ application/pgp-signature
+{::include test-vectors/detached-alg44.asc}
 ~~~
 
 
