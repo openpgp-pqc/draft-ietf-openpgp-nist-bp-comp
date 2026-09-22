@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 1 March 2027                                        S. Kousidis
+Expires: 26 March 2027                                       S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                          28 August 2026
+                                                       22 September 2026
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 March 2027.
+   This Internet-Draft will expire on 26 March 2027.
 
 Copyright Notice
 
@@ -2184,7 +2184,6 @@ A.1.4.  Detached Signature
    QxGhPj4MyZITBdhiIoFiNn43WgdcVkxc3AIKMQ2lYUiODqfOs+3jrhcaNzKBp8vH
    yZ8wxnkPowo16zB/ob35I0yzw/HyIjJrc4fQESIuWbzqFytHdJWm609UXK28wdTk
    7/YAAAAAAAAAAAAAAAAAAAAABAoQFh0n
-   =HhdV
    -----END PGP SIGNATURE-----
 
 A.2.  Sample ML-DSA-87+ECDSA-NIST-P-521 with ML-KEM-1024+ECDH-NIST-P-521
@@ -3320,7 +3319,6 @@ A.2.4.  Detached Signature
    waEFdtuZHDNBj45SkXJEHiNvcH2c2eAOGRwpOZ/YeqP3HTqkrPH5+xCSm/4yOm10
    fpijvNgRIilNU1d0kZfU3uf5GB8vbnuDpbK02OToAAAAAAAAAAAAAAAACA8SGR0m
    Mz8=
-   =EQ3L
    -----END PGP SIGNATURE-----
 
 A.3.  Sample ML-DSA-65+ECDSA-brainpoolP384r1 with ML-KEM-768+ECDH-
@@ -4170,7 +4168,6 @@ A.3.4.  Detached Signature
    YAI+2bK6kXN5XkbXg6yqOL81vzW32f2RxPUl5VL7D3uQj3rx/Omy0soiji5a0qDy
    exjKQprBjo1ID48ICg8dNKq5vsTGG0iKlZmxwh4nVGLzAQ8tS8LV1tzgVX274P9x
    gbnD7wAAAAAAAAAAAAAAAAAAChEWHyQp
-   =n29y
    -----END PGP SIGNATURE-----
 
 A.4.  Sample ML-DSA-87+ECDSA-brainpoolP512r1 with ML-KEM-1024+ECDH-
@@ -5303,7 +5300,6 @@ A.4.4.  Detached Signature
    1kgVEu/4nL1mL6Wl19rcy2BH23FOp1xlRzGeRmwsMy0I4gmgKFlMAn92eEAWDFvX
    hfoDAclyFAs4N0UVSlxpnqOv7/G9w8gQFiM+YXOp5DdkbG1xhsvhBBVsncvqCi1x
    dbXaADQ5jC86P0JNeJLAxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJDBQcIigsNQ==
-   =J1bv
    -----END PGP SIGNATURE-----
 
 Acknowledgments

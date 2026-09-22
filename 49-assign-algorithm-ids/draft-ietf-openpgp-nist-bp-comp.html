@@ -13,23 +13,23 @@
 <meta content='
        This document defines PQ/T ("post-quantum/traditional") composite schemes based on ML-KEM and ML-DSA combined with ECDH and ECDSA algorithms using the NIST and Brainpool domain parameters for the OpenPGP protocol  , and as such extends  . 
     ' name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-openpgp-nist-bp-comp-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
+  xml2rfc 3.34.1
     Python 3.14.7
-    ConfigArgParse 1.7.5
+    ConfigArgParse 1.7.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.5
+    platformdirs 4.11.10
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.2
+    wcwidth 0.8.4
 -->
 <link href="draft-ietf-openpgp-nist-bp-comp.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1045,11 +1045,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">NIST Brainpool PQC in OpenPGP</td>
-<td class="right">August 2026</td>
+<td class="right">September 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Dang, et al.</td>
-<td class="center">Expires 1 March 2027</td>
+<td class="center">Expires 26 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg {
 <dd class="internet-draft">draft-ietf-openpgp-nist-bp-comp-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-08-28" class="published">28 August 2026</time>
+<time datetime="2026-09-22" class="published">22 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-01">1 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-26">26 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1132,7 +1132,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2714,7 +2714,7 @@ The field specifications enclosed in brackets for the ML-KEM + ECDH composite al
             <p id="section-9.1-1.2.1">Removed the note about using experimental code points for interoperability testing.<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-1.3">
-            <p id="section-9.1-1.3.1">Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate  composite KEM values.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-1.3.1">Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate composite KEM values.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-1.4">
             <p id="section-9.1-1.4.1">Added detached signature test vectors for all four composite signature algorithms.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
@@ -3638,7 +3638,7 @@ DxcdIA==
 <p id="appendix-A.1.3-4">The hex-encoded <code>ecdhKeyShare</code> input to <code>multiKeyCombine</code> is <code>849DB1550BC587A213684D607C4B2A888FAADBEAC9B86F4D940CEDFF7CC6F2C6FEA19640135D2676E3309F3B496B114C</code>.<a href="#appendix-A.1.3-4" class="pilcrow">¶</a></p>
 <p id="appendix-A.1.3-5">The hex-encoded output of <code>multiKeyCombine</code> is <code>E32208735F54262A792303915B26BD37BE621FC278617CE81EE62FB41C60F3FD</code>.<a href="#appendix-A.1.3-5" class="pilcrow">¶</a></p>
 <p id="appendix-A.1.3-6">The hex-encoded session key is <code>3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271F496A4699075D265</code>.<a href="#appendix-A.1.3-6" class="pilcrow">¶</a></p>
-<div class="breakable lang-application/pgp-keys sourcecode" id="appendix-A.1.3-7">
+<div class="breakable lang-application/pgp-encrypted sourcecode" id="appendix-A.1.3-7">
 <pre>
 -----BEGIN PGP MESSAGE-----
 
@@ -3837,7 +3837,6 @@ JsQrlht2S5ZArrHoM3ttYMVi35q3ICe44U57akOGerUOAjewTOmq76Gq7bDyLs8/
 QxGhPj4MyZITBdhiIoFiNn43WgdcVkxc3AIKMQ2lYUiODqfOs+3jrhcaNzKBp8vH
 yZ8wxnkPowo16zB/ob35I0yzw/HyIjJrc4fQESIuWbzqFytHdJWm609UXK28wdTk
 7/YAAAAAAAAAAAAAAAAAAAAABAoQFh0n
-=HhdV
 -----END PGP SIGNATURE-----
 </pre><a href="#appendix-A.1.4-3" class="pilcrow">¶</a>
 </div>
@@ -4747,7 +4746,7 @@ dHbB5v4AAAAAAAAAAAAAAAAADBQfJiw0OD4=
 <p id="appendix-A.2.3-4">The hex-encoded <code>ecdhKeyShare</code> input to <code>multiKeyCombine</code> is <code>0199DF8E39D0F2707661C511630F86B3BC534759F4D47731F3DD248E8B603A1402CB055F187D35D931A7845F937414AE40EF6BBFAC260810CE1BF6596D16763AD421</code>.<a href="#appendix-A.2.3-4" class="pilcrow">¶</a></p>
 <p id="appendix-A.2.3-5">The hex-encoded output of <code>multiKeyCombine</code> is <code>AE20BEC20344D38BCFBDDD5F47CB39DF6FDCF21812609989A2B8EBDB1C86E444</code>.<a href="#appendix-A.2.3-5" class="pilcrow">¶</a></p>
 <p id="appendix-A.2.3-6">The hex-encoded session key is <code>1CF924D10F23B2AC9A4EE7F851F608C46949777722128C482053CA8DE46FE4DC</code>.<a href="#appendix-A.2.3-6" class="pilcrow">¶</a></p>
-<div class="breakable lang-application/pgp-keys sourcecode" id="appendix-A.2.3-7">
+<div class="breakable lang-application/pgp-encrypted sourcecode" id="appendix-A.2.3-7">
 <pre>
 -----BEGIN PGP MESSAGE-----
 
@@ -5015,7 +5014,6 @@ XQ9qG3kjzv6S6u0dcdujQhofnZjJvQ804fUlBNPV64+KHoODeGEMF/ZLxYcZS2zZ
 waEFdtuZHDNBj45SkXJEHiNvcH2c2eAOGRwpOZ/YeqP3HTqkrPH5+xCSm/4yOm10
 fpijvNgRIilNU1d0kZfU3uf5GB8vbnuDpbK02OToAAAAAAAAAAAAAAAACA8SGR0m
 Mz8=
-=EQ3L
 -----END PGP SIGNATURE-----
 </pre><a href="#appendix-A.2.4-3" class="pilcrow">¶</a>
 </div>
@@ -5708,7 +5706,7 @@ DxQYIQ==
 <p id="appendix-A.3.3-4">The hex-encoded <code>ecdhKeyShare</code> input to <code>multiKeyCombine</code> is <code>42E358469E28AD7A27DE68CE2F8FAA66C52D90BEE435D02E79E8B06617135526B129927DDEA04B18F1D810CB3AC80F70</code>.<a href="#appendix-A.3.3-4" class="pilcrow">¶</a></p>
 <p id="appendix-A.3.3-5">The hex-encoded output of <code>multiKeyCombine</code> is <code>A984B4AB2F0D371597CA0E8CEB9FE7A898E6DE4637250CB5444A734903A31A2C</code>.<a href="#appendix-A.3.3-5" class="pilcrow">¶</a></p>
 <p id="appendix-A.3.3-6">The hex-encoded session key is <code>8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B7EC0104B01C67EED</code>.<a href="#appendix-A.3.3-6" class="pilcrow">¶</a></p>
-<div class="breakable lang-application/pgp-keys sourcecode" id="appendix-A.3.3-7">
+<div class="breakable lang-application/pgp-encrypted sourcecode" id="appendix-A.3.3-7">
 <pre>
 -----BEGIN PGP MESSAGE-----
 
@@ -5907,7 +5905,6 @@ eotdA7Ox75HoxnXR0N8psLjp74L/pLlc706UslrvAPmLENodKnWC4D6pHnIFd+9m
 YAI+2bK6kXN5XkbXg6yqOL81vzW32f2RxPUl5VL7D3uQj3rx/Omy0soiji5a0qDy
 exjKQprBjo1ID48ICg8dNKq5vsTGG0iKlZmxwh4nVGLzAQ8tS8LV1tzgVX274P9x
 gbnD7wAAAAAAAAAAAAAAAAAAChEWHyQp
-=n29y
 -----END PGP SIGNATURE-----
 </pre><a href="#appendix-A.3.4-3" class="pilcrow">¶</a>
 </div>
@@ -6816,7 +6813,7 @@ EhYeJy01
 <p id="appendix-A.4.3-4">The hex-encoded <code>ecdhKeyShare</code> input to <code>multiKeyCombine</code> is <code>A43FDA1493FA96C50B979FE97947B7097FF9E6FD3EA1B9C1F80EB58C1BC8D88EFCD637FE1C89B0C1BEFA8C49C3413A3AE22DF087D5CC8CCD868FA7374B3CB71A</code>.<a href="#appendix-A.4.3-4" class="pilcrow">¶</a></p>
 <p id="appendix-A.4.3-5">The hex-encoded output of <code>multiKeyCombine</code> is <code>627468BE7E65FA4013345B23F0789FE1AF9F4D47AB4C56C143A825EF243994FE</code>.<a href="#appendix-A.4.3-5" class="pilcrow">¶</a></p>
 <p id="appendix-A.4.3-6">The hex-encoded session key is <code>97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472A344ECFECE11B20B</code>.<a href="#appendix-A.4.3-6" class="pilcrow">¶</a></p>
-<div class="breakable lang-application/pgp-keys sourcecode" id="appendix-A.4.3-7">
+<div class="breakable lang-application/pgp-encrypted sourcecode" id="appendix-A.4.3-7">
 <pre>
 -----BEGIN PGP MESSAGE-----
 
@@ -7082,7 +7079,6 @@ gqaoxp7kXhB5LhBVflzkc8xSY9lL8gFbbBd7djDeRaREgfkBhQqOfeozLurecQ2u
 1kgVEu/4nL1mL6Wl19rcy2BH23FOp1xlRzGeRmwsMy0I4gmgKFlMAn92eEAWDFvX
 hfoDAclyFAs4N0UVSlxpnqOv7/G9w8gQFiM+YXOp5DdkbG1xhsvhBBVsncvqCi1x
 dbXaADQ5jC86P0JNeJLAxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJDBQcIigsNQ==
-=J1bv
 -----END PGP SIGNATURE-----
 </pre><a href="#appendix-A.4.4-3" class="pilcrow">¶</a>
 </div>
