@@ -176,6 +176,44 @@ fn generate_one(
 
     message.finalize()?;
 
+    /*
+     * RFC 9580, Section 6.1, prohibits a CRC24 footer for armor
+     * containing only v6 Signature packets.  Sequoia's streaming
+     * Armorer still emits the optional footer, so remove that armor
+     * line without changing the serialized Signature packet.
+     */
+    let armored =
+        std::fs::read_to_string(
+            &detached_path,
+        )
+        .with_context(|| {
+            format!(
+                "failed to read {}",
+                detached_path.display(),
+            )
+        })?;
+
+    let armored =
+        armored
+            .lines()
+            .filter(
+                |line| !line.starts_with('='),
+            )
+            .collect::<Vec<_>>()
+            .join("\n")
+            + "\n";
+
+    std::fs::write(
+        &detached_path,
+        armored,
+    )
+    .with_context(|| {
+        format!(
+            "failed to rewrite {} without CRC24",
+            detached_path.display(),
+        )
+    })?;
+
     println!(
         "detached {}:",
         suite.primary_alg_id(),

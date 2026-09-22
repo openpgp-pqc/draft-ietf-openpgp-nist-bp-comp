@@ -712,7 +712,7 @@ This section gives the history of changes in the respective document versions. T
 
 - Replaced experimental algorithm IDs 100-107 with the assigned algorithm IDs 37-44.
 - Removed the note about using experimental code points for interoperability testing.
-- Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate  composite KEM values.
+- Re-generated the test vectors using algorithm IDs 37-44 and updated the corresponding fingerprints and intermediate composite KEM values.
 - Added detached signature test vectors for all four composite signature algorithms.
 
 ## draft-ietf-openpgp-nist-bp-comp-04
@@ -818,7 +818,7 @@ The hex-encoded output of `multiKeyCombine` is `E32208735F54262A792303915B26BD37
 The hex-encoded session key is `3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271F496A4699075D265`.
 
 {: sourcecode-name="encrypted-alg37_signed-alg41.asc"}
-~~~ application/pgp-keys
+~~~ application/pgp-encrypted
 {::include test-vectors/encrypted-alg37_signed-alg41.asc}
 ~~~
 
@@ -889,7 +889,7 @@ The hex-encoded output of `multiKeyCombine` is `AE20BEC20344D38BCFBDDD5F47CB39DF
 The hex-encoded session key is `1CF924D10F23B2AC9A4EE7F851F608C46949777722128C482053CA8DE46FE4DC`.
 
 {: sourcecode-name="encrypted-alg38_signed-alg42.asc"}
-~~~ application/pgp-keys
+~~~ application/pgp-encrypted
 {::include test-vectors/encrypted-alg38_signed-alg42.asc}
 ~~~
 
@@ -962,7 +962,7 @@ The hex-encoded output of `multiKeyCombine` is `A984B4AB2F0D371597CA0E8CEB9FE7A8
 The hex-encoded session key is `8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B7EC0104B01C67EED`.
 
 {: sourcecode-name="encrypted-alg39_signed-alg43.asc"}
-~~~ application/pgp-keys
+~~~ application/pgp-encrypted
 {::include test-vectors/encrypted-alg39_signed-alg43.asc}
 ~~~
 
@@ -1034,7 +1034,7 @@ The hex-encoded output of `multiKeyCombine` is `627468BE7E65FA4013345B23F0789FE1
 The hex-encoded session key is `97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472A344ECFECE11B20B`.
 
 {: sourcecode-name="encrypted-alg40_signed-alg44.asc"}
-~~~ application/pgp-keys
+~~~ application/pgp-encrypted
 {::include test-vectors/encrypted-alg40_signed-alg44.asc}
 ~~~
 

@@ -37,6 +37,17 @@ sequoia-openpgp = {
 
 Adjust this path if your checkout layout differs.
 
+The vector set in this pull request was generated with the Sequoia
+implementations developed in the following merge requests:
+
+- [assigned algorithm IDs 37–44](https://gitlab.com/sequoia-pgp/sequoia/-/merge_requests/1886);
+- [NIST/Brainpool PQC cipher suites](https://gitlab.com/sequoia-pgp/sequoia/-/merge_requests/1887); and
+- [the test-only KEM intermediate-value extractor](https://gitlab.com/fluppe2/sequoia/-/merge_requests/1).
+
+These references identify the implementation branches used for the published
+vectors; the local path dependency allows the generator to be built from those
+checkouts.
+
 An OpenSSL backend with the required PQC support is required.
 
 For independent verification of generated vectors, a compatible `sq` build is also required.
@@ -210,6 +221,8 @@ metadata-alg43.json
 metadata-alg44.json
 ```
 
+The filenames use the primary signature algorithm ID to identify the complete signature/KEM suite.
+
 Each file contains values of the form:
 
 ```json
@@ -239,12 +252,12 @@ The script verifies:
 
 - all four detached signatures;
 - all four encrypted-message signatures;
-- successful decryption;
-- exact recovery of `Testing.txt`;
-- v6 PKESKs;
-- v2 SEIPD;
-- AES-256/OCB; and
-- detached-signature packet structure.
+- successful decryption; and
+- exact recovery of `Testing.txt`.
+
+It also displays the packet-dump fields used to inspect the v6 PKESKs, v2
+SEIPD packets, AES-256/OCB parameters, and detached-signature structure. These
+structural fields are not asserted by the script.
 
 KEM intermediate metadata must be generated separately using the Sequoia test-only extractor described above.
 
