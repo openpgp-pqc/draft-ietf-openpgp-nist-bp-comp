@@ -2575,19 +2575,19 @@ The random salt prefixed to the hashed data in a v6 signature mitigates precompu
 Both signature components authenticate the same message digest.
 Finding a different admissible input with that digest therefore allows an attacker to reuse both components of an existing signature.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">For any hash function with an n-bit digest, an attacker with T distinct target digests can search for an input whose digest matches any of them.
-For an ideal hash function, this generic classical search takes approximately 2^n / T hash evaluations, assuming sufficient storage and efficient target lookup, and excluding the cost of collecting and processing the targets.
+For an ideal hash function, this generic classical search takes approximately 2<sup>n</sup> / T hash evaluations, assuming sufficient storage and efficient target lookup, and excluding the cost of collecting and processing the targets.
 Thus, an n-bit digest does not in general provide n-bit security against multi-target second-preimage attacks.
-Section 4.A.4 of <span>[<a href="#NIST-PQC-CRITERIA" class="cite xref">NIST-PQC-CRITERIA</a>]</span> considers an attacker with access to signatures for up to 2^64 chosen messages.
-With that many distinct target digests, a 256-bit digest gives a generic search cost of approximately 2^192 hash evaluations, below the classical 2^256 reference work factor for the highest security level targeted here.
+Section 4.A.4 of <span>[<a href="#NIST-PQC-CRITERIA" class="cite xref">NIST-PQC-CRITERIA</a>]</span> considers an attacker with access to signatures for up to 2<sup>64</sup> chosen messages.
+With that many distinct target digests, a 256-bit digest gives a generic search cost of approximately 2<sup>192</sup> hash evaluations, below the classical 2<sup>256</sup> reference work factor for the highest security level targeted here.
 This generic attack applies to both SHA2-256 and SHA3-256.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">For SHA2-256, the expandable-message technique of Kelsey and Schneier <span>[<a href="#KS05" class="cite xref">KS05</a>]</span> can yield further gains by targeting intermediate chaining states of sufficiently long signed messages.
 In a multi-target application, the bridge search can use eligible intermediate states across the target messages, rather than only their final digests.
-Its cost is approximately 2^256 / N compression-function evaluations, where N is the number of distinct eligible target states.
+Its cost is approximately 2<sup>256</sup> / N compression-function evaluations, where N is the number of distinct eligible target states.
 The total attack cost also includes constructing the expandable message, processing the target messages, and storing and looking up the target states.
 Consequently, this additional gain depends on the lengths and number of target messages and the available resources.
 This technique exploits the Merkle-Damgard construction with a 256-bit chaining state used by SHA2-256; it does not apply in the same way to SHA3-256.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">To provide a conservative margin against these attacks, <a href="#ecc-mldsa-sig-packet" class="auto internal xref">Section 6.3.1</a> requires message digests of at least 384 bits for all composite signature schemes defined here.
-For a 384-bit digest and 2^64 distinct target digests, the generic classical search cost is approximately 2^320 hash evaluations under the assumptions above.
+For a 384-bit digest and 2<sup>64</sup> distinct target digests, the generic classical search cost is approximately 2<sup>320</sup> hash evaluations under the assumptions above.
 These work factors describe the specified classical attacks and do not by themselves establish a NIST post-quantum security category.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
