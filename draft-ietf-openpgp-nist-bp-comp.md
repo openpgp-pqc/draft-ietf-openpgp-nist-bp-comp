@@ -144,6 +144,28 @@ normative:
 
 informative:
 
+  NIST-PQC-CRITERIA:
+    target: https://csrc.nist.gov/CSRC/media/Projects/Post-Quantum-Cryptography/documents/call-for-proposals-final-dec-2016.pdf
+    title: Submission Requirements and Evaluation Criteria for the Post-Quantum Cryptography Standardization Process
+    author:
+      - org: National Institute of Standards and Technology
+    date: December 2016
+
+  KS05:
+    target: https://doi.org/10.1007/11426639_28
+    title: Second Preimages on n-bit Hash Functions for Much Less than 2^n Work
+    author:
+      -
+        ins: J. Kelsey
+        name: John Kelsey
+      -
+        ins: B. Schneier
+        name: Bruce Schneier
+    date: 2005
+    seriesinfo:
+      DOI: 10.1007/11426639_28
+      LNCS: 3494
+
   TR-03111:
       target: https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Technische-Richtlinien/TR-nach-Thema-sortiert/tr03111/TR-03111_node.html
       title: Technical Guideline BSI TR-03111 – Elliptic Curve Cryptography, Version 2.1
@@ -227,7 +249,8 @@ For interoperability this extension offers ML-* in composite combinations with t
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
 This document is to be understood as an extension of {{RFC9980}}, which introduced PQC in OpenPGP, in that it defines further algorithm code points.
-All general specifications in {{RFC9980}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
+All general specifications in {{RFC9980}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document, except where this document specifies otherwise.
+In particular, {{ecc-mldsa-sig-packet}} requires a minimum message digest size of 384 bits for all composite signature schemes defined in this document; see {{minimum-digest-size}} for the rationale.
 
 # Preliminaries
 
@@ -636,8 +659,10 @@ The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures con
 
  - A fixed-length octet string of the ML-DSA signature value, whose length depends on the algorithm ID as specified in {{tab-mldsa-artifacts}}.
 
-A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 256 bits for the computation of the message digest.
+A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 384 bits for the computation of the message digest.
 A verifying implementation MUST reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size.
+These requirements apply to all signature types and all composite ML-DSA + ECDSA algorithms defined in this document.
+See {{minimum-digest-size}} for the rationale.
 
 ### Key Material Packets
 
@@ -670,12 +695,36 @@ The following security considerations given in {{RFC9980}} equally apply to this
 - the arguments for the security features of the KEM combiner given in {{Section 9.2 of RFC9980}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
 - the considerations regarding domain separation and context binding for the KEM combiner ({{Section 9.2.1 of RFC9980}}),
 - the use of the hedged variant of ML-DSA ({{Section 9.3 of RFC9980}}),
-- the minimum digest size for PQ/T signatures ({{Section 9.4 of RFC9980}}),
 - the use of symmetric encryption in SEIPD packets ({{Section 9.5 of RFC9980}}),
 - the key generation for composite schemes ({{Section 9.6 of RFC9980}}),
 - and random number generation and seeding ({{Section 9.7 of RFC9980}}).
 
 When implementing or using any of the algorithms defined in this specification, the above referenced security considerations should be noted.
+
+## Minimum Digest Size for Composite Signatures {#minimum-digest-size}
+
+For the composite signature schemes defined in this document, the following considerations replace those in {{Section 9.4 of RFC9980}}.
+The random salt prefixed to the hashed data in a v6 signature mitigates precomputed collision attacks, but does not prevent multi-target second-preimage attacks.
+Both signature components authenticate the same message digest.
+Finding a different admissible input with that digest therefore allows an attacker to reuse both components of an existing signature.
+
+For any hash function with an n-bit digest, an attacker with T distinct target digests can search for an input whose digest matches any of them.
+For an ideal hash function, this generic classical search takes approximately 2^n / T hash evaluations, assuming sufficient storage and efficient target lookup, and excluding the cost of collecting and processing the targets.
+Thus, an n-bit digest does not in general provide n-bit security against multi-target second-preimage attacks.
+Section 4.A.4 of {{NIST-PQC-CRITERIA}} considers an attacker with access to signatures for up to 2^64 chosen messages.
+With that many distinct target digests, a 256-bit digest gives a generic search cost of approximately 2^192 hash evaluations, below the classical 2^256 reference work factor for the highest security level targeted here.
+This generic attack applies to both SHA2-256 and SHA3-256.
+
+For SHA2-256, the expandable-message technique of Kelsey and Schneier {{KS05}} can yield further gains by targeting intermediate chaining states of sufficiently long signed messages.
+In a multi-target application, the bridge search can use eligible intermediate states across the target messages, rather than only their final digests.
+Its cost is approximately 2^256 / N compression-function evaluations, where N is the number of distinct eligible target states.
+The total attack cost also includes constructing the expandable message, processing the target messages, and storing and looking up the target states.
+Consequently, this additional gain depends on the lengths and number of target messages and the available resources.
+This technique exploits the Merkle-Damgard construction with a 256-bit chaining state used by SHA2-256; it does not apply in the same way to SHA3-256.
+
+To provide a conservative margin against these attacks, {{ecc-mldsa-sig-packet}} requires message digests of at least 384 bits for all composite signature schemes defined here.
+For a 384-bit digest and 2^64 distinct target digests, the generic classical search cost is approximately 2^320 hash evaluations under the assumptions above.
+These work factors describe the specified classical attacks and do not by themselves establish a NIST post-quantum security category.
 
 ## Elliptic Curve Point Validation {#ec-point-validation}
 
@@ -707,6 +756,10 @@ IANA is asked to add the following note to this registry:
 # Changelog
 
 This section gives the history of changes in the respective document versions. The order is newest-first.
+
+## draft-ietf-openpgp-nist-bp-comp-06
+
+- Raised the minimum message digest size for all composite signatures to 384 bits and added security considerations for multi-target second-preimage attacks and the Kelsey-Schneier attack on SHA2-256.
 
 ## draft-ietf-openpgp-nist-bp-comp-05
 
