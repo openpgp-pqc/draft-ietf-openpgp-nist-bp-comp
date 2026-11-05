@@ -25,3 +25,4 @@ report.xml
 xml-dl
 
 /tools/pqc-vector-generator/target/
+!test-vectors/Testing.txt
