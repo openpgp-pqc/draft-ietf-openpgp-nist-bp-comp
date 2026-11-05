@@ -5,12 +5,12 @@
 Network Working Group                                            Q. Dang
 Internet-Draft                                                      NIST
 Intended status: Informational                                  S. Ehlen
-Expires: 26 March 2027                                       S. Kousidis
+Expires: 9 May 2027                                          S. Kousidis
                                                                      BSI
                                                                  J. Roth
                                                              F. Strenzke
                                                                   MTG AG
-                                                       22 September 2026
+                                                         5 November 2026
 
 
   PQ/T Composite Schemes for OpenPGP using NIST and Brainpool Elliptic
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 March 2027.
+   This Internet-Draft will expire on 9 May 2027.
 
 Copyright Notice
 
@@ -116,17 +116,19 @@ Table of Contents
        6.3.1.  Signature Packet (Packet Type ID 2)
        6.3.2.  Key Material Packets
    7.  Security Considerations
-     7.1.  Elliptic Curve Point Validation
+     7.1.  Minimum Digest Size for Composite Signatures
+     7.2.  Elliptic Curve Point Validation
    8.  IANA Considerations
    9.  Changelog
-     9.1.  draft-ietf-openpgp-nist-bp-comp-05
-     9.2.  draft-ietf-openpgp-nist-bp-comp-04
-     9.3.  draft-ietf-openpgp-nist-bp-comp-03
-     9.4.  draft-ietf-openpgp-nist-bp-comp-02
-     9.5.  draft-ietf-openpgp-nist-bp-comp-01
-     9.6.  draft-ietf-openpgp-nist-bp-comp-00
-     9.7.  draft-ehlen-openpgp-nist-bp-comp-02
-     9.8.  draft-ehlen-openpgp-nist-bp-comp-01
+     9.1.  draft-ietf-openpgp-nist-bp-comp-06
+     9.2.  draft-ietf-openpgp-nist-bp-comp-05
+     9.3.  draft-ietf-openpgp-nist-bp-comp-04
+     9.4.  draft-ietf-openpgp-nist-bp-comp-03
+     9.5.  draft-ietf-openpgp-nist-bp-comp-02
+     9.6.  draft-ietf-openpgp-nist-bp-comp-01
+     9.7.  draft-ietf-openpgp-nist-bp-comp-00
+     9.8.  draft-ehlen-openpgp-nist-bp-comp-02
+     9.9.  draft-ehlen-openpgp-nist-bp-comp-01
    10. Contributors
    11. References
      11.1.  Normative References
@@ -239,7 +241,10 @@ Table of Contents
    points.  All general specifications in [RFC9980] that pertain to the
    ML-KEM and ML-DSA composite schemes or generally cryptographic
    schemes defined therein equally apply to the schemes specified in
-   this document.
+   this document, except where this document specifies otherwise.  In
+   particular, Section 6.3.1 requires a minimum message digest size of
+   384 bits for all composite signature schemes defined in this
+   document; see Section 7.1 for the rationale.
 
 2.  Preliminaries
 
@@ -899,10 +904,12 @@ Table of Contents
       length depends on the algorithm ID as specified in Table 8.
 
    A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a
-   digest size of at least 256 bits for the computation of the message
+   digest size of at least 384 bits for the computation of the message
    digest.  A verifying implementation MUST reject any composite ML-DSA
    + ECDSA signature that uses a hash algorithm with a smaller digest
-   size.
+   size.  These requirements apply to all signature types and all
+   composite ML-DSA + ECDSA algorithms defined in this document.  See
+   Section 7.1 for the rationale.
 
 6.3.2.  Key Material Packets
 
@@ -958,9 +965,6 @@ Table of Contents
    *  the use of the hedged variant of ML-DSA (Section 9.3 of
       [RFC9980]),
 
-   *  the minimum digest size for PQ/T signatures (Section 9.4 of
-      [RFC9980]),
-
    *  the use of symmetric encryption in SEIPD packets (Section 9.5 of
       [RFC9980]),
 
@@ -974,7 +978,56 @@ Table of Contents
    specification, the above referenced security considerations should be
    noted.
 
-7.1.  Elliptic Curve Point Validation
+7.1.  Minimum Digest Size for Composite Signatures
+
+   For the composite signature schemes defined in this document, the
+   following considerations replace those in Section 9.4 of [RFC9980].
+   The random salt prefixed to the hashed data in a v6 signature
+   mitigates precomputed collision attacks, but does not prevent multi-
+   target second-preimage attacks.  Both signature components
+   authenticate the same message digest.  Finding a different admissible
+   input with that digest therefore allows an attacker to reuse both
+   components of an existing signature.
+
+   For any hash function with an n-bit digest, an attacker with T
+   distinct target digests can search for an input whose digest matches
+   any of them.  For an ideal hash function, this generic classical
+   search takes approximately 2^n / T hash evaluations, assuming
+   sufficient storage and efficient target lookup, and excluding the
+   cost of collecting and processing the targets.  Thus, an n-bit digest
+   does not in general provide n-bit security against multi-target
+   second-preimage attacks.  Section 4.A.4 of [NIST-PQC-CRITERIA]
+   considers an attacker with access to signatures for up to 2^64 chosen
+   messages.  With that many distinct target digests, a 256-bit digest
+   gives a generic search cost of approximately 2^192 hash evaluations,
+   below the classical 2^256 reference work factor for the highest
+   security level targeted here.  This generic attack applies to both
+   SHA2-256 and SHA3-256.
+
+   For SHA2-256, the expandable-message technique of Kelsey and Schneier
+   [KS05] can yield further gains by targeting intermediate chaining
+   states of sufficiently long signed messages.  In a multi-target
+   application, the bridge search can use eligible intermediate states
+   across the target messages, rather than only their final digests.
+   Its cost is approximately 2^256 / N compression-function evaluations,
+   where N is the number of distinct eligible target states.  The total
+   attack cost also includes constructing the expandable message,
+   processing the target messages, and storing and looking up the target
+   states.  Consequently, this additional gain depends on the lengths
+   and number of target messages and the available resources.  This
+   technique exploits the Merkle-Damgard construction with a 256-bit
+   chaining state used by SHA2-256; it does not apply in the same way to
+   SHA3-256.
+
+   To provide a conservative margin against these attacks, Section 6.3.1
+   requires message digests of at least 384 bits for all composite
+   signature schemes defined here.  For a 384-bit digest and 2^64
+   distinct target digests, the generic classical search cost is
+   approximately 2^320 hash evaluations under the assumptions above.
+   These work factors describe the specified classical attacks and do
+   not by themselves establish a NIST post-quantum security category.
+
+7.2.  Elliptic Curve Point Validation
 
    In contrast to the Montgomery and Edwards curves used for the
    composite schemes defined in [RFC9980], the NIST and Brainpool curves
@@ -1158,7 +1211,14 @@ Table of Contents
    This section gives the history of changes in the respective document
    versions.  The order is newest-first.
 
-9.1.  draft-ietf-openpgp-nist-bp-comp-05
+9.1.  draft-ietf-openpgp-nist-bp-comp-06
+
+   *  Raised the minimum message digest size for all composite
+      signatures to 384 bits and added security considerations for
+      multi-target second-preimage attacks and the Kelsey-Schneier
+      attack on SHA2-256.
+
+9.2.  draft-ietf-openpgp-nist-bp-comp-05
 
    *  Replaced experimental algorithm IDs 100-107 with the assigned
       algorithm IDs 37-44.
@@ -1173,7 +1233,7 @@ Table of Contents
    *  Added detached signature test vectors for all four composite
       signature algorithms.
 
-9.2.  draft-ietf-openpgp-nist-bp-comp-04
+9.3.  draft-ietf-openpgp-nist-bp-comp-04
 
    *  Added the requirement to perform full public key validation on
       received EC points in the ECDH-KEM operations, and a corresponding
@@ -1200,29 +1260,29 @@ Table of Contents
 
    *  Change email address of one author.
 
-9.3.  draft-ietf-openpgp-nist-bp-comp-03
+9.4.  draft-ietf-openpgp-nist-bp-comp-03
 
    *  Fix: Display test vector public keys (instead of secret keys).
 
    *  Align with (relevant) editorial changes from IESG review of
       [RFC9980].
 
-9.4.  draft-ietf-openpgp-nist-bp-comp-02
+9.5.  draft-ietf-openpgp-nist-bp-comp-02
 
    *  Updated algorithm selection and assigned experimental code points
       100-107.
 
    *  Added test vectors.
 
-9.5.  draft-ietf-openpgp-nist-bp-comp-01
+9.6.  draft-ietf-openpgp-nist-bp-comp-01
 
    *  Editorial alignment to [RFC9980].
 
-9.6.  draft-ietf-openpgp-nist-bp-comp-00
+9.7.  draft-ietf-openpgp-nist-bp-comp-00
 
    *  Changed draft title.
 
-9.7.  draft-ehlen-openpgp-nist-bp-comp-02
+9.8.  draft-ehlen-openpgp-nist-bp-comp-02
 
    *  Completed the IANA table.
 
@@ -1232,7 +1292,7 @@ Table of Contents
 
    *  Various editorial alignments to [RFC9980].
 
-9.8.  draft-ehlen-openpgp-nist-bp-comp-01
+9.9.  draft-ehlen-openpgp-nist-bp-comp-01
 
    *  Replaced the explicit description of the KEM combiner with a
       reference to [RFC9980].
@@ -1321,6 +1381,19 @@ Table of Contents
    [ABH_21]   Alwen, J., Blanchet, B., Hauck, E., Kiltz, E., Lipp, B.,
               and D. Riepel, "Analysing the HPKE Standard", 2021,
               <https://doi.org/10.1007/978-3-030-77870-5_4>.
+
+   [KS05]     Kelsey, J. and B. Schneier, "Second Preimages on n-bit
+              Hash Functions for Much Less than 2^n Work",
+              DOI 10.1007/11426639_28, LNCS 3494, 2005,
+              <https://doi.org/10.1007/11426639_28>.
+
+   [NIST-PQC-CRITERIA]
+              National Institute of Standards and Technology,
+              "Submission Requirements and Evaluation Criteria for the
+              Post-Quantum Cryptography Standardization Process",
+              December 2016, <https://csrc.nist.gov/CSRC/media/Projects/
+              Post-Quantum-Cryptography/documents/call-for-proposals-
+              final-dec-2016.pdf>.
 
    [RFC9794]  Driscoll, F., Parsons, M., and B. Hale, "Terminology for
               Post-Quantum Traditional Hybrid Schemes", RFC 9794,
