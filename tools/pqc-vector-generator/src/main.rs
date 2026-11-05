@@ -3,6 +3,7 @@ mod keys;
 mod message;
 mod suite;
 mod util;
+mod verify;
 
 use std::path::PathBuf;
 
@@ -28,6 +29,14 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Command {
+    /// Verify signatures, plaintext, and packet parameters with Sequoia.
+    Verify {
+        #[arg(long)]
+        output: PathBuf,
+        /// Check the draft text against the verified artifacts and metadata.
+        #[arg(long)]
+        draft: Option<PathBuf>,
+    },
     /// Generate the four transferable secret/public key pairs.
     GenerateKeys {
         /// Output directory.
@@ -86,6 +95,7 @@ fn main() -> Result<()> {
         .collect();
 
     match cli.command {
+        Command::Verify { output, draft } => verify::verify_all(&suites, &output, draft.as_deref())?,
         Command::GenerateKeys {
             output,
             force,
