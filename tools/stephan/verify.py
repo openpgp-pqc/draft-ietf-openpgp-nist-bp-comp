@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Ad-hoc vector verifier. No Sequoia or repository verification code used.
+"""Additional sanity check outside the OpenPGP implementation ecosystem.
+No Sequoia or repository verification code used.
 Usage: python3 tools/stephan/verify.py [--vectors /path/to/test-vectors]
 Requires cryptography >= 50.0.0 and openssl >= 3.5.
 """
@@ -16,9 +17,10 @@ import zlib
 
 from cryptography.exceptions import InvalidSignature, InvalidTag, UnsupportedAlgorithm
 from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import ec, utils, mldsa
+from cryptography.hazmat.primitives.asymmetric import ec, utils, mldsa, mlkem
 from cryptography.hazmat.primitives.ciphers.aead import AESOCB3, AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.keywrap import aes_key_unwrap, InvalidUnwrap
 
 
 def u32(n):
@@ -86,6 +88,13 @@ HASHES = {
     9: ("sha384", hashes.SHA384, 24),
     10: ("sha512", hashes.SHA512, 32),
     14: ("sha3_512", hashes.SHA3_512, 32),
+}
+# ML-KEM public-key length, ciphertext length, seed import class.
+KEMS = {
+    37: (1184, 1088, mlkem.MLKEM768PrivateKey),
+    38: (1568, 1568, mlkem.MLKEM1024PrivateKey),
+    39: (1184, 1088, mlkem.MLKEM768PrivateKey),
+    40: (1568, 1568, mlkem.MLKEM1024PrivateKey),
 }
 
 
@@ -201,6 +210,130 @@ def verify(sig, data, primary, label, openssl):
     }
 
 
+def combine(mlkem_share, ecdh_share, ephemeral, recipient, alg):
+    # RFC 9980 4.2.1; the final byte makes the domain separator suffix-free.
+    domain = b"OpenPGPCompositeKDFv1"
+    return hashlib.sha3_256(
+        mlkem_share
+        + ecdh_share
+        + ephemeral
+        + recipient
+        + bytes([alg])
+        + domain
+        + bytes([len(domain)])
+    ).digest()
+
+
+def establish_session(pkesk, secret_subkey, openssl):
+    public = public_part(secret_subkey)
+    alg = public[5]
+    curve, n, _, _, _ = SUITES[alg + 4]
+    pklen, ctlen, cls = KEMS[alg]
+    pointlen = 1 + 2 * n
+    require(len(public) == 10 + pointlen + pklen, "KEM public material length")
+    recipient = public[10 : 10 + pointlen]
+    mlkem_public = public[10 + pointlen :]
+    secret = secret_subkey[len(public) :]
+    # The published v6 secret subkeys are unencrypted: usage 0, scalar, d || z.
+    require(
+        len(secret) == 1 + n + 64 and secret[0] == 0,
+        "expected unencrypted v6 KEM secret material",
+    )
+    classical = ec.derive_private_key(num(secret[1 : 1 + n]), curve())
+    recipient_key = ec.EllipticCurvePublicKey.from_encoded_point(curve(), recipient)
+    require(
+        classical.public_key().public_numbers() == recipient_key.public_numbers(),
+        "ECDH private/public key mismatch",
+    )
+    pq = cls.from_seed_bytes(secret[1 + n :])
+    require(
+        pq.public_key().public_bytes_raw() == mlkem_public,
+        "ML-KEM seed-derived public key mismatch",
+    )
+
+    # These vectors use a v6 recipient field with a v6, 32-byte fingerprint.
+    require(pkesk[:3] == b"\x06\x21\x06", "expected v6 PKESK recipient")
+    fingerprint = hashlib.sha256(framed_key(public)).digest()
+    require(
+        pkesk[3:35] == fingerprint and pkesk[35] == alg,
+        "PKESK recipient fingerprint/algorithm mismatch",
+    )
+    pos = 36
+    ephemeral = pkesk[pos : pos + pointlen]
+    pos += pointlen
+    ciphertext = pkesk[pos : pos + ctlen]
+    pos += ctlen
+    require(
+        pos < len(pkesk) and pkesk[pos] == len(pkesk) - pos - 1,
+        "wrapped session key length",
+    )
+    wrapped = pkesk[pos + 1 :]
+    ephemeral_key = ec.EllipticCurvePublicKey.from_encoded_point(curve(), ephemeral)
+    ecdh_share = classical.exchange(ec.ECDH(), ephemeral_key)
+    mlkem_share = pq.decapsulate(ciphertext)
+    require(len(ecdh_share) == n and len(mlkem_share) == 32, "KEM share lengths")
+
+    # Repeat ML-KEM decapsulation through system OpenSSL, from the same seed.
+    # Only public test-vector keys are written; TemporaryDirectory cleans up.
+    with tempfile.TemporaryDirectory() as td:
+        td = pathlib.Path(td)
+        (td / "key.der").write_bytes(
+            pq.private_bytes(
+                serialization.Encoding.DER,
+                serialization.PrivateFormat.PKCS8,
+                serialization.NoEncryption(),
+            )
+        )
+        (td / "ciphertext").write_bytes(ciphertext)
+        r = subprocess.run(
+            [
+                openssl,
+                "pkeyutl",
+                "-decap",
+                "-inkey",
+                str(td / "key.der"),
+                "-in",
+                str(td / "ciphertext"),
+                "-out",
+                str(td / "share"),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        require(r.returncode == 0, "OpenSSL ML-KEM: " + r.stdout + r.stderr)
+        require(
+            (td / "share").read_bytes() == mlkem_share,
+            "Python/system OpenSSL ML-KEM share mismatch",
+        )
+
+    kek = combine(mlkem_share, ecdh_share, ephemeral, recipient, alg)
+    session = aes_key_unwrap(kek, wrapped)
+    require(len(session) == 32, "expected AES-256 session key")
+    # ML-KEM implicitly rejects invalid ciphertexts by returning another share.
+    changed = bytes([ciphertext[0] ^ 1]) + ciphertext[1:]
+    rejected_share = pq.decapsulate(changed)
+    require(rejected_share != mlkem_share, "modified ML-KEM ciphertext kept share")
+    bad_kek = combine(rejected_share, ecdh_share, ephemeral, recipient, alg)
+    try:
+        aes_key_unwrap(bad_kek, wrapped)
+    except InvalidUnwrap:
+        pass
+    else:
+        raise ValueError("modified ML-KEM ciphertext unwrapped session key")
+    values = {
+        "recipient": fingerprint.hex(),
+        "mlkemKeyShare": mlkem_share.hex(),
+        "ecdhKeyShare": ecdh_share.hex(),
+        "multiKeyCombine": kek.hex(),
+        "sessionKey": session.hex(),
+    }
+    print(
+        f"PASS KEM={alg} ML-KEM / OpenSSL-ML-KEM / ECDH / SHA3-256 combiner / AES unwrap; modified ciphertext rejected"
+    )
+    return session, values
+
+
 def decrypt(body, session):
     require(body[0] == 2 and body[1] == 9, "expected SEIPDv2 AES-256")
     mode = body[2]
@@ -251,6 +384,7 @@ def main(args):
     root = args.vectors.resolve()
     results = []
     inventory = {}
+    kem_results = {}
     print("Vectors:", root)
     openssl_version = subprocess.check_output(
         [args.openssl, "version"], text=True, timeout=30
@@ -311,13 +445,21 @@ def main(args):
             packets(armor(root / f"encrypted-alg{kem}_signed-alg{alg}.asc"))
         )
         require([t for t, b in encrypted] == [1, 18], "expected PKESK and SEIPD")
-        session = bytes.fromhex(
-            json.loads((root / f"metadata-alg{alg}.json").read_text())["sessionKey"]
-        )
+        subkeys = [b for t, b in sec if t == 7]
+        require(len(subkeys) == 1 and subkeys[0][5] == kem, "expected KEM subkey")
+        session, values = establish_session(encrypted[0][1], subkeys[0], args.openssl)
+        # Metadata is only an expected-output oracle, never a decryption input.
+        metadata = json.loads((root / f"metadata-alg{alg}.json").read_text())
+        for field, value in values.items():
+            require(
+                bytes.fromhex(metadata[field]) == bytes.fromhex(value),
+                f"KEM {kem} metadata mismatch: {field}",
+            )
+        kem_results[str(kem)] = values
         plain = decrypt(encrypted[1][1], session)
         inside = list(flatten(plain))
         print(
-            f"PASS suite={alg} SEIPDv2 chunk and final authentication; inner packets={[t for t,b in inside]} (published session key)"
+            f"PASS suite={alg} SEIPDv2 chunk and final authentication; inner packets={[t for t,b in inside]} (independently recovered session key)"
         )
         literal = [b for t, b in inside if t == 11]
         sigs = [b for t, b in inside if t == 2]
@@ -340,12 +482,13 @@ def main(args):
             "detached_signatures": 1,
             "inline_signatures": 1,
             "authenticated_decryption": True,
+            "kem_key_establishment": True,
         }
     require(len(results) == 32, "expected 32 signature occurrences")
     unique = {r["signature_sha256"] for r in results}
     require(len(unique) == 20, "expected 20 unique signatures")
     print(
-        f"ALL PASS: {len(results)} occurrences, {len(unique)} unique composite signatures, 4 authenticated encrypted messages."
+        f"ALL PASS: {len(results)} occurrences, {len(unique)} unique composite signatures, 4 hybrid KEM chains, 4 authenticated encrypted messages."
     )
     if args.output is not None:
         inputs = {
@@ -356,6 +499,7 @@ def main(args):
         report = {
             "results": results,
             "inventory": inventory,
+            "kem_results": kem_results,
             "vectors": str(root),
             "input_sha256": inputs,
             "runtime": {
@@ -364,8 +508,9 @@ def main(args):
                 "system_openssl": openssl_version,
             },
             "scope": {
-                "kem_checked": False,
-                "decryption_key_source": "published metadata sessionKey",
+                "kem_checked": True,
+                "decryption_key_source": "ML-KEM + ECDH, composite combiner, AES key unwrap",
+                "purpose": "additional sanity check outside the OpenPGP implementation ecosystem",
                 "unique_signatures": len(unique),
                 "signature_occurrences": len(results),
             },
@@ -390,7 +535,7 @@ def parse_args():
     parser.add_argument(
         "--openssl",
         default="openssl",
-        help="OpenSSL executable with ML-DSA support (default: openssl on PATH)",
+        help="OpenSSL executable with ML-DSA and ML-KEM support (default: openssl on PATH)",
     )
     return parser.parse_args()
 
@@ -405,6 +550,7 @@ if __name__ == "__main__":
         IndexError,
         InvalidSignature,
         InvalidTag,
+        InvalidUnwrap,
         UnsupportedAlgorithm,
         StopIteration,
         subprocess.SubprocessError,
