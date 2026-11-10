@@ -144,6 +144,28 @@ normative:
 
 informative:
 
+  NIST-PQC-CRITERIA:
+    target: https://csrc.nist.gov/CSRC/media/Projects/Post-Quantum-Cryptography/documents/call-for-proposals-final-dec-2016.pdf
+    title: Submission Requirements and Evaluation Criteria for the Post-Quantum Cryptography Standardization Process
+    author:
+      - org: National Institute of Standards and Technology
+    date: December 2016
+
+  KS05:
+    target: https://doi.org/10.1007/11426639_28
+    title: Second Preimages on n-bit Hash Functions for Much Less than 2^n Work
+    author:
+      -
+        ins: J. Kelsey
+        name: John Kelsey
+      -
+        ins: B. Schneier
+        name: Bruce Schneier
+    date: 2005
+    seriesinfo:
+      DOI: 10.1007/11426639_28
+      LNCS: 3494
+
   TR-03111:
       target: https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Technische-Richtlinien/TR-nach-Thema-sortiert/tr03111/TR-03111_node.html
       title: Technical Guideline BSI TR-03111 – Elliptic Curve Cryptography, Version 2.1
@@ -227,7 +249,8 @@ For interoperability this extension offers ML-* in composite combinations with t
 ## Applicable Specifications for the use of PQC Algorithms in OpenPGP
 
 This document is to be understood as an extension of {{RFC9980}}, which introduced PQC in OpenPGP, in that it defines further algorithm code points.
-All general specifications in {{RFC9980}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document.
+All general specifications in {{RFC9980}} that pertain to the ML-KEM and ML-DSA composite schemes or generally cryptographic schemes defined therein equally apply to the schemes specified in this document, except where this document specifies otherwise.
+In particular, {{ecc-mldsa-sig-packet}} requires a minimum message digest size of 384 bits for all composite signature schemes defined in this document; see {{minimum-digest-size}} for the rationale.
 
 # Preliminaries
 
@@ -636,8 +659,10 @@ The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures con
 
  - A fixed-length octet string of the ML-DSA signature value, whose length depends on the algorithm ID as specified in {{tab-mldsa-artifacts}}.
 
-A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 256 bits for the computation of the message digest.
+A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 384 bits for the computation of the message digest.
 A verifying implementation MUST reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size.
+These requirements apply to all signature types and all composite ML-DSA + ECDSA algorithms defined in this document.
+See {{minimum-digest-size}} for the rationale.
 
 ### Key Material Packets
 
@@ -670,12 +695,36 @@ The following security considerations given in {{RFC9980}} equally apply to this
 - the arguments for the security features of the KEM combiner given in {{Section 9.2 of RFC9980}}, as also the NIST and Brainpool curves represent nominal groups according to {{ABH+21}},
 - the considerations regarding domain separation and context binding for the KEM combiner ({{Section 9.2.1 of RFC9980}}),
 - the use of the hedged variant of ML-DSA ({{Section 9.3 of RFC9980}}),
-- the minimum digest size for PQ/T signatures ({{Section 9.4 of RFC9980}}),
 - the use of symmetric encryption in SEIPD packets ({{Section 9.5 of RFC9980}}),
 - the key generation for composite schemes ({{Section 9.6 of RFC9980}}),
 - and random number generation and seeding ({{Section 9.7 of RFC9980}}).
 
 When implementing or using any of the algorithms defined in this specification, the above referenced security considerations should be noted.
+
+## Minimum Digest Size for Composite Signatures {#minimum-digest-size}
+
+For the composite signature schemes defined in this document, the following considerations replace those in {{Section 9.4 of RFC9980}}.
+The random salt prefixed to the hashed data in a v6 signature mitigates precomputed collision attacks, but does not prevent multi-target second-preimage attacks.
+Both signature components authenticate the same message digest.
+Finding a different admissible input with that digest therefore allows an attacker to reuse both components of an existing signature.
+
+For any hash function with an n-bit digest, an attacker with T distinct target digests can search for an input whose digest matches any of them.
+For an ideal hash function, this generic classical search takes approximately 2<sup>n</sup> / T hash evaluations, assuming sufficient storage and efficient target lookup, and excluding the cost of collecting and processing the targets.
+Thus, an n-bit digest does not in general provide n-bit security against multi-target second-preimage attacks.
+Section 4.A.4 of {{NIST-PQC-CRITERIA}} considers an attacker with access to signatures for up to 2<sup>64</sup> chosen messages.
+With that many distinct target digests, a 256-bit digest gives a generic search cost of approximately 2<sup>192</sup> hash evaluations, below the classical 2<sup>256</sup> reference work factor for the highest security level targeted here.
+This generic attack applies to both SHA2-256 and SHA3-256.
+
+For SHA2-256, the expandable-message technique of Kelsey and Schneier {{KS05}} can yield further gains by targeting intermediate chaining states of sufficiently long signed messages.
+In a multi-target application, the bridge search can use eligible intermediate states across the target messages, rather than only their final digests.
+Its cost is approximately 2<sup>256</sup> / N compression-function evaluations, where N is the number of distinct eligible target states.
+The total attack cost also includes constructing the expandable message, processing the target messages, and storing and looking up the target states.
+Consequently, this additional gain depends on the lengths and number of target messages and the available resources.
+This technique exploits the Merkle–Damgård construction with a 256-bit chaining state used by SHA2-256; it does not apply in the same way to SHA3-256.
+
+To provide a conservative margin against these attacks, {{ecc-mldsa-sig-packet}} requires message digests of at least 384 bits for all composite signature schemes defined here.
+For a 384-bit digest and 2<sup>64</sup> distinct target digests, the generic classical search cost is approximately 2<sup>320</sup> hash evaluations under the assumptions above.
+These work factors describe the specified classical attacks and do not by themselves establish a NIST post-quantum security category.
 
 ## Elliptic Curve Point Validation {#ec-point-validation}
 
@@ -707,6 +756,12 @@ IANA is asked to add the following note to this registry:
 # Changelog
 
 This section gives the history of changes in the respective document versions. The order is newest-first.
+
+## draft-ietf-openpgp-nist-bp-comp-06
+
+- Raised the minimum message digest size for all composite signatures to 384 bits and added security considerations for multi-target second-preimage attacks and the Kelsey-Schneier attack on SHA2-256.
+- Message signatures in all test vectors now use SHA2-384 (384-bit curves) or SHA3-512 (512/521-bit curves); documented the hash algorithm per vector and updated the corresponding intermediate composite KEM values.
+- Updated all certificate self-signatures to SHA3-512 and restricted advertised hash preferences to SHA2-384, SHA2-512, and SHA3-512; regenerated the 384-bit curve keys and their dependent vectors, and documented the self-signature hash per suite.
 
 ## draft-ietf-openpgp-nist-bp-comp-05
 
@@ -762,6 +817,10 @@ This section gives the history of changes in the respective document versions. T
 
 # Test Vectors
 
+The message signatures in these test vectors deliberately exercise both SHA2 and SHA3 hash algorithms: the 384-bit curve suites use SHA2-384, while the 512-bit and 521-bit curve suites use SHA3-512.
+Each suite uses the same message digest algorithm for its detached signature and its signature inside the encrypted message.
+These choices illustrate supported hash algorithms and do not impose additional requirements on implementations.
+
 ## Sample ML-DSA-65+ECDSA-NIST-P-384 with ML-KEM-768+ECDH-NIST-P-384 Data
 
 ### Transferable Secret Key {#test-vector-1-sec}
@@ -775,11 +834,13 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-NIST-P-384 Private Subkey packet
 - A v6 subkey binding signature
 
+All self-signatures use SHA3-512 as their hash algorithm.
+
 The primary key has the fingerprint
-`44F8AEA123A5BB7B747C714A3749876A84ECC7EFCAC6CB5ACCD1A152F6351DE6`.
+`880938C5A71E65F081A309261D332BA6C0FF24616E1D4F83FFE82D178077D876`.
 
 The subkey has the fingerprint
-`175BCF4EA2AC9C2C35809D071B2549C9DB1898878863D12D374C5A0C794F0AFE`.
+`4263F66EDFE7D46859D72B85253FEF005296A92B7CA9D60D9E022EEB057082EA`.
 
 {: sourcecode-name="seckey-primary41-sub37.asc"}
 ~~~ application/pgp-keys
@@ -809,13 +870,15 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `6FC2B62C8A99B3ACE887055CEF120E763820D8742373FB9FBED1AE140056F34D`.
+The signature uses SHA2-384 as its hash algorithm.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `849DB1550BC587A213684D607C4B2A888FAADBEAC9B86F4D940CEDFF7CC6F2C6FEA19640135D2676E3309F3B496B114C`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `8EADE5BBC26672679F8D6EB47865E4FD0BE3B943083A006A8A1A6DE5E33E254B`.
 
-The hex-encoded output of `multiKeyCombine` is `E32208735F54262A792303915B26BD37BE621FC278617CE81EE62FB41C60F3FD`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `3BB9078CE945E6D64986EB216EFCEE880E312C11A183943E43F00C7D52F621AFBAE85719238FBE846CD0C2D1C3CE48DF`.
 
-The hex-encoded session key is `3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271F496A4699075D265`.
+The hex-encoded output of `multiKeyCombine` is `5BBB68569F8BC3BE4042DE6D09C447EF2A7DC28749B7EEED9FB3BD5124EC7AF4`.
+
+The hex-encoded session key is `411B430418CC23DF37DB3D9607A91C948BEBE07B8768D2AA4702C09F9D1C3DDD`.
 
 {: sourcecode-name="encrypted-alg37_signed-alg41.asc"}
 ~~~ application/pgp-encrypted
@@ -827,6 +890,8 @@ The hex-encoded session key is `3DDC8DBB5E523105E906E05EF47157103DD6342E58D91271
 Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-1-sec}}:
 
 - A v6 signature packet
+
+The signature uses SHA2-384 as its hash algorithm.
 
 {: sourcecode-name="detached-alg41.asc"}
 ~~~ application/pgp-signature
@@ -845,6 +910,8 @@ Here is a Transferable Secret Key consisting of:
 - A v6 positive certification self-signature
 - A v6 ML-KEM-1024+ECDH-NIST-P-521 Private Subkey packet
 - A v6 subkey binding signature
+
+All self-signatures use SHA3-512 as their hash algorithm.
 
 The primary key has the fingerprint
 `97BF5A5EB176B4830F8087EDC98048717273D9EF7A95BA81425664BEDBC81AE5`.
@@ -880,13 +947,15 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `70864EE075F0D9DA98596201DB720283EABED187655264BA78DEB6C4830D74E6`.
+The signature uses SHA3-512 as its hash algorithm.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `0199DF8E39D0F2707661C511630F86B3BC534759F4D47731F3DD248E8B603A1402CB055F187D35D931A7845F937414AE40EF6BBFAC260810CE1BF6596D16763AD421`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `8AE458E2B9958728094D409C625664E1DDA0F0EAFF11BA9C16128DACA069D98C`.
 
-The hex-encoded output of `multiKeyCombine` is `AE20BEC20344D38BCFBDDD5F47CB39DF6FDCF21812609989A2B8EBDB1C86E444`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `019D66F57360B4E2232C322278BE769A71E59C14F298D4E7A1A32DF42A5FE3B6AFB796C744F62F3E64E74A446F0AD3ED02DDFEB15D28E0AB04062027C856BEB55C72`.
 
-The hex-encoded session key is `1CF924D10F23B2AC9A4EE7F851F608C46949777722128C482053CA8DE46FE4DC`.
+The hex-encoded output of `multiKeyCombine` is `C27B79BB8C85A67EE2DA5E3B5468CCC9850082F91BD5C361C0D29FB790AA5EA7`.
+
+The hex-encoded session key is `19FE4ABCC96ACA51414087CBBF1735C9BADAC9B34CFDF8388657E0E0E1299433`.
 
 {: sourcecode-name="encrypted-alg38_signed-alg42.asc"}
 ~~~ application/pgp-encrypted
@@ -898,6 +967,8 @@ The hex-encoded session key is `1CF924D10F23B2AC9A4EE7F851F608C46949777722128C48
 Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-2-sec}}:
 
 - A v6 signature packet
+
+The signature uses SHA3-512 as its hash algorithm.
 
 {: sourcecode-name="detached-alg42.asc"}
 ~~~ application/pgp-signature
@@ -918,11 +989,13 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private Subkey packet
 - A v6 subkey binding signature
 
+All self-signatures use SHA3-512 as their hash algorithm.
+
 The primary key has the fingerprint
-`89F721E99B3E6D46ED6D6D0BA71D4691DF5981F7EDC756527F8E35ADAD7C02BA`.
+`57A5A4F945F8ED220BBB1BDB3836F8826218A12AC768FDE924B09E2A88425753`.
 
 The subkey has the fingerprint
-`B416466A0828115F0DC503A3FC7BA4A9A29D89ED12B7C16792237428619C5F51`.
+`4BCCF7071F5F260E8DD4AA1C88B0A85A29C0B44F4AC81194EE46F7B7CA8903C3`.
 
 {: sourcecode-name="seckey-primary43-sub39.asc"}
 ~~~ application/pgp-keys
@@ -953,13 +1026,15 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `D70855BE74329189A0216FD01CB3CDE5B7A3ABCA1D2B1FE66AA7C89130B282E1`.
+The signature uses SHA2-384 as its hash algorithm.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `42E358469E28AD7A27DE68CE2F8FAA66C52D90BEE435D02E79E8B06617135526B129927DDEA04B18F1D810CB3AC80F70`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `06DD0945B55EE465E2D059C695B9932522787CB564639F9B6F26E3AF08F9B271`.
 
-The hex-encoded output of `multiKeyCombine` is `A984B4AB2F0D371597CA0E8CEB9FE7A898E6DE4637250CB5444A734903A31A2C`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `8C99CD0FCFDF707B5559F8A6F42AF1A7B27C0D17DC6EF49238D6947AE3FF493F52FA2813BDFE9C6F69A00F04C3CAC7BB`.
 
-The hex-encoded session key is `8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B7EC0104B01C67EED`.
+The hex-encoded output of `multiKeyCombine` is `E8191D0C724930752D2A1C8CAF8DC294E5C765C42AF157D70C94944CF0F70878`.
+
+The hex-encoded session key is `BEA87F664C65938B7DE750D1FE90F23128E758FF077C7FE3AC9F2026A680E9E7`.
 
 {: sourcecode-name="encrypted-alg39_signed-alg43.asc"}
 ~~~ application/pgp-encrypted
@@ -971,6 +1046,8 @@ The hex-encoded session key is `8EA71B68C451D4EDAF3A09F821CD7ABFAC1A8378CBCBDC3B
 Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-3-sec}}:
 
 - A v6 signature packet
+
+The signature uses SHA2-384 as its hash algorithm.
 
 {: sourcecode-name="detached-alg43.asc"}
 ~~~ application/pgp-signature
@@ -990,6 +1067,8 @@ Here is a Transferable Secret Key consisting of:
 - A v6 positive certification self-signature
 - A v6 ML-KEM-1024+ECDH-brainpoolP512r1 Private Subkey packet
 - A v6 subkey binding signature
+
+All self-signatures use SHA3-512 as their hash algorithm.
 
 The primary key has the fingerprint
 `1E6A6AEB3DE4E0796F5DE5C1B0C8F234DE56DD7C724AAB3847F464A75AB30DB6`.
@@ -1025,13 +1104,15 @@ Here is a signed message "Testing\n" encrypted to the certificate {{test-vector-
 - A v6 PKESK
 - A v2 SEIPD
 
-The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `959D22B1B1F77350228AFDD0336AB6B772E0D32B482E19C0DC6C40D8AB2A3AAA`.
+The signature uses SHA3-512 as its hash algorithm.
 
-The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `A43FDA1493FA96C50B979FE97947B7097FF9E6FD3EA1B9C1F80EB58C1BC8D88EFCD637FE1C89B0C1BEFA8C49C3413A3AE22DF087D5CC8CCD868FA7374B3CB71A`.
+The hex-encoded `mlkemKeyShare` input to `multiKeyCombine` is `4A630E4ABD671D09E6FF129E51F396CE1117227EED11B7F1813015A37B614EAE`.
 
-The hex-encoded output of `multiKeyCombine` is `627468BE7E65FA4013345B23F0789FE1AF9F4D47AB4C56C143A825EF243994FE`.
+The hex-encoded `ecdhKeyShare` input to `multiKeyCombine` is `6EA798B0EBAB8777E6038188CDE7D58DFEDF21FF9E44997BDD52E7D0A69A7C2798B646A31005FFB07A8F65D7B1008C4A06BD952DF14076B745B875C99C37D553`.
 
-The hex-encoded session key is `97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472A344ECFECE11B20B`.
+The hex-encoded output of `multiKeyCombine` is `9C3567473EBAD09F91000D61997855D1F43A25949D206C983F25768D43D1CC23`.
+
+The hex-encoded session key is `CE2743201427AB0E361C67F6626B2291A28EE5A1F048DC0304924877160F5F7E`.
 
 {: sourcecode-name="encrypted-alg40_signed-alg44.asc"}
 ~~~ application/pgp-encrypted
@@ -1043,6 +1124,8 @@ The hex-encoded session key is `97E1336C5E4C46020F74D934BBDFCAC1751C8B57D8C2C472
 Here is a detached signature over the message "Testing\n" created by the secret key {{test-vector-4-sec}}:
 
 - A v6 signature packet
+
+The signature uses SHA3-512 as its hash algorithm.
 
 {: sourcecode-name="detached-alg44.asc"}
 ~~~ application/pgp-signature

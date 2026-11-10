@@ -5,9 +5,10 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1"
+serde_json = "1"
 clap = { version = "4", features = ["derive"] }
-sequoia-openpgp = {
-    path = "../../../sequoia/openpgp",
-    default-features = false,
-    features = ["crypto-openssl"]
-}
+
+[dependencies.sequoia-openpgp]
+path = "../../../sequoia/openpgp"
+default-features = false
+features = ["crypto-openssl"]
