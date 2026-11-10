@@ -23,9 +23,9 @@ Requirements:
 From the repository root:
 
 ```sh
-python3 -m venv tools/stephan/.venv
-tools/stephan/.venv/bin/python -m pip install -r tools/stephan/requirements.txt
-tools/stephan/.venv/bin/python tools/stephan/verify.py
+python3 -m venv tools/verification_OpenSSL_Python/.venv
+tools/verification_OpenSSL_Python/.venv/bin/python -m pip install -r tools/verification_OpenSSL_Python/requirements.txt
+tools/verification_OpenSSL_Python/.venv/bin/python tools/verification_OpenSSL_Python/verify.py
 ```
 
 The verifier resolves the default vector directory relative to its own location,
@@ -37,8 +37,8 @@ no output files unless `--output` is supplied.
 To retain a machine-readable report and an execution log:
 
 ```sh
-tools/stephan/.venv/bin/python tools/stephan/verify.py \
-  --output tools/stephan/results.json > tools/stephan/execution.log 2>&1
+tools/verification_OpenSSL_Python/.venv/bin/python tools/verification_OpenSSL_Python/verify.py \
+  --output tools/verification_OpenSSL_Python/results.json > tools/verification_OpenSSL_Python/execution.log 2>&1
 ```
 
 Optional arguments:

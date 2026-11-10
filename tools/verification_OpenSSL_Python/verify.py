@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Additional sanity check outside the OpenPGP implementation ecosystem.
 No Sequoia or repository verification code used.
-Usage: python3 tools/stephan/verify.py [--vectors /path/to/test-vectors]
+Usage: python3 tools/verification_OpenSSL_Python/verify.py [--vectors /path/to/test-vectors]
 Requires cryptography >= 50.0.0 and openssl >= 3.5.
 """
 
