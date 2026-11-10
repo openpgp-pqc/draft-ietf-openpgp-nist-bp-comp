@@ -41,3 +41,10 @@ armored artifacts, metadata, and matching draft text as one publication set.
 The verification wrapper also checks the draft statements against these artifacts
 and metadata. The coauthor is tracking verification by a second complete
 OpenPGP implementation separately, before last call; see the generator README.
+
+For an independent, standalone check of both components of all published
+composite signatures and authenticated message decryption, see
+[`tools/stephan/`](../tools/stephan/). It reads this directory by default and
+uses Python `cryptography` and the OpenSSL command-line tool, without Sequoia.
+Its decryption checks use the published session keys; it does not verify the
+hybrid KEM key-establishment chain.
