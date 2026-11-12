@@ -3,7 +3,6 @@ mod keys;
 mod message;
 mod suite;
 mod util;
-mod verify;
 
 use std::path::PathBuf;
 
@@ -21,31 +20,15 @@ use clap::{
 struct Cli {
     #[command(subcommand)]
     command: Command,
-
-    /// Primary algorithm IDs to process (repeat for multiple suites).
-    #[arg(long, global = true, value_parser = clap::value_parser!(u8).range(41..=44))]
-    suite: Vec<u8>,
 }
 
 #[derive(Subcommand, Debug)]
 enum Command {
-    /// Verify signatures, plaintext, and packet parameters with Sequoia.
-    Verify {
-        #[arg(long)]
-        output: PathBuf,
-        /// Check the draft text against the verified artifacts and metadata.
-        #[arg(long)]
-        draft: Option<PathBuf>,
-    },
     /// Generate the four transferable secret/public key pairs.
     GenerateKeys {
         /// Output directory.
         #[arg(long)]
         output: PathBuf,
-
-        /// Re-sign existing key packets, preserving their fingerprints.
-        #[arg(long, requires = "force")]
-        reuse_keys: bool,
 
         /// Replace existing key files.
         #[arg(long)]
@@ -90,22 +73,14 @@ fn main() -> Result<()> {
     let cli =
         Cli::parse();
 
-    let suites: Vec<_> = suite::Suite::ALL.into_iter()
-        .filter(|s| cli.suite.is_empty() || cli.suite.contains(&s.primary_alg_id()))
-        .collect();
-
     match cli.command {
-        Command::Verify { output, draft } => verify::verify_all(&suites, &output, draft.as_deref())?,
         Command::GenerateKeys {
             output,
             force,
-            reuse_keys,
         } => {
             keys::generate_all(
-                &suites,
                 &output,
                 force,
-                reuse_keys,
             )?;
         }
 
@@ -114,7 +89,6 @@ fn main() -> Result<()> {
             force,
         } => {
             detached::generate_all(
-                &suites,
                 &output,
                 force,
             )?;
@@ -125,7 +99,6 @@ fn main() -> Result<()> {
             force,
         } => {
             message::generate_all(
-                &suites,
                 &output,
                 force,
             )?;
@@ -137,16 +110,13 @@ fn main() -> Result<()> {
         } => {
             println!("Generating key vectors...");
             keys::generate_all(
-                &suites,
                 &output,
                 force,
-                false,
             )?;
 
             println!();
             println!("Generating detached signatures...");
             detached::generate_all(
-                &suites,
                 &output,
                 force,
             )?;
@@ -154,7 +124,6 @@ fn main() -> Result<()> {
             println!();
             println!("Generating encrypted-and-signed messages...");
             message::generate_all(
-                &suites,
                 &output,
                 force,
             )?;

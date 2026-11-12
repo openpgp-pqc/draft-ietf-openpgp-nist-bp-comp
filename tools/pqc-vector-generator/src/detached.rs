@@ -27,7 +27,6 @@ use crate::util::{
 };
 
 pub fn generate_all(
-    suites: &[Suite],
     output: &Path,
     force: bool,
 ) -> Result<()> {
@@ -59,7 +58,7 @@ pub fn generate_all(
         );
     }
 
-    for &suite in suites {
+    for suite in Suite::ALL {
         generate_one(
             suite,
             output,
@@ -123,8 +122,11 @@ fn generate_one(
      *
      *     Testing\n
      *
-     * The suite selects SHA2-384 for the 384-bit curves and
-     * SHA3-512 for the larger curves.
+     * The hash follows the corresponding RFC 9980 test-vector
+     * pattern:
+     *
+     *   ML-DSA-65 -> SHA-256
+     *   ML-DSA-87 -> SHA3-512
      *
      * SignatureBuilder's normal v6 behavior is used for the
      * signature creation-time subpacket.

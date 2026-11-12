@@ -23,6 +23,3 @@ package-lock.json
 report.xml
 !requirements.txt
 xml-dl
-
-/tools/pqc-vector-generator/target/
-!test-vectors/Testing.txt

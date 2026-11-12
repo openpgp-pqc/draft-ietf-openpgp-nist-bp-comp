@@ -46,25 +46,54 @@ impl Suite {
         }
     }
 
-    /// SHA3-512 for direct-key, User ID, and subkey-binding signatures.
+    /// Hash used for the certificate signatures:
+    ///
+    ///   ML-DSA-65 suites -> SHA3-256
+    ///   ML-DSA-87 suites -> SHA3-512
+    ///
+    /// This is used for the direct-key self-signature, User ID
+    /// certification signature, and subkey-binding signature.
     pub fn certificate_hash(self) -> HashAlgorithm {
-        HashAlgorithm::SHA3_512
+        match self {
+            Suite::NistP384
+            | Suite::BrainpoolP384 => {
+                HashAlgorithm::SHA3_256
+            }
+
+            Suite::NistP521
+            | Suite::BrainpoolP512 => {
+                HashAlgorithm::SHA3_512
+            }
+        }
     }
 
-    /// Message digest for detached signature vectors.
+    /// Hash used for the detached-signature vectors.
+    ///
+    /// This follows the corresponding RFC 9980 test-vector pattern:
+    ///
+    ///   ML-DSA-65 -> SHA-256
+    ///   ML-DSA-87 -> SHA3-512
     pub fn detached_hash(self) -> HashAlgorithm {
         match self {
-            Suite::NistP384 | Suite::BrainpoolP384 => HashAlgorithm::SHA384,
-            Suite::NistP521 | Suite::BrainpoolP512 => HashAlgorithm::SHA3_512,
+            Suite::NistP384
+            | Suite::BrainpoolP384 => {
+                HashAlgorithm::SHA256
+            }
+
+            Suite::NistP521
+            | Suite::BrainpoolP512 => {
+                HashAlgorithm::SHA3_512
+            }
         }
     }
 
-    /// Message digest for encrypted-and-signed vectors.
+    /// Hash used for signatures embedded in the encrypted-and-signed
+    /// message vectors.
+    ///
+    /// The existing NIST/Brainpool test-vector convention uses
+    /// SHA-256 for all four suites.
     pub fn encrypted_message_hash(self) -> HashAlgorithm {
-        match self {
-            Suite::NistP384 | Suite::BrainpoolP384 => HashAlgorithm::SHA384,
-            Suite::NistP521 | Suite::BrainpoolP512 => HashAlgorithm::SHA3_512,
-        }
+        HashAlgorithm::SHA256
     }
 
     pub fn secret_filename(self) -> String {

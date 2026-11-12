@@ -8,7 +8,6 @@ use sequoia_openpgp as openpgp;
 
 use openpgp::cert::Cert;
 use openpgp::crypto::KeyPair;
-use openpgp::parse::Parse;
 use openpgp::packet::{
     signature::SignatureBuilder,
     Packet,
@@ -35,10 +34,8 @@ use crate::util::{
 };
 
 pub fn generate_all(
-    suites: &[Suite],
     output: &Path,
     force: bool,
-    reuse_keys: bool,
 ) -> Result<()> {
     ensure_output_dir(output)?;
 
@@ -64,13 +61,12 @@ pub fn generate_all(
         TEST_DATA,
     )?;
 
-    for &suite in suites {
+    for suite in Suite::ALL {
         generate_one(
             suite,
             creation_time,
             output,
             force,
-            reuse_keys,
         )?;
     }
 
@@ -82,7 +78,6 @@ fn generate_one(
     creation_time: SystemTime,
     output: &Path,
     force: bool,
-    reuse_keys: bool,
 ) -> Result<()> {
     let hash =
         suite.certificate_hash();
@@ -116,23 +111,12 @@ fn generate_one(
     /*
      * Primary composite signature key.
      */
-    let existing = if reuse_keys {
-        Some(Cert::from_file(&secret_path)?)
-    } else {
-        None
-    };
-    // Keep refreshed bindings valid at the creation times of retained vectors.
-    let creation_time = existing.as_ref()
-        .map(|cert| cert.primary_key().key().creation_time())
-        .unwrap_or(creation_time);
-    let mut primary = if let Some(cert) = &existing {
-        cert.primary_key().key().clone().parts_into_secret()?
-    } else {
-        suite.generate_primary()?
-    };
-    if !reuse_keys {
-        primary.set_creation_time(creation_time)?;
-    }
+    let mut primary =
+        suite.generate_primary()?;
+
+    primary.set_creation_time(
+        creation_time,
+    )?;
 
     let mut signer: KeyPair =
         primary.clone()
@@ -141,12 +125,12 @@ fn generate_one(
     /*
      * Direct-key self-signature metadata used by the test vectors:
      *
-     *   hash: SHA3-512
+     *   hash: suite-dependent SHA3-256 or SHA3-512
      *   flags: C,S
      *   features: SEIPDv1, SEIPDv2
      *   AEAD: AES256+OCB, AES192+OCB, AES128+OCB
      *   symmetric: AES256, AES192, AES128
-     *   hashes: SHA384, SHA512, SHA3-512
+     *   hashes: SHA256, SHA384, SHA512, SHA3-256, SHA3-512
      *   compression: Uncompressed
      */
     let direct =
@@ -203,8 +187,10 @@ fn generate_one(
             )?
             .set_preferred_hash_algorithms(
                 vec![
+                    HashAlgorithm::SHA256,
                     HashAlgorithm::SHA384,
                     HashAlgorithm::SHA512,
+                    HashAlgorithm::SHA3_256,
                     HashAlgorithm::SHA3_512,
                 ],
             )?
@@ -272,21 +258,17 @@ fn generate_one(
     /*
      * Single composite KEM encryption subkey.
      */
-    let mut subkey = if let Some(cert) = &existing {
-        cert.keys().subkeys().next()
-            .ok_or_else(|| anyhow::anyhow!("missing encryption subkey"))?
-            .key().clone().parts_into_secret()?
-    } else {
-        suite.generate_subkey()?
-    };
-    if !reuse_keys {
-        subkey.set_creation_time(creation_time)?;
-    }
+    let mut subkey =
+        suite.generate_subkey()?;
+
+    subkey.set_creation_time(
+        creation_time,
+    )?;
 
     /*
      * Subkey binding used by the test vectors:
      *
-     *   hash: SHA3-512
+     *   hash: suite-dependent SHA3-256 or SHA3-512
      *   flags: Et,Er
      */
     let subkey_binding =

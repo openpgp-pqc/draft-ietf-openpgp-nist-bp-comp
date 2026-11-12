@@ -12,20 +12,18 @@ use sequoia_openpgp as openpgp;
 
 use openpgp::cert::Cert;
 use openpgp::parse::Parse;
-use openpgp::packet::{OnePassSig, Packet, signature::SignatureBuilder};
-use openpgp::serialize::Serialize;
 use openpgp::serialize::stream::{
     Armorer,
     Encryptor,
     LiteralWriter,
     Message,
     Recipient,
+    Signer,
 };
 use openpgp::types::{
     AEADAlgorithm,
     Features,
     SymmetricAlgorithm,
-    SignatureType,
 };
 
 use crate::suite::Suite;
@@ -36,7 +34,6 @@ use crate::util::{
 };
 
 pub fn generate_all(
-    suites: &[Suite],
     output: &Path,
     force: bool,
 ) -> Result<()> {
@@ -68,7 +65,7 @@ pub fn generate_all(
         );
     }
 
-    for &suite in suites {
+    for suite in Suite::ALL {
         generate_one(
             suite,
             output,
@@ -123,7 +120,7 @@ fn generate_one(
      * The test-vector certificate deliberately contains no signing
      * subkey.  The only subkey is the composite KEM encryption key.
      */
-    let mut signer =
+    let signer =
         cert.primary_key()
             .key()
             .clone()
@@ -177,19 +174,10 @@ fn generate_one(
      *       Literal Data ("Testing\n")
      *       Signature v6
      *
-     * The embedded signature uses SHA2-384 for the 384-bit curves
-     * and SHA3-512 for the larger curves.
+     * The embedded message signature uses SHA-256 for all four
+     * suites, preserving the convention used by the existing
+     * NIST/Brainpool encrypted-and-signed test vectors.
      */
-    // The streaming Signer in the recorded Sequoia revision excludes SHA3
-    // from its acceptable-hash list. Use SignatureBuilder, as for detached
-    // vectors, and serialize the one-pass/literal/signature packet sequence.
-    // Deriving the one-pass packet from the signature preserves its v6 salt.
-    let signature = SignatureBuilder::new(SignatureType::Binary)
-        .set_hash_algo(suite.encrypted_message_hash())
-        .sign_message(&mut signer, TEST_DATA)?;
-    let mut one_pass = OnePassSig::try_from(&signature)?;
-    one_pass.set_last(true);
-
     let mut f =
         File::create(
             &message_path,
@@ -226,8 +214,15 @@ fn generate_one(
         )
         .build()?;
 
-    let mut message = message;
-    Packet::from(one_pass).serialize(&mut message)?;
+    let message =
+        Signer::new(
+            message,
+            signer,
+        )?
+        .hash_algo(
+            suite.encrypted_message_hash(),
+        )?
+        .build()?;
 
     let mut message =
         LiteralWriter::new(message)
@@ -237,9 +232,6 @@ fn generate_one(
         TEST_DATA,
     )?;
 
-    let mut message = message.finalize_one()?
-        .context("literal writer has no enclosing encryptor")?;
-    Packet::from(signature).serialize(&mut message)?;
     message.finalize()?;
 
     println!(

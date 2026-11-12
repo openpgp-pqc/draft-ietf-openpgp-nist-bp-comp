@@ -7,30 +7,12 @@ if [[ $# -lt 1 || $# -gt 2 ]]; then
 fi
 
 VECTOR_DIR="$(realpath "$1")"
-SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
-DRAFT="${PQC_DRAFT:-$SCRIPT_DIR/../../../draft-ietf-openpgp-nist-bp-comp.md}"
+SQ="${2:-sq}"
 
 if [[ ! -d "$VECTOR_DIR" ]]; then
     echo "Vector directory not found: $VECTOR_DIR" >&2
     exit 1
 fi
-
-# Always assert hashes and packet structure using the compatible Sequoia build.
-if [[ -n "${PQC_VECTOR_GENERATOR:-}" ]]; then
-    "$PQC_VECTOR_GENERATOR" verify --output "$VECTOR_DIR" --draft "$DRAFT"
-elif [[ -n "${SEQUOIA_CHECKOUT:-}" ]]; then
-    "$SCRIPT_DIR/run.sh" "$SEQUOIA_CHECKOUT" verify --output "$VECTOR_DIR" --draft "$DRAFT"
-else
-    echo "Set SEQUOIA_CHECKOUT to a compatible Sequoia checkout (see the generator README), or set PQC_VECTOR_GENERATOR." >&2
-    exit 2
-fi
-python3 "$SCRIPT_DIR/check-metadata.py" "$VECTOR_DIR"
-
-# A compatible sq can optionally provide another verification frontend.
-if [[ $# == 1 ]]; then
-    exit 0
-fi
-SQ="$2"
 
 if ! command -v "$SQ" >/dev/null 2>&1 && [[ ! -x "$SQ" ]]; then
     echo "sq executable not found: $SQ" >&2
