@@ -1,20 +1,14 @@
 # Published vector set
 
-The literal payload is the eight bytes in `Testing.txt`: `54 65 73 74 69 6e 67 0a`.
+The literal payload consists of the eight bytes in `Testing.txt`: `54 65 73 74 69 6e 67 0a`.
 
-The message-digest update replaces the detached signatures and encrypted-and-signed
-messages for suites 41/37 (NIST P-384) and 43/39 (brainpoolP384r1) with SHA2-384.
-The encrypted messages for suites 42/38 (NIST P-521) and 44/40 (brainpoolP512r1)
-use SHA3-512, matching their retained detached signatures. The vectors deliberately
-exercise both hash families.
-
-All direct-key, User ID certification, and subkey-binding self-signatures use
-SHA3-512. Certificate hash preferences are SHA2-384, SHA2-512, and SHA3-512.
-The 41/37 and 43/39 keys were regenerated to replace their former SHA3-256
-self-signatures, and all dependent artifacts and metadata were regenerated.
-The 42/38 and 44/40 certificates were re-signed over their existing key packets
-to update preferences; their fingerprints and message artifacts are retained.
-The SHA3-256 KEM combiner is unchanged.
+All direct-key, User ID certification, subkey-binding, detached, and embedded
+signatures use SHA2-384 for suites 41/37 (NIST P-384) and 43/39
+(brainpoolP384r1), and SHA3-512 for suites 42/38 (NIST P-521) and 44/40
+(brainpoolP512r1). The vectors deliberately exercise both hash families.
+These consistent digests are test-vector choices; the normative minimum remains
+384 bits without requiring digest consistency. Certificate hash preferences are
+SHA2-384, SHA2-512, and SHA3-512. The KEM combiner uses SHA3-256.
 
 Generation and verification used:
 

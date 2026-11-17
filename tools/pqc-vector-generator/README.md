@@ -124,16 +124,8 @@ Certificate preferences are:
 
 ## Hash Algorithms
 
-Certificate signatures use:
-
-| Signature algorithm | Hash |
-|---|---|
-| 41 | SHA3-512 |
-| 42 | SHA3-512 |
-| 43 | SHA3-512 |
-| 44 | SHA3-512 |
-
-Detached signatures use:
+Certificate signatures (direct-key, User ID certification, and subkey binding),
+detached signatures, and signatures embedded in encrypted messages use:
 
 | Signature algorithm | Hash |
 |---|---|
@@ -142,12 +134,10 @@ Detached signatures use:
 | 43 | SHA2-384 |
 | 44 | SHA3-512 |
 
-Signatures embedded in encrypted messages use SHA2-384 for algorithms 41 and 43,
-and SHA3-512 for algorithms 42 and 44. These choices concern message digests;
-all certificate signatures use SHA3-512 to satisfy the 384-bit minimum for
-every signature type. The KEM combiner still uses SHA3-256; it is not a signature.
-The message vectors deliberately exercise both SHA2 and SHA3; each suite uses
-the same digest algorithm in its detached and embedded signatures.
+These consistent digests are choices for the test vectors. The normative
+requirement remains a minimum signature digest size of 384 bits; implementations
+need not use one digest consistently across a certificate and its messages.
+The KEM combiner still uses SHA3-256; it is not a signature.
 
 The recorded Sequoia revision excludes SHA3 from its streaming signer's hash
 list. Encrypted-message generation therefore signs the fixed payload through
@@ -179,10 +169,10 @@ and fingerprints, use:
 
 ```sh
 tools/pqc-vector-generator/scripts/run.sh /tmp/sequoia-vectors generate-keys \
-  --suite 42 --suite 44 --output test-vectors --force --reuse-keys
+  --suite 41 --suite 43 --output test-vectors --force --reuse-keys
 ```
 
-This reconstructs the fixed vector certificate with SHA3-512 self-signatures
+This reconstructs the fixed vector certificate with suite-specific self-signatures
 and the supported hash preferences. It uses the retained primary key's creation
 time for the replacement self-signatures so retained message signatures still
 have valid bindings at their original signing times. This mode targets these
@@ -326,7 +316,7 @@ The script verifies:
 - successful authenticated decryption and exact recovery of `Testing.txt`;
 - metadata session keys against normal Sequoia PKESK decryption;
 - cryptographic validity of all three self-signatures in both public and secret
-  certificates, SHA3-512 hashes, and the exact allowed hash preference list;
+  certificates, the suite-specific hashes, and the exact allowed hash preference list;
 - each draft section's certificate hash statement, primary/subkey fingerprints, KEM values, and both message
   digest statements against the verified artifacts and metadata; and
 - metadata recipients and share lengths, the SHA3-256 combiner via Python
@@ -386,7 +376,7 @@ Use a new staging directory; do not copy stale metadata into it. Update the four
 KEM values in each affected draft section from the new metadata. Retain the
 certificates and fingerprints, certificate signatures, and unselected artifacts.
 When certificate hashes or preferences change, refresh or regenerate the
-certificates too; all published self-signatures now use SHA3-512.
+certificates too, using the suite-specific digests listed above.
 Copy the changed armored files and the extracted metadata together only
 after verification. Check that the remaining armored files are byte-identical.
 
