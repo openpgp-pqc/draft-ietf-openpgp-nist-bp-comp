@@ -761,7 +761,7 @@ This section gives the history of changes in the respective document versions. T
 
 - Raised the minimum message digest size for all composite signatures to 384 bits and added security considerations for multi-target second-preimage attacks and the Kelsey-Schneier attack on SHA2-256.
 - Message signatures in all test vectors now use SHA2-384 (384-bit curves) or SHA3-512 (512/521-bit curves); documented the hash algorithm per vector and updated the corresponding intermediate composite KEM values.
-- Updated all certificate self-signatures to SHA3-512 and restricted advertised hash preferences to SHA2-384, SHA2-512, and SHA3-512; regenerated the 384-bit curve keys and their dependent vectors, and documented the self-signature hash per suite.
+- Updated certificate self-signatures to SHA2-384 (384-bit curves) or SHA3-512 (512/521-bit curves) and restricted advertised hash preferences to SHA2-384, SHA2-512, and SHA3-512; regenerated the 384-bit curve keys and their dependent vectors, and documented the self-signature hash per suite.
 
 ## draft-ietf-openpgp-nist-bp-comp-05
 
@@ -817,8 +817,8 @@ This section gives the history of changes in the respective document versions. T
 
 # Test Vectors
 
-The message signatures in these test vectors deliberately exercise both SHA2 and SHA3 hash algorithms: the 384-bit curve suites use SHA2-384, while the 512-bit and 521-bit curve suites use SHA3-512.
-Each suite uses the same message digest algorithm for its detached signature and its signature inside the encrypted message.
+The certificate and message signatures in these test vectors deliberately exercise both SHA2 and SHA3 hash algorithms: the 384-bit curve suites use SHA2-384, while the 512-bit and 521-bit curve suites use SHA3-512.
+Each suite uses the same digest algorithm for its certificate signatures, detached signature, and signature inside the encrypted message.
 These choices illustrate supported hash algorithms and do not impose additional requirements on implementations.
 
 ## Sample ML-DSA-65+ECDSA-NIST-P-384 with ML-KEM-768+ECDH-NIST-P-384 Data
@@ -834,7 +834,7 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-NIST-P-384 Private Subkey packet
 - A v6 subkey binding signature
 
-All self-signatures use SHA3-512 as their hash algorithm.
+All self-signatures use SHA2-384 as their hash algorithm.
 
 The primary key has the fingerprint
 `880938C5A71E65F081A309261D332BA6C0FF24616E1D4F83FFE82D178077D876`.
@@ -989,7 +989,7 @@ Here is a Transferable Secret Key consisting of:
 - A v6 ML-KEM-768+ECDH-brainpoolP384r1 Private Subkey packet
 - A v6 subkey binding signature
 
-All self-signatures use SHA3-512 as their hash algorithm.
+All self-signatures use SHA2-384 as their hash algorithm.
 
 The primary key has the fingerprint
 `57A5A4F945F8ED220BBB1BDB3836F8826218A12AC768FDE924B09E2A88425753`.

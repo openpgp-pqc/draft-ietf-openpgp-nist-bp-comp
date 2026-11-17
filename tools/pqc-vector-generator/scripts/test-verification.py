@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Regression checks for the vector verifier: pass the built generator path."""
+import base64
 import json
 import re
 from pathlib import Path
@@ -12,6 +13,33 @@ import unittest
 GENERATOR = str(Path(sys.argv.pop(1)).resolve())
 ROOT = Path(__file__).resolve().parents[3]
 DRAFT = ROOT / 'draft-ietf-openpgp-nist-bp-comp.md'
+
+
+def certificate_packets(path):
+    """Read complete new-format packets from these fixed armored certificates."""
+    lines = path.read_text().splitlines()
+    start = lines.index('') + 1
+    data = base64.b64decode(''.join(line for line in lines[start:]
+                                   if not line.startswith(('=', '-----'))), validate=True)
+    result = []
+    offset = 0
+    while offset < len(data):
+        start = offset
+        header, length = data[offset:offset + 2]
+        assert header & 0xc0 == 0xc0
+        offset += 2
+        if 192 <= length < 224:
+            length = (length - 192) * 256 + data[offset] + 192
+            offset += 1
+        elif length == 255:
+            length = int.from_bytes(data[offset:offset + 4], 'big')
+            offset += 4
+        else:
+            assert length < 192, 'partial lengths not used in these certificates'
+        offset += length
+        assert offset <= len(data)
+        result.append((header & 63, data[start:offset]))
+    return result
 
 
 class VerificationTests(unittest.TestCase):
@@ -48,23 +76,37 @@ class VerificationTests(unittest.TestCase):
             path.write_bytes(original)
 
     def test_certificate_digest_statements(self):
-        statement = 'All self-signatures use SHA3-512 as their hash algorithm.'
-        self.assertEqual(self.text.count(statement), 4)
-        parts = self.text.split(statement)
-        for occurrence in range(4):
-            for replacement in ['', statement.replace('SHA3-512', 'SHA3-256')]:
+        pattern = r'All self-signatures use (SHA2-384|SHA3-512) as their hash algorithm\.'
+        matches = list(re.finditer(pattern, self.text))
+        self.assertEqual([m.group(1) for m in matches],
+                         ['SHA2-384', 'SHA3-512', 'SHA2-384', 'SHA3-512'])
+        for occurrence, match in enumerate(matches):
+            for digest in [None, 'SHA3-256',
+                           'SHA3-512' if match.group(1) == 'SHA2-384' else 'SHA2-384']:
+                replacement = ('' if digest is None else
+                               f'All self-signatures use {digest} as their hash algorithm.')
                 with self.subTest(suite=occurrence + 41, replacement=replacement):
-                    altered = parts[0]
-                    for index, part in enumerate(parts[1:]):
-                        altered += (replacement if index == occurrence else statement) + part
-                    self.draft.write_text(altered)
+                    self.draft.write_text(self.text[:match.start()] + replacement +
+                                          self.text[match.end():])
                     self.verify('certificate digest statement missing or incorrect')
 
     def test_refresh_preserves_keys_and_existing_messages(self):
-        result = subprocess.run([GENERATOR, 'generate-keys', '--suite', '42',
-            '--suite', '44', '--output', str(self.directory), '--force', '--reuse-keys'],
+        originals = {p.name: p.read_bytes() for p in self.directory.iterdir()}
+        packets = {p.name: certificate_packets(p) for p in self.directory.glob('*key-*.asc')}
+        result = subprocess.run([GENERATOR, 'generate-keys', '--suite', '41',
+            '--suite', '42', '--suite', '43', '--suite', '44',
+            '--output', str(self.directory), '--force', '--reuse-keys'],
             capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+        for name, original in originals.items():
+            path = self.directory / name
+            if name in packets:
+                # Every non-signature packet, including complete secret key
+                # packets, must survive the refresh exactly.
+                self.assertEqual([p for p in packets[name] if p[0] != 2],
+                                 [p for p in certificate_packets(path) if p[0] != 2])
+            else:
+                self.assertEqual(path.read_bytes(), original, name)
         # Draft fingerprints and pre-existing message signatures must still verify.
         self.verify()
 

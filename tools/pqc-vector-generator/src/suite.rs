@@ -46,9 +46,9 @@ impl Suite {
         }
     }
 
-    /// SHA3-512 for direct-key, User ID, and subkey-binding signatures.
+    /// Consistent certificate and message hashes within each vector suite.
     pub fn certificate_hash(self) -> HashAlgorithm {
-        HashAlgorithm::SHA3_512
+        self.detached_hash()
     }
 
     /// Message digest for detached signature vectors.

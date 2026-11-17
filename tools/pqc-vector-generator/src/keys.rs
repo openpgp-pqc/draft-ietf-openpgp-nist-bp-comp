@@ -141,7 +141,7 @@ fn generate_one(
     /*
      * Direct-key self-signature metadata used by the test vectors:
      *
-     *   hash: SHA3-512
+     *   hash: suite-specific (SHA2-384 or SHA3-512)
      *   flags: C,S
      *   features: SEIPDv1, SEIPDv2
      *   AEAD: AES256+OCB, AES192+OCB, AES128+OCB
@@ -286,7 +286,7 @@ fn generate_one(
     /*
      * Subkey binding used by the test vectors:
      *
-     *   hash: SHA3-512
+     *   hash: suite-specific (SHA2-384 or SHA3-512)
      *   flags: Et,Er
      */
     let subkey_binding =

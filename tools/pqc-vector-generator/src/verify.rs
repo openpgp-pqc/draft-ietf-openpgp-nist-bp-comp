@@ -245,6 +245,14 @@ pub fn verify_all(suites: &[Suite], output: &Path, draft: Option<&Path>) -> Resu
     Ok(())
 }
 
+fn vector_hash_name(hash: HashAlgorithm) -> Result<&'static str> {
+    match hash {
+        HashAlgorithm::SHA384 => Ok("SHA2-384"),
+        HashAlgorithm::SHA3_512 => Ok("SHA3-512"),
+        _ => anyhow::bail!("unexpected vector digest"),
+    }
+}
+
 /// Check the statements within each suite's own section, rather than searching
 /// the whole document where another vector could hide a missing statement.
 fn check_draft(draft: &str, suite: Suite, cert: &Cert, metadata: &serde_json::Value) -> Result<()> {
@@ -263,7 +271,8 @@ fn check_draft(draft: &str, suite: Suite, cert: &Cert, metadata: &serde_json::Va
         .context("missing detached signature section")?;
     let secret_section = keys.split("### Transferable Public Key").next().unwrap();
     ensure!(secret_section.matches("All self-signatures use ").count() == 1
-        && secret_section.contains("All self-signatures use SHA3-512 as their hash algorithm."),
+        && secret_section.contains(&format!("All self-signatures use {} as their hash algorithm.",
+            vector_hash_name(suite.certificate_hash())?)),
         "draft certificate digest statement missing or incorrect");
     let primary = cert.fingerprint().to_string();
     let subkey = cert
@@ -311,11 +320,7 @@ fn check_draft(draft: &str, suite: Suite, cert: &Cert, metadata: &serde_json::Va
         ("encrypted", encrypted, suite.encrypted_message_hash()),
         ("detached", detached, suite.detached_hash()),
     ] {
-        let hash = match hash {
-            HashAlgorithm::SHA384 => "SHA2-384",
-            HashAlgorithm::SHA3_512 => "SHA3-512",
-            _ => anyhow::bail!("unexpected vector digest"),
-        };
+        let hash = vector_hash_name(hash)?;
         let statement = format!("The signature uses {hash} as its hash algorithm.");
         ensure!(
             text.matches("The signature uses ").count() == 1 && text.contains(&statement),
