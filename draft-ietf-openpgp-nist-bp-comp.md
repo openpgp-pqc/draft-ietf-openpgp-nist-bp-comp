@@ -660,7 +660,8 @@ The algorithm-specific v6 signature parameters for ML-DSA + ECDSA signatures con
  - A fixed-length octet string of the ML-DSA signature value, whose length depends on the algorithm ID as specified in {{tab-mldsa-artifacts}}.
 
 A composite ML-DSA + ECDSA signature MUST use a hash algorithm with a digest size of at least 384 bits for the computation of the message digest.
-A verifying implementation MUST reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size.
+A composite ML-DSA-87 + ECDSA signature (algorithm IDs 42 and 44) MUST use a hash algorithm with a digest size of at least 512 bits.
+A verifying implementation MUST reject any composite ML-DSA + ECDSA signature that uses a hash algorithm with a smaller digest size than required for its algorithm ID.
 These requirements apply to all signature types and all composite ML-DSA + ECDSA algorithms defined in this document.
 See {{minimum-digest-size}} for the rationale.
 
@@ -725,6 +726,11 @@ This technique exploits the Merkle–Damgård construction with a 256-bit chaini
 To provide a conservative margin against these attacks, {{ecc-mldsa-sig-packet}} requires message digests of at least 384 bits for all composite signature schemes defined here.
 For a 384-bit digest and 2<sup>64</sup> distinct target digests, the generic classical search cost is approximately 2<sup>320</sup> hash evaluations under the assumptions above.
 These work factors describe the specified classical attacks and do not by themselves establish a NIST post-quantum security category.
+
+A signer who chooses both the salt and the message is not limited to second preimages: it can search for two messages with the same digest and sign once, so that the signature verifies for both.
+This matters for non-repudiation, and its generic cost is the collision bound of about 2<sup>n/2</sup>.
+A 384-bit digest gives about 2<sup>192</sup>, which matches the ML-DSA-65 composites but is below the level of the ML-DSA-87 composites.
+{{ecc-mldsa-sig-packet}} therefore requires a 512-bit digest for the ML-DSA-87 composites.
 
 ## Elliptic Curve Point Validation {#ec-point-validation}
 
